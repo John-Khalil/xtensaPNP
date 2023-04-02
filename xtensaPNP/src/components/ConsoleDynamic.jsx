@@ -26,7 +26,7 @@ const DynamicConsole=({userConsole})=>{
 			consoleData:`${mainConsoleInput.current.value}${consoleEnableCR.current.checked?'\r':''}${consoleEnableCR.current.checked?'\n':''}`
 		});
 		userCommands.push(mainConsoleInput.current.value);
-		userCommandsIndex=userCommands.length-1;
+		userCommandsIndex=userCommands.length;
 		mainConsoleInput.current.value='';
 	}
 
@@ -38,8 +38,10 @@ const DynamicConsole=({userConsole})=>{
 		if((keyDownEvent.key==='ArrowDown') && (userCommands[userCommandsIndex+1]!=undefined ))
 			mainConsoleInput.current.value=userCommands[(++userCommandsIndex)];
 		
-		if((keyDownEvent.key==='ArrowUp') && (userCommands[userCommandsIndex]!=undefined ))
-			mainConsoleInput.current.value=userCommands[(userCommandsIndex--)];
+		if((keyDownEvent.key==='ArrowUp') && (userCommands[userCommandsIndex-1]!=undefined ))
+			mainConsoleInput.current.value=userCommands[(--userCommandsIndex)];
+		
+
 	}
 
 	useEffect(()=>{
