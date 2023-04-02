@@ -20,7 +20,7 @@ const DynamicConsole=({userConsole})=>{
 	const consoleSend=()=>{
 		userConsole.send({
 			consoleIdentifier,
-			consoleData:{data:`${mainConsoleInput.current.value}${consoleEnableCR.current.checked?'\r':''}${consoleEnableCR.current.checked?'\n':''}`,updateCount:(userConsole.consoleData.updateCount||0)}
+			consoleData:`${mainConsoleInput.current.value}${consoleEnableCR.current.checked?'\r':''}${consoleEnableCR.current.checked?'\n':''}`
 		});
 		mainConsoleInput.current.value='';
 	}
@@ -34,8 +34,8 @@ const DynamicConsole=({userConsole})=>{
 		if(userConsole.clearConsole===true)
 			clearMainConsoleOutput();
 
-		if((userConsole.consoleData||{}).data!==undefined){
-			mainConsoleOutput.current.innerHTML+=userConsole.consoleData.data;
+		if(userConsole.consoleData!==undefined){
+			mainConsoleOutput.current.innerHTML+=userConsole.consoleData;
 			mainConsoleOutput.current.scrollTop=mainConsoleOutput.current.scrollHeight;
 		}
 
@@ -118,20 +118,17 @@ const DynamicConsole=({userConsole})=>{
 }
 
 export default function ConsoleDynamic() {
-	const [consoleLog,consoleLogger]=useState({data:'',updateCount:0});
+	const [consoleLog,consoleLogger]=useState('');
 	let testCounter=0;
 	const getConsoleInput=(consoleInput)=>{
-		console.log(consoleInput);
-		consoleLogger({data:consoleInput.consoleData.data,updateCount:consoleInput.consoleData.updateCount++});
-		// consoleLogger('');
+		console.log(consoleInput.consoleIdentifier);
+		consoleLogger(consoleInput.consoleData);
+		setTimeout(() => {
+			consoleLogger(undefined);
+		}, 0);
 	}
 	useEffect(()=>{
-		consoleLogger('MANGA');
-		consoleLogger('MANGA');
-
-		consoleLogger('MANGA');
-		consoleLogger('MANGA');
-		consoleLogger('MANGA');
+		
 	},[]);
 	return (
 		<>
