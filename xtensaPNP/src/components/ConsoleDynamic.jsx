@@ -1,5 +1,8 @@
 import React,{ useState,useEffect,useRef } from "react"
 
+const userCommands=[];
+let userCommandsIndex=0;
+
 const DynamicConsole=({userConsole})=>{
 	let defaultTextColor='green';
 	let defaultThemeColor='green';
@@ -22,12 +25,21 @@ const DynamicConsole=({userConsole})=>{
 			consoleIdentifier,
 			consoleData:`${mainConsoleInput.current.value}${consoleEnableCR.current.checked?'\r':''}${consoleEnableCR.current.checked?'\n':''}`
 		});
+		userCommands.push(mainConsoleInput.current.value);
+		userCommandsIndex=userCommands.length-1;
 		mainConsoleInput.current.value='';
 	}
 
 	const hitEnter=keyDownEvent=>{
+		// console.log("keyDownEvent > ",keyDownEvent.key); //^ get the value for any key from the console
 		if(keyDownEvent.key==='Enter')
 			consoleSend();
+
+		if((keyDownEvent.key==='ArrowDown') && (userCommands[userCommandsIndex+1]!=undefined ))
+			mainConsoleInput.current.value=userCommands[(++userCommandsIndex)];
+		
+		if((keyDownEvent.key==='ArrowUp') && (userCommands[userCommandsIndex]!=undefined ))
+			mainConsoleInput.current.value=userCommands[(userCommandsIndex--)];
 	}
 
 	useEffect(()=>{
