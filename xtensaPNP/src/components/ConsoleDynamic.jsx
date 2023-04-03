@@ -24,14 +24,17 @@ const DynamicConsole=({userConsole})=>{
 	}
 
 	const consoleSend=()=>{
+		if(!(mainConsoleInput.current.value||[]).length)
+			return;
+
 		userConsole.send({
 			consoleIdentifier,
 			consoleData:`${mainConsoleInput.current.value}${consoleEnableCR.current.checked?'\r':''}${consoleEnableCR.current.checked?'\n':''}`
 		});
 		// userCommands.push(mainConsoleInput.current.value);
 		// userCommandsIndex=userCommands.length;
+		setUserCommandsIndex(userCommands.length+1);
 		setUserCommands([...userCommands,mainConsoleInput.current.value]);
-		setUserCommandsIndex(userCommands.length);
 		mainConsoleInput.current.value='';
 	}
 
@@ -40,18 +43,18 @@ const DynamicConsole=({userConsole})=>{
 		if(keyDownEvent.key==='Enter')
 			consoleSend();
 
-		if((keyDownEvent.key==='ArrowDown') && (userCommands[userCommandsIndex]!=undefined )){
-			setUserCommandsIndex(userCommandsIndex+1);
-			mainConsoleInput.current.value=userCommands[userCommandsIndex];
+		if((keyDownEvent.key==='ArrowDown') && (userCommands[userCommandsIndex+1]!=undefined )){
+			mainConsoleInput.current.value=userCommands[userCommandsIndex+1];
+			setUserCommandsIndex(userCommandsIndex+1);							//! this will not change the value untill the proccess end
 		}
 		
-		if((keyDownEvent.key==='ArrowUp') && (userCommands[userCommandsIndex]!=undefined )){
-			console.log(userCommandsIndex)
-			setUserCommandsIndex(userCommandsIndex-1);
-			mainConsoleInput.current.value=userCommands[userCommandsIndex];
+		if((keyDownEvent.key==='ArrowUp') && (userCommands[userCommandsIndex-1]!=undefined )){
+			mainConsoleInput.current.value=userCommands[userCommandsIndex-1];
+			setUserCommandsIndex(userCommandsIndex-1);							//! this will not change the value untill the proccess end
 		}
 
-		// console.log(userConsole)
+		if(!((keyDownEvent.key==='ArrowUp')||(keyDownEvent.key==='ArrowDown')||(keyDownEvent.key==='Enter')))
+			setUserCommandsIndex(userCommands.length);
 	}
 
 	useEffect(()=>{
