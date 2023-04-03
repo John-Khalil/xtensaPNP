@@ -1,7 +1,7 @@
 import React,{ useState,useEffect,useRef } from "react"
 
-const userCommands=[];
-let userCommandsIndex=0;
+// const userCommands=[];
+// let userCommandsIndex=0;
 
 const DynamicConsole=({userConsole})=>{
 	let defaultTextColor='green';
@@ -16,6 +16,9 @@ const DynamicConsole=({userConsole})=>{
 	const consoleEnableNL=useRef();
 	const consoleEnableCR=useRef();
 
+	const [userCommands,setUserCommands]=useState([]);
+	const [userCommandsIndex,setUserCommandsIndex]=useState(0);
+
 	const clearMainConsoleOutput=()=>{
 		mainConsoleOutput.current.innerHTML='';
 	}
@@ -25,8 +28,10 @@ const DynamicConsole=({userConsole})=>{
 			consoleIdentifier,
 			consoleData:`${mainConsoleInput.current.value}${consoleEnableCR.current.checked?'\r':''}${consoleEnableCR.current.checked?'\n':''}`
 		});
-		userCommands.push(mainConsoleInput.current.value);
-		userCommandsIndex=userCommands.length;
+		// userCommands.push(mainConsoleInput.current.value);
+		// userCommandsIndex=userCommands.length;
+		setUserCommands([...userCommands,mainConsoleInput.current.value]);
+		setUserCommandsIndex(userCommands.length);
 		mainConsoleInput.current.value='';
 	}
 
@@ -35,13 +40,18 @@ const DynamicConsole=({userConsole})=>{
 		if(keyDownEvent.key==='Enter')
 			consoleSend();
 
-		if((keyDownEvent.key==='ArrowDown') && (userCommands[userCommandsIndex+1]!=undefined ))
-			mainConsoleInput.current.value=userCommands[(++userCommandsIndex)];
+		if((keyDownEvent.key==='ArrowDown') && (userCommands[userCommandsIndex]!=undefined )){
+			setUserCommandsIndex(userCommandsIndex+1);
+			mainConsoleInput.current.value=userCommands[userCommandsIndex];
+		}
 		
-		if((keyDownEvent.key==='ArrowUp') && (userCommands[userCommandsIndex-1]!=undefined ))
-			mainConsoleInput.current.value=userCommands[(--userCommandsIndex)];
-		
+		if((keyDownEvent.key==='ArrowUp') && (userCommands[userCommandsIndex]!=undefined )){
+			console.log(userCommandsIndex)
+			setUserCommandsIndex(userCommandsIndex-1);
+			mainConsoleInput.current.value=userCommands[userCommandsIndex];
+		}
 
+		// console.log(userConsole)
 	}
 
 	useEffect(()=>{
