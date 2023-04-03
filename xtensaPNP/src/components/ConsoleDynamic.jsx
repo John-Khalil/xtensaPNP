@@ -53,7 +53,7 @@ const DynamicConsole=({userConsole})=>{
 			setUserCommandsIndex(userCommandsIndex-1);							//! this will not change the value untill the proccess end
 		}
 
-		if(!((keyDownEvent.key==='ArrowUp')||(keyDownEvent.key==='ArrowDown')||(keyDownEvent.key==='Enter')))
+		if(!((keyDownEvent.key==='ArrowUp')||(keyDownEvent.key==='ArrowDown')||(keyDownEvent.key==='Enter'))) 
 			setUserCommandsIndex(userCommands.length);
 	}
 
