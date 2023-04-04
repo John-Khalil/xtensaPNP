@@ -88,7 +88,7 @@ const DynamicConsole=({userConsole})=>{
 				</div>
 
 				{(consoleOutput)?(
-					<pre className="w-[calc(100% -24)] h-[320px] m-1 p-1 overflow-scroll" ref={mainConsoleOutput}>
+					<pre className="w-[calc(100% -24)] h-[320px] m-1 p-1 overflow-scroll font-extrabold" ref={mainConsoleOutput}>
 						
 					</pre>
 				):(<></>)}
@@ -174,14 +174,14 @@ export default function ConsoleDynamic() {
 			}}/>
 
 			<DynamicConsole userConsole={{
-				consoleInput:false,
+				consoleInput:true,
 				// clearConsole:true,
 				// themeColor:'yellow',
 				height:200,
 				// consoleData:consoleLog,
 				// send:getConsoleInput,
 				hide:false,
-				// textColor:'yellow'
+				textColor:'#a855f7',
 				themeColor:'#a855f7',
 				consoleIdentifier:'USER 2'
 
