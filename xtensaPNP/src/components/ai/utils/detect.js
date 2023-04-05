@@ -93,6 +93,8 @@ export const detectVideo = (vidSource, model, classThreshold, canvasRef) => {
         yRatio,
       ]); // render boxes
       tf.dispose(res); // clear memory
+      // console.log(`yRatio >> ${yRatio}`);
+      // console.log(`xRatio >> ${xRatio}`);
     });
 
     requestAnimationFrame(detectFrame); // get another frame

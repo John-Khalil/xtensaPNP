@@ -50,8 +50,21 @@ const ObjectDetecion = ({modelName}) => {
     });
   }, []);
 
+
+
+
+  navigator.mediaDevices.getUserMedia({ video: true })
+  .then((stream) => {
+    cameraRef.current.srcObject = stream;
+    // videoRef.current.srcObject = stream;
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+
+
   return (
-    <>
+    <div className="">
       
 
       <div className="content">
@@ -76,7 +89,7 @@ const ObjectDetecion = ({modelName}) => {
       </div>
 
       <ButtonHandler imageRef={imageRef} cameraRef={cameraRef} videoRef={videoRef} />
-    </>
+    </div>
   );
 };
 
