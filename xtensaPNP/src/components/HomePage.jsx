@@ -36,7 +36,7 @@ export default function HomePage() {
             const boxes_data = boxes.dataSync();
             const scores_data = scores.dataSync();
             const classes_data = classes.dataSync();
-            console.log([boxes_data,scores_data,classes_data]);
+            // console.log([boxes_data,scores_data,classes_data]);
           },
           // otherModels:[
           //   {
@@ -47,12 +47,12 @@ export default function HomePage() {
           // ]
       }}/>
       
-      <ObjectDetecion userModel={{
+      {/* <ObjectDetecion userModel={{
           videoSource,
           modelName:'components',
           labels:['capacitor', 'inductor', 'resistor'],
           classThreshold : 0.01
-      }}/>
+      }}/> */}
     
     </>
   )

@@ -23,6 +23,11 @@ const ObjectDetecion = ({userModel}) => {
   // const modelName = "yolov5n";
   const classThreshold = (userModel.classThreshold||0.2);
   const videoSource=(userModel||{}).videoSource||undefined;
+
+  const [multiModel,setMultiModel]=useState([{
+    net: null,
+    inputShape: [1, 0, 0, 3],
+  }]);
 1
   useEffect(() => {
     tf.ready().then(async () => {
@@ -48,7 +53,57 @@ const ObjectDetecion = ({userModel}) => {
         net: yolov5,
         inputShape: yolov5.inputs[0].shape,
       }); // set model & input shape
+
+      ((userModel||{}).otherModels||[]).forEach((element) => {
+        tf.loadGraphModel(
+          `${window.location.origin}/${element.modelName}_web_model/model.json`,
+          {
+            onProgress: (fractions) => {
+  
+  
+            },
+          }
+        ).then(async(elementModel)=>{
+          // multiModel.push({
+            //   net: elementModel,
+            //   inputShape: elementModel.inputs[0].shape
+            // });
+  
+            const dummyInput = tf.ones(elementModel.inputs[0].shape);
+            const warmupResult = await elementModel.executeAsync(dummyInput);
+            tf.dispose(warmupResult);
+            tf.dispose(dummyInput);
+  
+            if((multiModel.length==1)&&(multiModel.net==null)){
+              // console.log('init');
+              setMultiModel([{ net: elementModel,inputShape: elementModel.inputs[0].shape}]);
+            }
+            else
+              setMultiModel([...multiModel,{ net: elementModel,inputShape: elementModel.inputs[0].shape}]);
+        });
+  
+
+
     });
+
+    
+      // dummyInput = tf.ones(elementModel.inputs[0].shape);
+      // warmupResult = await elementModel.executeAsync(dummyInput);
+      // tf.dispose(warmupResult);
+      // tf.dispose(dummyInput);
+
+      
+    });
+
+
+
+
+
+
+
+
+
+
   }, []);
 
 
@@ -79,22 +134,26 @@ const ObjectDetecion = ({userModel}) => {
   
 
   let otherModels=[];
-  ((userModel||{}).otherModels||[]).forEach(element => {
-    otherModels.push(
-      <ObjectDetecion userModel={{
-        canvasRef,
-        otherModels:[],
-        className:'hidden',
-        videoSource:(userModel||{}).videoSource||undefined,
+  // ((userModel||{}).otherModels||[]).forEach(element => {
+  //   otherModels.push(
+  //     <ObjectDetecion userModel={{
+  //       canvasRef,
+  //       cameraRef,
+  //       otherModels:[],
+  //       className:'hidden',
+  //       videoSource:(userModel||{}).videoSource||undefined,
 
-        modelName:element.modelName,
-        labels:element.labels,
-        classThreshold:element.modelName||classThreshold,
-        onDetect:element.onDetect,
+  //       modelName:element.modelName,
+  //       labels:element.labels,
+  //       classThreshold:element.modelName||classThreshold,
+  //       onDetect:element.onDetect,
 
-      }}/>
-    );
-  });
+  //     }}/>
+  //   );
+  // });
+  // setInterval(() => {
+  //   console.log(multiModel)
+  // }, 10000);
 
   return (
     <>
@@ -112,7 +171,18 @@ const ObjectDetecion = ({userModel}) => {
             muted
             // srcObject ={videoSource}
             ref={cameraRef}
-            onPlay={() => detectVideo(cameraRef.current, model, classThreshold, ((userModel||{}).canvasRef||canvasRef).current,userModel)}
+            onPlay={() => {
+              
+              detectVideo(((userModel||{}).cameraRef||cameraRef).current, model, classThreshold, ((userModel||{}).canvasRef||canvasRef).current,userModel);
+              if(multiModel.length){
+                ((userModel||{}).otherModels||[]).forEach(async(element,index) => {
+                  console.log("test")
+                  detectVideo(((userModel||{}).cameraRef||cameraRef).current,multiModel[index] , element.classThreshold, ((userModel||{}).canvasRef||canvasRef).current,element);
+                });
+              } 
+               
+              }
+            }
           />
           {/* <video
             autoPlay

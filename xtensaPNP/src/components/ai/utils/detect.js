@@ -83,6 +83,7 @@ export const detectVideo = (vidSource, model, classThreshold, canvasRef,userMode
     tf.engine().startScope(); // start scoping tf engine
     const [input, xRatio, yRatio] = preprocess(vidSource, modelWidth, modelHeight);
 
+    // console.log(model)
     await model.net.executeAsync(input).then((res) => {
       ((userModel||{}).onDetect||(uselessArg=>{}))(res);
       const [boxes, scores, classes] = res.slice(0, 3);
@@ -103,4 +104,45 @@ export const detectVideo = (vidSource, model, classThreshold, canvasRef,userMode
   };
 
   detectFrame(); // initialize to detect every frame
+};
+
+export const detectVideoClosure = (vidSource, model, classThreshold, canvasRef,userModel) => {
+  const [modelWidth, modelHeight] = model.inputShape.slice(1, 3); // get model width and height
+
+  /**
+   * Function to detect every frame from video
+   */
+  const detectFrame = async () => {
+    if (vidSource.videoWidth === 0 && vidSource.srcObject === null) {
+      const ctx = canvasRef.getContext("2d");
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clean canvas
+      return; // handle if source is closed
+    }
+
+    tf.engine().startScope(); // start scoping tf engine
+    const [input, xRatio, yRatio] = preprocess(vidSource, modelWidth, modelHeight);
+
+    // console.log(model)
+    await model.net.executeAsync(input).then((res) => {
+      ((userModel||{}).onDetect||(uselessArg=>{}))(res);
+      const [boxes, scores, classes] = res.slice(0, 3);
+      const boxes_data = boxes.dataSync();
+      const scores_data = scores.dataSync();
+      const classes_data = classes.dataSync();
+      renderBoxes(canvasRef, classThreshold, boxes_data, scores_data, classes_data, [
+        xRatio,
+        yRatio,
+      ],userModel); // render boxes
+      tf.dispose(res); // clear memory
+      // console.log(`yRatio >> ${yRatio}`);
+      // console.log(`xRatio >> ${xRatio}`);
+    });
+
+    requestAnimationFrame(detectFrame); // get another frame
+    tf.engine().endScope(); // end of scoping
+  };
+
+  return detectFrame;
+
+  // detectFrame(); // initialize to detect every frame
 };
