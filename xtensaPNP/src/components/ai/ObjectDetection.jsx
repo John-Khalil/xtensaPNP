@@ -6,7 +6,7 @@ import ButtonHandler from "./components/btn-handler";
 import { detectImage, detectVideo } from "./utils/detect";
 
 
-const ObjectDetecion = ({modelName}) => {
+const ObjectDetecion = ({userModel}) => {
   // const [loading, setLoading] = useState({ loading: true, progress: 0 }); // loading state
   const [model, setModel] = useState({
     net: null,
@@ -26,7 +26,7 @@ const ObjectDetecion = ({modelName}) => {
   useEffect(() => {
     tf.ready().then(async () => {
       const yolov5 = await tf.loadGraphModel(
-        `${window.location.origin}/${modelName}_web_model/model.json`,
+        `${window.location.origin}/${userModel.modelName}_web_model/model.json`,
         {
           onProgress: (fractions) => {
             // setLoading({ loading: true, progress: fractions }); // set loading fractions
@@ -62,33 +62,37 @@ const ObjectDetecion = ({modelName}) => {
     console.error(error);
   });
 
+  setTimeout(() => {
+    cameraRef.current.srcObject = undefined;
+  }, 20000);
+
 
   return (
     <div className="">
       
 
       <div className="content">
-        <img
+        {/* <img
           src="#"
           ref={imageRef}
           onLoad={() => detectImage(imageRef.current, model, classThreshold, canvasRef.current)}
-        />
+        /> */}
         <video
           autoPlay
           muted
           ref={cameraRef}
-          onPlay={() => detectVideo(cameraRef.current, model, classThreshold, canvasRef.current)}
+          onPlay={() => detectVideo(cameraRef.current, model, classThreshold, canvasRef.current,userModel)}
         />
-        <video
+        {/* <video
           autoPlay
           muted
           ref={videoRef}
           onPlay={() => detectVideo(videoRef.current, model, classThreshold, canvasRef.current)}
-        />
+        /> */}
         <canvas width={model.inputShape[1]} height={model.inputShape[2]} ref={canvasRef} />
       </div>
 
-      <ButtonHandler imageRef={imageRef} cameraRef={cameraRef} videoRef={videoRef} />
+      {/* <ButtonHandler imageRef={imageRef} cameraRef={cameraRef} videoRef={videoRef} /> */}
     </div>
   );
 };

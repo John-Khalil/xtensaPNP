@@ -67,7 +67,7 @@ export const detectImage = async (imgSource, model, classThreshold, canvasRef) =
  * @param {Number} classThreshold class threshold
  * @param {HTMLCanvasElement} canvasRef canvas reference
  */
-export const detectVideo = (vidSource, model, classThreshold, canvasRef) => {
+export const detectVideo = (vidSource, model, classThreshold, canvasRef,userModel) => {
   const [modelWidth, modelHeight] = model.inputShape.slice(1, 3); // get model width and height
 
   /**
@@ -84,6 +84,7 @@ export const detectVideo = (vidSource, model, classThreshold, canvasRef) => {
     const [input, xRatio, yRatio] = preprocess(vidSource, modelWidth, modelHeight);
 
     await model.net.executeAsync(input).then((res) => {
+      ((userModel||{}).onDetect||(uselessArg=>{}))(res);
       const [boxes, scores, classes] = res.slice(0, 3);
       const boxes_data = boxes.dataSync();
       const scores_data = scores.dataSync();
@@ -91,7 +92,7 @@ export const detectVideo = (vidSource, model, classThreshold, canvasRef) => {
       renderBoxes(canvasRef, classThreshold, boxes_data, scores_data, classes_data, [
         xRatio,
         yRatio,
-      ]); // render boxes
+      ],userModel); // render boxes
       tf.dispose(res); // clear memory
       // console.log(`yRatio >> ${yRatio}`);
       // console.log(`xRatio >> ${xRatio}`);
