@@ -38,13 +38,13 @@ export default function HomePage() {
             const classes_data = classes.dataSync();
             // console.log([boxes_data,scores_data,classes_data]);
           },
-          // otherModels:[
-          //   {
-          //     modelName:'components',
-          //     labels:['capacitor', 'inductor', 'resistor'],
-          //     classThreshold : 0.01
-          //   }
-          // ]
+          otherModels:[
+            {
+              modelName:'components',
+              labels:['capacitor', 'inductor', 'resistor'],
+              classThreshold : 0.01
+            }
+          ]
       }}/>
       
       {/* <ObjectDetecion userModel={{
