@@ -21,7 +21,8 @@ const ObjectDetecion = ({userModel}) => {
 
   // model configs
   // const modelName = "yolov5n";
-  const classThreshold = 0.2;
+  const classThreshold = (userModel.classThreshold||0.2);
+  const videoSource=(userModel||{}).videoSource||undefined;
 1
   useEffect(() => {
     tf.ready().then(async () => {
@@ -53,47 +54,81 @@ const ObjectDetecion = ({userModel}) => {
 
 
 
-  navigator.mediaDevices.getUserMedia({ video: true })
-  .then((stream) => {
-    cameraRef.current.srcObject = stream;
-    // videoRef.current.srcObject = stream;
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+  // navigator.mediaDevices.getUserMedia({ video: true })
+  // .then((stream) => {
+  //   cameraRef.current.srcObject = stream;
+  //   // videoRef.current.srcObject = stream;
+  // })
+  // .catch((error) => {
+  //   console.error(error);
+  // });
+
+  // setTimeout(() => {
+  //   cameraRef.current.srcObject = undefined;
+  //   // cameraRef.current.srcObject = videoSource;
+  // }, 200000);
+
+  // useEffect(()=>{
+  //   cameraRef.current.srcObject = (userModel||{}).videoSource||undefined;
+  // },[userModel]);
 
   setTimeout(() => {
-    cameraRef.current.srcObject = undefined;
-  }, 20000);
+    cameraRef.current.srcObject = (userModel||{}).videoSource||undefined;
+  }, 50);
 
+  
+
+  let otherModels=[];
+  ((userModel||{}).otherModels||[]).forEach(element => {
+    otherModels.push(
+      <ObjectDetecion userModel={{
+        canvasRef,
+        otherModels:[],
+        className:'hidden',
+        videoSource:(userModel||{}).videoSource||undefined,
+
+        modelName:element.modelName,
+        labels:element.labels,
+        classThreshold:element.modelName||classThreshold,
+        onDetect:element.onDetect,
+
+      }}/>
+    );
+  });
 
   return (
-    <div className="">
-      
+    <>
+       <div className={(userModel||{}).className||''}>
+        
 
-      <div className="content">
-        {/* <img
-          src="#"
-          ref={imageRef}
-          onLoad={() => detectImage(imageRef.current, model, classThreshold, canvasRef.current)}
-        /> */}
-        <video
-          autoPlay
-          muted
-          ref={cameraRef}
-          onPlay={() => detectVideo(cameraRef.current, model, classThreshold, canvasRef.current,userModel)}
-        />
-        {/* <video
-          autoPlay
-          muted
-          ref={videoRef}
-          onPlay={() => detectVideo(videoRef.current, model, classThreshold, canvasRef.current)}
-        /> */}
-        <canvas width={model.inputShape[1]} height={model.inputShape[2]} ref={canvasRef} />
+        <div className="content">
+          {/* <img
+            src="#"
+            ref={imageRef}
+            onLoad={() => detectImage(imageRef.current, model, classThreshold, canvasRef.current)}
+          /> */}
+          <video
+            autoPlay
+            muted
+            // srcObject ={videoSource}
+            ref={cameraRef}
+            onPlay={() => detectVideo(cameraRef.current, model, classThreshold, ((userModel||{}).canvasRef||canvasRef).current,userModel)}
+          />
+          {/* <video
+            autoPlay
+            muted
+            ref={videoRef}
+            onPlay={() => detectVideo(videoRef.current, model, classThreshold, canvasRef.current)}
+          /> */}
+          <canvas width={model.inputShape[1]} height={model.inputShape[2]} ref={canvasRef} />
+        </div>
+
+        {/* <ButtonHandler imageRef={imageRef} cameraRef={cameraRef} videoRef={videoRef} /> */}
       </div>
-
-      {/* <ButtonHandler imageRef={imageRef} cameraRef={cameraRef} videoRef={videoRef} /> */}
-    </div>
+      {otherModels}
+    </>
+   
+    
   );
 };
 
