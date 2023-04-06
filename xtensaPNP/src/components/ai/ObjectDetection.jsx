@@ -172,15 +172,13 @@ const ObjectDetecion = ({userModel}) => {
             // srcObject ={videoSource}
             ref={cameraRef}
             onPlay={() => {
-                setInterval(() => {
-                  detectVideo(((userModel||{}).cameraRef||cameraRef).current, model, classThreshold, ((userModel||{}).canvasRef||canvasRef).current,userModel);
-                  if(multiModel.length){
-                    ((userModel||{}).otherModels||[]).forEach((element,index) => {
-                      // console.log("test")
-                      detectVideo(((userModel||{}).cameraRef||cameraRef).current,multiModel[index] , element.classThreshold, ((userModel||{}).canvasRef||canvasRef).current,element);
-                    });
-                  } 
-                }, 0);
+              detectVideo(((userModel||{}).cameraRef||cameraRef).current, model, classThreshold, ((userModel||{}).canvasRef||canvasRef).current,userModel);
+              if(multiModel.length){
+                ((userModel||{}).otherModels||[]).forEach((element,index) => {
+                  // console.log("test")
+                  detectVideo(((userModel||{}).cameraRef||cameraRef).current,multiModel[index] , element.classThreshold, ((userModel||{}).canvasRef||canvasRef).current,element);
+                });
+              } 
                 
                 
                
