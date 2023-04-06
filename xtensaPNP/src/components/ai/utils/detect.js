@@ -76,7 +76,7 @@ export const detectVideo = (vidSource, model, classThreshold, canvasRef,userMode
   const detectFrame = async () => {
     if (vidSource.videoWidth === 0 && vidSource.srcObject === null) {
       const ctx = canvasRef.getContext("2d");
-      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clean canvas
+      // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clean canvas
       return; // handle if source is closed
     }
 
@@ -103,8 +103,8 @@ export const detectVideo = (vidSource, model, classThreshold, canvasRef,userMode
       
       requestAnimationFrame(detectFrame); // get another frame
     }, 0);
-
     // tf.engine().endScope(); // end of scoping
+
   };
 
   detectFrame(); // initialize to detect every frame
