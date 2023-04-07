@@ -99,10 +99,15 @@ export const detectVideo = (vidSource, model, classThreshold, canvasRef,userMode
       // console.log(`xRatio >> ${xRatio}`);
     });
 
-    setTimeout(() => {
-      
+    const asyncRecall=async()=>{
       requestAnimationFrame(detectFrame); // get another frame
-    }, 0);
+    }
+    asyncRecall();
+
+    // setTimeout(() => {
+      
+    //   requestAnimationFrame(detectFrame); // get another frame
+    // }, 0);
     // tf.engine().endScope(); // end of scoping
 
   };
