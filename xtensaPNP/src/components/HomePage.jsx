@@ -28,17 +28,6 @@ export default function HomePage() {
       <ObjectDetecion userModel={{
           videoSource,
           className:'',
-
-          // modelName:'broken_traces',
-          // labels:['missing_hole', 'mouse_bite','open_circuit', 'short', 'spur', 'spurious_copper'],
-          // classThreshold : 0.01,
-          // onDetect:(res)=>{
-          //   const [boxes, scores, classes] = res.slice(0, 3);
-          //   const boxes_data = boxes.dataSync();
-          //   const scores_data = scores.dataSync();
-          //   const classes_data = classes.dataSync();
-          //   // console.log([boxes_data,scores_data,classes_data]);
-          // },
           models:[
             {
               modelName:'broken_traces',

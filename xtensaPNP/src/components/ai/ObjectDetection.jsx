@@ -7,53 +7,18 @@ import { detectImage, detectVideo } from "./utils/detect";
 
 
 const ObjectDetecion = ({userModel}) => {
-  // const [loading, setLoading] = useState({ loading: true, progress: 0 }); // loading state
-  // const [model, setModel] = useState({
-  //   net: null,
-  //   inputShape: [1, 0, 0, 3],
-  // }); // init model & input shape
-
-  // references
   const imageRef = useRef(null);
   const cameraRef = useRef(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
-  // model configs
-  // const modelName = "yolov5n";
   const classThreshold = (userModel.classThreshold||0.2);
   const videoSource=(userModel||{}).videoSource||undefined;
 
-  // const [multiModel,setMultiModel]=useState([{
-  //   net: null,
-  //   inputShape: [1, 0, 0, 3],
-  // }]);
   const [multiModel,setMultiModel]=useState([]);
 1
   useEffect(() => {
     tf.ready().then(async () => {
-      // const yolov5 = await tf.loadGraphModel(
-      //   `${window.location.origin}/${userModel.modelName}_web_model/model.json`,
-      //   {
-      //     onProgress: (fractions) => {
-      //       // setLoading({ loading: true, progress: fractions }); // set loading fractions
-
-
-      //     },
-      //   }
-      // ); // load model
-
-      // // warming up model
-      // const dummyInput = tf.ones(yolov5.inputs[0].shape);
-      // const warmupResult = await yolov5.executeAsync(dummyInput);
-      // tf.dispose(warmupResult); // cleanup memory
-      // tf.dispose(dummyInput); // cleanup memory
-
-      // // setLoading({ loading: false, progress: 1 });
-      // setModel({
-      //   net: yolov5,
-      //   inputShape: yolov5.inputs[0].shape,
-      // }); // set model & input shape
 
       const modelArrayBuffer=[];
 
@@ -67,82 +32,24 @@ const ObjectDetecion = ({userModel}) => {
               },
             }
           ).then(async(elementModel)=>{
-            // multiModel.push({
-              //   net: elementModel,
-              //   inputShape: elementModel.inputs[0].shape
-              // });
+
     
               const dummyInput = tf.ones(elementModel.inputs[0].shape);
               const warmupResult = await elementModel.executeAsync(dummyInput);
               tf.dispose(warmupResult);
               tf.dispose(dummyInput);
               modelArrayBuffer.push({ net: elementModel,inputShape: elementModel.inputs[0].shape});
-    
-              // if((multiModel[0].net==null)){
-              //   // console.log('init');
-              //   setMultiModel([{ net: elementModel,inputShape: elementModel.inputs[0].shape}]);
-              // }
-              // else
-                // setMultiModel([...multiModel,{ net: elementModel,inputShape: elementModel.inputs[0].shape}]);
 
                 if(index==(userModel.models.length-1))
                   setMultiModel(modelArrayBuffer);
           });
-    
-
-
-      });
-
-    
-      // dummyInput = tf.ones(elementModel.inputs[0].shape);
-      // warmupResult = await elementModel.executeAsync(dummyInput);
-      // tf.dispose(warmupResult);
-      // tf.dispose(dummyInput);
-
-      
+      });      
     });
-
-
-
-
-
-
-
-
-
-
   }, []);
-
-  // useEffect(()=>{
-  //   console.log("multiModel >> ",multiModel);
-  // },[multiModel])
-
-
-
-
-  // navigator.mediaDevices.getUserMedia({ video: true })
-  // .then((stream) => {
-  //   cameraRef.current.srcObject = stream;
-  //   // videoRef.current.srcObject = stream;
-  // })
-  // .catch((error) => {
-  //   console.error(error);
-  // });
-
-  // setTimeout(() => {
-  //   cameraRef.current.srcObject = undefined;
-  //   // cameraRef.current.srcObject = videoSource;
-  // }, 200000);
-
-  // useEffect(()=>{
-  //   cameraRef.current.srcObject = (userModel||{}).videoSource||undefined;
-  // },[userModel]);
 
   setTimeout(() => {
     cameraRef.current.srcObject = (userModel||{}).videoSource||undefined;
   }, 50);
-
-  
 
   let otherModels=[];
   // ((userModel||{}).otherModels||[]).forEach(element => {
@@ -183,13 +90,8 @@ const ObjectDetecion = ({userModel}) => {
             // srcObject ={videoSource}
             ref={cameraRef}
             onPlay={() => {
-              // detectVideo(((userModel||{}).cameraRef||cameraRef).current, model, classThreshold, ((userModel||{}).canvasRef||canvasRef).current,userModel);
               if(multiModel.length){
                 ((userModel||{}).models||[]).forEach(async (element,index) => {
-                  // console.log("test >> ",multiModel)
-                  // setTimeout(() => {
-                    
-                  // }, 0);
                   detectVideo(((userModel||{}).cameraRef||cameraRef).current,multiModel[index] , element.classThreshold, ((userModel||{}).canvasRef||canvasRef).current,element);
                 });
               } 
@@ -207,8 +109,6 @@ const ObjectDetecion = ({userModel}) => {
           /> */}
           <canvas width={(multiModel[0]!=undefined)?multiModel[0].inputShape[1]:0} height={(multiModel[0]!=undefined)?multiModel[0].inputShape[2]:0} ref={canvasRef} />
         </div>
-
-        {/* <ButtonHandler imageRef={imageRef} cameraRef={cameraRef} videoRef={videoRef} /> */}
       </div>
       {otherModels}
     </>
