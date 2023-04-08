@@ -3,7 +3,7 @@ import React,{ useState,useEffect,useRef } from "react"
 // const userCommands=[];
 // let userCommandsIndex=0;
 
-const DynamicConsole=({userConsole})=>{
+export const DynamicConsole=({userConsole})=>{
 	let defaultTextColor='green';
 	let defaultThemeColor='green';
 	const consoleIdentifier=userConsole.consoleIdentifier||'ALL-USERS';
@@ -85,7 +85,7 @@ const DynamicConsole=({userConsole})=>{
 
 	return(
 		<>
-			<div className={`p-1 m-1 overflow-scroll rounded-lg bg-gray-900 float-left lg:w-[45%] w-[calc(100% -16)] min-w-1000`} style={{
+			<div className={`p-1 m-1 overflow-scroll min-w-1000 rounded-lg  ${userConsole.className||'float-left lg:w-[45%] w-[calc(100% -16)] '}`} style={{
 				border:`1px solid ${userConsole.themeColor||defaultThemeColor}`,
 				color:userConsole.textColor||defaultTextColor,
 				display:`${userConsole.hide?'none':''}`
@@ -103,7 +103,7 @@ const DynamicConsole=({userConsole})=>{
 				</div>
 
 				{(consoleOutput)?(
-					<pre className="w-[calc(100% -24)] h-[320px] m-1 p-1 overflow-scroll font-bold" ref={mainConsoleOutput}>
+					<pre className={`w-[calc(100% -24)] h-[${userConsole.height||320}px] m-1 p-1 overflow-scroll font-bold`} ref={mainConsoleOutput}>
 						{/* {userConsole.consoleData} */}
 						{consoleDataObjects}
 					</pre>
@@ -182,7 +182,7 @@ export default function ConsoleDynamic() {
 				consoleInput:true,
 				// clearConsole:true,
 				// themeColor:'yellow',
-				height:200,
+				// height:200,
 				consoleData:consoleLog,
 				send:getConsoleInput,
 				hide:false,

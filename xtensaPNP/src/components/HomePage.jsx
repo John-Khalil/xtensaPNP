@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import ObjectDetecion from './ai/ObjectDetection'
+import { DynamicConsole } from "./ConsoleDynamic";
 
 export default function HomePage() {
   const [videoSource,setVideoSource]=useState(undefined);
@@ -18,11 +19,29 @@ export default function HomePage() {
     }, 200000);
   },[]);
 
+
+
+
+
+
+
+
+  const [consoleLog,consoleLogger]=useState(<>
+		<div className="bg-fuchsia-400"> test</div>
+	</>);
+	let testCounter=0;
+	const getConsoleInput=(consoleInput)=>{
+		console.log(consoleInput.consoleIdentifier);
+		consoleLogger(consoleInput.consoleData);
+		setTimeout(() => {
+			consoleLogger(undefined);
+		}, 0);
+	}
+
   
 
   return (
     <>
-      <div>HomePage</div>
 
 
       <ObjectDetecion userModel={{
@@ -48,7 +67,30 @@ export default function HomePage() {
             }
           ]
       }}/>
+
       
+
+      <div className=" text center">
+
+          
+
+        <DynamicConsole userConsole={{
+          className:'lg:w-[calc(100% -16)] ',
+          // consoleInput:true,
+          // clearConsole:true,
+          themeColor:'#a11caf',
+          height:200,
+          consoleData:consoleLog,
+          send:getConsoleInput,
+          hide:false,
+          consoleIdentifier:'ALL-EVENTS',
+          textColor:'#00ff00',
+          // themeColor:'rgb(0,0,0)'
+          
+          
+        }}/>
+      
+      </div>
       {/* <ObjectDetecion userModel={{
           videoSource,
           modelName:'components',
