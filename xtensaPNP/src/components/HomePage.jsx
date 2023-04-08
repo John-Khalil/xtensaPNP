@@ -2,51 +2,43 @@ import React, { useState, useEffect, useRef } from "react";
 import ObjectDetecion from './ai/ObjectDetection'
 import { DynamicConsole } from "./ConsoleDynamic";
 
+import ReactModal from 'react-modal';
+
+
 export default function HomePage() {
   const [videoSource,setVideoSource]=useState(undefined);
-  useEffect(()=>{
-    navigator.mediaDevices.getUserMedia({ video: true })
-    .then((stream) => {
-      // setVideoSource(stream);
-      // videoRef.current.srcObject = stream;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
 
-    setTimeout(() => {
-      setVideoSource(undefined);
-    }, 200000);
+  useEffect(()=>{
+    // navigator.mediaDevices.getUserMedia({ video: true })
+    // .then((stream) => {
+    //   setVideoSource(stream);
+    //   // videoRef.current.srcObject = stream;
+    // })
+    // .catch((error) => {
+    //   console.error(error);
+    // });
+
+    // setTimeout(() => {
+    //   setVideoSource(undefined);
+    // }, 200000);
+
+    // setVideoSource('http://192.168.1.6:8080/videofeed');
   },[]);
 
 
-
-
-
-
-
-
-  const [consoleLog,consoleLogger]=useState(<>
-		<div className="bg-fuchsia-400"> test</div>
-	</>);
-	let testCounter=0;
-	const getConsoleInput=(consoleInput)=>{
-		console.log(consoleInput.consoleIdentifier);
-		consoleLogger(consoleInput.consoleData);
-		setTimeout(() => {
-			consoleLogger(undefined);
-		}, 0);
-	}
-
-  
-
   return (
     <>
-
+      {/* <ReactModal isOpen={true} contentElement={
+        (props, children) => <div {...props}>{children}</div>
+      }>
+        <>
+        <div className="bg-fuchsia-400"> test</div>
+        </>
+      </ReactModal> */}
 
       <ObjectDetecion userModel={{
           videoSource,
-          className:'',
+          className:'border border-fuchsia-700 rounded-lg m-1 p-1 ',
           models:[
             {
               modelName:'broken_traces',
@@ -70,7 +62,7 @@ export default function HomePage() {
 
       
 
-      <div className=" text center">
+      <div className=" text center ">
 
           
 
@@ -80,8 +72,8 @@ export default function HomePage() {
           // clearConsole:true,
           themeColor:'#a11caf',
           height:200,
-          consoleData:consoleLog,
-          send:getConsoleInput,
+          // consoleData:consoleLog,
+          // send:getConsoleInput,
           hide:false,
           consoleIdentifier:'ALL-EVENTS',
           textColor:'#00ff00',
