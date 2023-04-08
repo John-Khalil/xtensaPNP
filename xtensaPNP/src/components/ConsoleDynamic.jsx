@@ -19,8 +19,11 @@ const DynamicConsole=({userConsole})=>{
 	const [userCommands,setUserCommands]=useState([]);
 	const [userCommandsIndex,setUserCommandsIndex]=useState(0);
 
+	const [consoleDataObjects,setConsoleDataObjects]=useState([]);
+
 	const clearMainConsoleOutput=()=>{
-		mainConsoleOutput.current.innerHTML='';
+		// mainConsoleOutput.current.innerHTML='';
+		setConsoleDataObjects([]);
 	}
 
 	const consoleSend=()=>{
@@ -57,16 +60,28 @@ const DynamicConsole=({userConsole})=>{
 			setUserCommandsIndex(userCommands.length);
 	}
 
+
+
+
 	useEffect(()=>{
 		if(userConsole.clearConsole===true)
 			clearMainConsoleOutput();
 
 		if(userConsole.consoleData!==undefined){
-			mainConsoleOutput.current.innerHTML+=userConsole.consoleData;
-			mainConsoleOutput.current.scrollTop=mainConsoleOutput.current.scrollHeight;
+			// mainConsoleOutput.current.innerHTML+=userConsole.consoleData;
+			setConsoleDataObjects([...consoleDataObjects,userConsole.consoleData]);
+			// (async()=>{
+			// 	mainConsoleOutput.current.scrollTop=mainConsoleOutput.current.scrollHeight;
+
+			// })();
 		}
 
 	},[userConsole]);
+
+	useEffect(()=>{
+		mainConsoleOutput.current.scrollTop=mainConsoleOutput.current.scrollHeight;
+
+	},[consoleDataObjects]);
 
 	return(
 		<>
@@ -89,7 +104,8 @@ const DynamicConsole=({userConsole})=>{
 
 				{(consoleOutput)?(
 					<pre className="w-[calc(100% -24)] h-[320px] m-1 p-1 overflow-scroll font-bold" ref={mainConsoleOutput}>
-						
+						{/* {userConsole.consoleData} */}
+						{consoleDataObjects}
 					</pre>
 				):(<></>)}
 
@@ -145,7 +161,10 @@ const DynamicConsole=({userConsole})=>{
 }
 
 export default function ConsoleDynamic() {
-	const [consoleLog,consoleLogger]=useState('');
+
+	const [consoleLog,consoleLogger]=useState(<>
+		<div className="bg-fuchsia-400"> test</div>
+	</>);
 	let testCounter=0;
 	const getConsoleInput=(consoleInput)=>{
 		console.log(consoleInput.consoleIdentifier);

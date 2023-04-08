@@ -6,7 +6,7 @@ export default function HomePage() {
   useEffect(()=>{
     navigator.mediaDevices.getUserMedia({ video: true })
     .then((stream) => {
-      setVideoSource(stream);
+      // setVideoSource(stream);
       // videoRef.current.srcObject = stream;
     })
     .catch((error) => {
