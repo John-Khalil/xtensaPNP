@@ -7,6 +7,9 @@ import ConsoleDynamic from './components/ConsoleDynamic';
 import NotFound from './components/NotFound';
 import AppSettings from './components/AppSettings';
 import SmartHub from './components/SmartHub';
+import Controls from './components/Controls';
+import SensorData from './components/SensorData';
+import Logs from './components/Logs';
 
 
 
@@ -21,6 +24,9 @@ function App() {
 					<Route path='smart-hub' element={<SmartHub/>}/>
 					<Route path="console-dynamic" element={<ConsoleDynamic />} />
 					<Route path="app-settings" element={<AppSettings />} />
+					<Route path="app-controls" element={<Controls/>} />
+					<Route path="app-sensor-data" element={<SensorData/>} />
+					<Route path="app-logs" element={<Logs/>} />
 					<Route path="*" element={<NotFound />} />
 				</Route>
 			</Routes>
