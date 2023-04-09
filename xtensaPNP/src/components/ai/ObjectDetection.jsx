@@ -24,7 +24,7 @@ const ObjectDetecion = ({userModel}) => {
 
 
   const [modelCheckList,setModelCheckList]=useState([]);
-  const [userEnabledModels,setUserEnabledModels]=useState(((userModel||{}).models||[]));
+  let [userEnabledModels,setUserEnabledModels]=useState(((userModel||{}).models||[]));
   
   
   useEffect(() => {
@@ -32,27 +32,7 @@ const ObjectDetecion = ({userModel}) => {
       
       const modelArrayBuffer=[];
       const modelCheckListArrayBuffer=[];
-      const enabledModels=[];
-      
-      const checkModel=enableModel=>{
-        console.log(enableModel)
 
-        enabledModels.forEach((element,index)=>{
-          if(element.modelName==enableModel.modelName)
-          enabledModels[index]=enableModel;
-        })
-
-        console.log(enabledModels);
-        
-        const enabledModelsBuffer=[];
-        enabledModels.forEach((element,index)=>{
-          if(element.enable)
-            enabledModelsBuffer.push(modelArrayBuffer[index])
-        })
-
-        setMultiModel(enabledModelsBuffer);
-
-      }
 
 
 
@@ -84,52 +64,25 @@ const ObjectDetecion = ({userModel}) => {
           modelCheckListArrayBuffer.push(<>
             <span>{element.modelName}</span><input className="float-right mt-2"  type="checkbox" onChange={event=>{
 
-              // checkModel({...element,index,enable:event.target.checked});
               ((userModel||{}).models||[])[index].enable=event.target.checked;
-              console.log(((userModel||{}).models||[]))
+              userEnabledModels=((userModel||{}).models||[]);
               setUserEnabledModels(((userModel||{}).models||[]));
             }}/><br />
           </>);
           
-          enabledModels.push(element);
+          
 
       });      
     });
 
   }, []);
 
-  useLayoutEffect(()=>{
-    
-    // setDivMargin((600-cameraRef.current.style.width)/2);
-    console.log((contentDiv.current.style.width-cameraRef.current.style.width)/2)
-
-  },[]);
 
   setTimeout(() => {
     cameraRef.current.srcObject = (userModel||{}).videoSource||undefined;
   }, 50);
 
-  let otherModels=[];
-  // ((userModel||{}).otherModels||[]).forEach(element => {
-  //   otherModels.push(
-  //     <ObjectDetecion userModel={{
-  //       canvasRef,
-  //       cameraRef,
-  //       otherModels:[],
-  //       className:'hidden',
-  //       videoSource:(userModel||{}).videoSource||undefined,
 
-  //       modelName:element.modelName,
-  //       labels:element.labels,
-  //       classThreshold:element.modelName||classThreshold,
-  //       onDetect:element.onDetect,
-
-  //     }}/>
-  //   );
-  // });
-  // setInterval(() => {
-  //   console.log(multiModel)
-  // }, 10000);
 
   return (
     <>
@@ -168,10 +121,14 @@ const ObjectDetecion = ({userModel}) => {
               ref={cameraRef}
               onPlay={() => {
                 if(multiModel.length){
-                  userEnabledModels.forEach(async (element,index) => {
-                    console.log(element.enable)
+                  ((userModel||{}).models||[]).forEach(async (element,index) => {
                     if(element.enable)
-                      detectVideo(((userModel||{}).cameraRef||cameraRef).current,multiModel[index] , element.classThreshold, ((userModel||{}).canvasRef||canvasRef).current,element);
+                      detectVideo(((userModel||{}).cameraRef||cameraRef).current,multiModel[index] , element.classThreshold, ((userModel||{}).canvasRef||canvasRef).current,element,()=>{
+                        if(!userEnabledModels[index].enable){
+                          return false;
+                        }
+                        return true;
+                      });
                   });
                 } 
                   
@@ -198,7 +155,6 @@ const ObjectDetecion = ({userModel}) => {
         </div>
 
       </div>
-      {otherModels}
     </>
    
     

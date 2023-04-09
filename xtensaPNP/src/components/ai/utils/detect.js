@@ -68,7 +68,7 @@ export const detectImage = async (imgSource, model, classThreshold, canvasRef,us
  * @param {Number} classThreshold class threshold
  * @param {HTMLCanvasElement} canvasRef canvas reference
  */
-export const detectVideo = (vidSource, model, classThreshold, canvasRef,userModel) => {
+export const detectVideo = (vidSource, model, classThreshold, canvasRef,userModel,eventThread) => {
   const [modelWidth, modelHeight] = model.inputShape.slice(1, 3); // get model width and height
 
   /**
@@ -101,7 +101,14 @@ export const detectVideo = (vidSource, model, classThreshold, canvasRef,userMode
     });
 
     const asyncRecall=async()=>{
-      requestAnimationFrame(detectFrame); // get another frame
+      if(eventThread()){
+        requestAnimationFrame(detectFrame); // get another frame
+      }
+      else{
+        setTimeout(() => {
+          asyncRecall();
+        }, 50);
+      }
     }
     asyncRecall();
 
