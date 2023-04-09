@@ -71,7 +71,7 @@ export default function HomePage() {
           // consoleInput:true,
           // clearConsole:true,
           themeColor:'#a11caf',
-          height:200,
+          height:290,
           // consoleData:consoleLog,
           // send:getConsoleInput,
           hide:false,

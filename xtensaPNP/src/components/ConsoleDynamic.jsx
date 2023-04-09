@@ -103,7 +103,9 @@ export const DynamicConsole=({userConsole})=>{
 				</div>
 
 				{(consoleOutput)?(
-					<pre className={`w-[calc(100% -24)] h-[${userConsole.height||320}px] m-1 p-1 overflow-scroll font-bold`} ref={mainConsoleOutput}>
+					<pre className={`w-[calc(100% -24)]  m-1 p-1 overflow-scroll font-bold`} ref={mainConsoleOutput} style={{
+						height:`${userConsole.height||320}px`
+					}}>
 						{/* {userConsole.consoleData} */}
 						{consoleDataObjects}
 					</pre>
