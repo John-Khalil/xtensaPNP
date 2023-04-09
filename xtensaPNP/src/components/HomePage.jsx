@@ -20,7 +20,7 @@ export default function HomePage() {
 
     setTimeout(() => {
       setVideoSource(undefined);
-    }, 50000);
+    }, 200000);
 
     // setVideoSource('http://192.168.1.6:8080/videofeed');
   },[]);
@@ -50,6 +50,7 @@ export default function HomePage() {
                 modelName:'broken_traces',
                 labels:['missing_hole', 'mouse_bite','open_circuit', 'short', 'spur', 'spurious_copper'],
                 classThreshold : 0.01,
+                enable:true,
                 onDetect:(res)=>{
                   const [boxes, scores, classes] = res.slice(0, 3);
                   const boxes_data = boxes.dataSync();
@@ -61,7 +62,8 @@ export default function HomePage() {
               {
                 modelName:'components',
                 labels:['capacitor', 'inductor', 'resistor'],
-                classThreshold : 0.01
+                classThreshold : 0.01,
+                enable:true
               }
             ]
           }}/>

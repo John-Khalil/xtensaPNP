@@ -24,16 +24,38 @@ const ObjectDetecion = ({userModel}) => {
 
 
   const [modelCheckList,setModelCheckList]=useState([]);
-  const checkModel=enableModel=>{
-    console.log(enableModel)
-  }
-
-
+  const [userEnabledModels,setUserEnabledModels]=useState(((userModel||{}).models||[]));
+  
+  
   useEffect(() => {
     tf.ready().then(async () => {
-
+      
       const modelArrayBuffer=[];
       const modelCheckListArrayBuffer=[];
+      const enabledModels=[];
+      
+      const checkModel=enableModel=>{
+        console.log(enableModel)
+
+        enabledModels.forEach((element,index)=>{
+          if(element.modelName==enableModel.modelName)
+          enabledModels[index]=enableModel;
+        })
+
+        console.log(enabledModels);
+        
+        const enabledModelsBuffer=[];
+        enabledModels.forEach((element,index)=>{
+          if(element.enable)
+            enabledModelsBuffer.push(modelArrayBuffer[index])
+        })
+
+        setMultiModel(enabledModelsBuffer);
+
+      }
+
+
+
 
       ((userModel||{}).models||[]).forEach((element,index) => {
           tf.loadGraphModel(
@@ -60,10 +82,16 @@ const ObjectDetecion = ({userModel}) => {
           });
 
           modelCheckListArrayBuffer.push(<>
-            <span>{element.modelName}</span><input className="float-right mt-2" type="checkbox" onChange={event=>{
-              checkModel({...element,enable:event.target.checked});
+            <span>{element.modelName}</span><input className="float-right mt-2"  type="checkbox" onChange={event=>{
+
+              // checkModel({...element,index,enable:event.target.checked});
+              ((userModel||{}).models||[])[index].enable=event.target.checked;
+              console.log(((userModel||{}).models||[]))
+              setUserEnabledModels(((userModel||{}).models||[]));
             }}/><br />
           </>);
+          
+          enabledModels.push(element);
 
       });      
     });
@@ -140,8 +168,10 @@ const ObjectDetecion = ({userModel}) => {
               ref={cameraRef}
               onPlay={() => {
                 if(multiModel.length){
-                  ((userModel||{}).models||[]).forEach(async (element,index) => {
-                    detectVideo(((userModel||{}).cameraRef||cameraRef).current,multiModel[index] , element.classThreshold, ((userModel||{}).canvasRef||canvasRef).current,element);
+                  userEnabledModels.forEach(async (element,index) => {
+                    console.log(element.enable)
+                    if(element.enable)
+                      detectVideo(((userModel||{}).cameraRef||cameraRef).current,multiModel[index] , element.classThreshold, ((userModel||{}).canvasRef||canvasRef).current,element);
                   });
                 } 
                   
