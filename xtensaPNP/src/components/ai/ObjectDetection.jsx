@@ -18,15 +18,22 @@ const ObjectDetecion = ({userModel}) => {
   const videoSource=(userModel||{}).videoSource||undefined;
   
   const [multiModel,setMultiModel]=useState([]);
-  1
+  
   const [divMargin,setDivMargin]=useState(0);
   const contentDiv=useRef(null);
+
+
+  const [modelCheckList,setModelCheckList]=useState([]);
+  const checkModel=enableModel=>{
+    console.log(enableModel)
+  }
 
 
   useEffect(() => {
     tf.ready().then(async () => {
 
       const modelArrayBuffer=[];
+      const modelCheckListArrayBuffer=[];
 
       ((userModel||{}).models||[]).forEach((element,index) => {
           tf.loadGraphModel(
@@ -46,9 +53,18 @@ const ObjectDetecion = ({userModel}) => {
               tf.dispose(dummyInput);
               modelArrayBuffer.push({ net: elementModel,inputShape: elementModel.inputs[0].shape});
 
-                if(index==(userModel.models.length-1))
+                if(index==(userModel.models.length-1)){
                   setMultiModel(modelArrayBuffer);
+                  setModelCheckList(modelCheckListArrayBuffer);
+                }
           });
+
+          modelCheckListArrayBuffer.push(<>
+            <span>{element.modelName}</span><input className="float-right mt-2" type="checkbox" onChange={event=>{
+              checkModel({...element,enable:event.target.checked});
+            }}/><br />
+          </>);
+
       });      
     });
 
@@ -147,7 +163,9 @@ const ObjectDetecion = ({userModel}) => {
 
         
 
-        <div className="float-right w-[200px] h-[200px] bg-green-200"></div>
+        <div className="float-right w-[150px] mx-2">
+            {modelCheckList}
+        </div>
 
       </div>
       {otherModels}
