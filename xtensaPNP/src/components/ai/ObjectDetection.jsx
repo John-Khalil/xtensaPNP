@@ -122,7 +122,6 @@ const ObjectDetecion = ({userModel}) => {
               onPlay={() => {
                 if(multiModel.length){
                   ((userModel||{}).models||[]).forEach(async (element,index) => {
-                    if(element.enable)
                       detectVideo(((userModel||{}).cameraRef||cameraRef).current,multiModel[index] , element.classThreshold, ((userModel||{}).canvasRef||canvasRef).current,element,()=>{
                         if(!userEnabledModels[index].enable){
                           return false;

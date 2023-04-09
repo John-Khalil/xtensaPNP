@@ -120,5 +120,18 @@ export const detectVideo = (vidSource, model, classThreshold, canvasRef,userMode
 
   };
 
-  detectFrame(); // initialize to detect every frame
+  const firstFrame=async()=>{
+    if(eventThread()){
+      detectFrame(); // initialize to detect every frame
+    }
+    else{
+      setTimeout(() => {
+        firstFrame();
+      }, 50);
+    }
+  }
+
+  firstFrame();
+
+  // detectFrame(); // initialize to detect every frame
 };

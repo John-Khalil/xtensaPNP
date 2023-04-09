@@ -50,7 +50,7 @@ export default function HomePage() {
                 modelName:'broken_traces',
                 labels:['missing_hole', 'mouse_bite','open_circuit', 'short', 'spur', 'spurious_copper'],
                 classThreshold : 0.01,
-                enable:true,
+                enable:false,
                 onDetect:(res)=>{
                   const [boxes, scores, classes] = res.slice(0, 3);
                   const boxes_data = boxes.dataSync();
@@ -63,7 +63,7 @@ export default function HomePage() {
                 modelName:'components',
                 labels:['capacitor', 'inductor', 'resistor'],
                 classThreshold : 0.01,
-                enable:true
+                enable:false
               }
             ]
           }}/>
