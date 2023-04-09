@@ -20,7 +20,7 @@ export default function HomePage() {
 
     setTimeout(() => {
       setVideoSource(undefined);
-    }, 200000);
+    }, 50000);
 
     // setVideoSource('http://192.168.1.6:8080/videofeed');
   },[]);
@@ -36,31 +36,38 @@ export default function HomePage() {
         </>
       </ReactModal> */}
 
-      <ObjectDetecion userModel={{
-          videoSource,
-          className:'border border-fuchsia-700 rounded-lg m-1 p-1 text-center',
-          models:[
-            {
-              modelName:'broken_traces',
-              labels:['missing_hole', 'mouse_bite','open_circuit', 'short', 'spur', 'spurious_copper'],
-              classThreshold : 0.01,
-              onDetect:(res)=>{
-                const [boxes, scores, classes] = res.slice(0, 3);
-                const boxes_data = boxes.dataSync();
-                const scores_data = scores.dataSync();
-                const classes_data = classes.dataSync();
-                // console.log([boxes_data,scores_data,classes_data]);
+
+      <div className="border border-fuchsia-700 rounded-lg m-1 p-1 h-[950px]">
+
+
+
+
+        <ObjectDetecion userModel={{
+            videoSource,
+            className:'',
+            models:[
+              {
+                modelName:'broken_traces',
+                labels:['missing_hole', 'mouse_bite','open_circuit', 'short', 'spur', 'spurious_copper'],
+                classThreshold : 0.01,
+                onDetect:(res)=>{
+                  const [boxes, scores, classes] = res.slice(0, 3);
+                  const boxes_data = boxes.dataSync();
+                  const scores_data = scores.dataSync();
+                  const classes_data = classes.dataSync();
+                  // console.log([boxes_data,scores_data,classes_data]);
+                },
               },
-            },
-            {
-              modelName:'components',
-              labels:['capacitor', 'inductor', 'resistor'],
-              classThreshold : 0.01
-            }
-          ]
-      }}/>
+              {
+                modelName:'components',
+                labels:['capacitor', 'inductor', 'resistor'],
+                classThreshold : 0.01
+              }
+            ]
+          }}/>
 
       
+        </div>
 
       <div className=" text center ">
 
