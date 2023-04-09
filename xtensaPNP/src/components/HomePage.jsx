@@ -9,18 +9,18 @@ export default function HomePage() {
   const [videoSource,setVideoSource]=useState(undefined);
 
   useEffect(()=>{
-    // navigator.mediaDevices.getUserMedia({ video: true })
-    // .then((stream) => {
-    //   setVideoSource(stream);
-    //   // videoRef.current.srcObject = stream;
-    // })
-    // .catch((error) => {
-    //   console.error(error);
-    // });
+    navigator.mediaDevices.getUserMedia({ video: true })
+    .then((stream) => {
+      setVideoSource(stream);
+      // videoRef.current.srcObject = stream;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 
-    // setTimeout(() => {
-    //   setVideoSource(undefined);
-    // }, 200000);
+    setTimeout(() => {
+      setVideoSource(undefined);
+    }, 200000);
 
     // setVideoSource('http://192.168.1.6:8080/videofeed');
   },[]);
@@ -38,7 +38,7 @@ export default function HomePage() {
 
       <ObjectDetecion userModel={{
           videoSource,
-          className:'border border-fuchsia-700 rounded-lg m-1 p-1 ',
+          className:'border border-fuchsia-700 rounded-lg m-1 p-1 text-center',
           models:[
             {
               modelName:'broken_traces',

@@ -80,9 +80,20 @@ const ObjectDetecion = ({userModel}) => {
 
         <div className="content">
           {/* <img
-            src="#"
+            src="http://192.168.1.6:8080/videofeed"
             ref={imageRef}
-            onLoad={() => detectImage(imageRef.current, model, classThreshold, canvasRef.current)}
+            onLoad={() =>{
+              // detectImage(imageRef.current, model, classThreshold, canvasRef.current)
+
+              if(multiModel.length){
+                ((userModel||{}).models||[]).forEach(async (element,index) => {
+                  detectImage(((userModel||{}).cameraRef||cameraRef).current,multiModel[index] , element.classThreshold, ((userModel||{}).canvasRef||canvasRef).current,element);
+                });
+              }               
+
+
+              }
+            }
           /> */}
           <video
             autoPlay
