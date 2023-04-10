@@ -76,10 +76,13 @@ const ObjectDetecion = ({userModel}) => {
       });      
     });
 
-
-    appLinker.send('ALL-EVENTS',<>
+    (async()=>{
+      appLinker.send('ALL-EVENTS',<>
       <div className="bg-cyan-700"> 'super normal text , could be any log info </div>
     </>);
+    })();
+
+    
 
     setTimeout(() => {
       appLinker.send('ALL-EVENTS',<>
