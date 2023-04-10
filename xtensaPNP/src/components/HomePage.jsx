@@ -27,7 +27,7 @@ export default function HomePage() {
     // setVideoSource('http://192.168.1.6:8080/videofeed');
 
     
-    appLinker.addListener('ALL-EVENTS',data=>{
+    appLinker.addListener('ALL-EVENTS',async(data)=>{
       allEventsLog(data)
     });
 
