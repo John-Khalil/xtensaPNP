@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import ObjectDetecion from './ai/ObjectDetection'
 import { DynamicConsole } from "./ConsoleDynamic";
+import appLinker from '../utils/utils'
 
 import ReactModal from 'react-modal';
 
 
 export default function HomePage() {
   const [videoSource,setVideoSource]=useState(undefined);
+  const [allEventsData,allEventsLog]=useState('');
 
   useEffect(()=>{
     navigator.mediaDevices.getUserMedia({ video: true })
@@ -23,7 +25,14 @@ export default function HomePage() {
     }, 200000);
 
     // setVideoSource('http://192.168.1.6:8080/videofeed');
+
+    
+    appLinker.addListener('ALL-EVENTS',data=>{
+      allEventsLog(data)
+    });
+
   },[]);
+
 
 
   return (
@@ -80,8 +89,8 @@ export default function HomePage() {
           // consoleInput:true,
           // clearConsole:true,
           themeColor:'#a11caf',
-          height:290,
-          // consoleData:consoleLog,
+          height:280,
+          consoleData:allEventsData,
           // send:getConsoleInput,
           hide:false,
           consoleIdentifier:'ALL-EVENTS',

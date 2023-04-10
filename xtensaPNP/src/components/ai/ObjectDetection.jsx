@@ -5,7 +5,7 @@ import "@tensorflow/tfjs-backend-webgl"; // set backend to webgl
 import ButtonHandler from "./components/btn-handler";
 import { detectImage, detectVideo } from "./utils/detect";
 import { useLayoutEffect } from "react";
-
+import appLinker from "../../utils/utils";
 
 const ObjectDetecion = ({userModel}) => {
   
@@ -74,6 +74,10 @@ const ObjectDetecion = ({userModel}) => {
 
       });      
     });
+
+    appLinker.send('ALL-EVENTS',<>
+      <div className="bg-gray-700"> test Manga</div>
+    </>);
 
   }, []);
 
