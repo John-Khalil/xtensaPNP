@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import ObjectDetecion from './ai/ObjectDetection'
 import { DynamicConsole } from "./ConsoleDynamic";
 import appLinker from '../utils/utils'
-
+import AppModal from "./AppModal";
 import ReactModal from 'react-modal';
 
 
@@ -13,7 +13,7 @@ export default function HomePage() {
   useEffect(()=>{
     navigator.mediaDevices.getUserMedia({ video: true })
     .then((stream) => {
-      setVideoSource(stream);
+      // setVideoSource(stream);
       // videoRef.current.srcObject = stream;
     })
     .catch((error) => {
@@ -37,13 +37,7 @@ export default function HomePage() {
 
   return (
     <>
-      {/* <ReactModal isOpen={true} contentElement={
-        (props, children) => <div {...props}>{children}</div>
-      }>
-        <>
-        <div className="bg-fuchsia-400"> test</div>
-        </>
-      </ReactModal> */}
+      <AppModal identifier={''}/>
 
 
       <div className="border border-fuchsia-700 rounded-lg m-1 p-1 h-[950px]">

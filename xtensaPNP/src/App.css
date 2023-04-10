@@ -74,6 +74,14 @@
 }
 
 
+
+
+
+.modal-overlay{
+  background-color: black;
+}
+
+
 /* .content > img {
   display: none;
   width: 100%;

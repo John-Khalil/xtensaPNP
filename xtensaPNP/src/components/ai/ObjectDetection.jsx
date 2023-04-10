@@ -6,6 +6,7 @@ import ButtonHandler from "./components/btn-handler";
 import { detectImage, detectVideo } from "./utils/detect";
 import { useLayoutEffect } from "react";
 import appLinker from "../../utils/utils";
+import { DynamicConsole } from "../ConsoleDynamic";
 
 const ObjectDetecion = ({userModel}) => {
   
@@ -75,9 +76,15 @@ const ObjectDetecion = ({userModel}) => {
       });      
     });
 
+    appLinker.send('ALL-EVENTS','super normal text , could be any log info ');
+
     appLinker.send('ALL-EVENTS',<>
+      <img src="https://i1.rgstatic.net/ii/profile.image/280003519500304-1443769449750_Q512/Ashraf-Fathallah.jpg" alt="" />
       <div className="bg-gray-700"> test Manga</div>
     </>);
+
+    appLinker.send('@AppModal-setContent',<DynamicConsole userConsole={{}}/>);
+		appLinker.send('@AppModal-setOpen',true);
 
   }, []);
 
