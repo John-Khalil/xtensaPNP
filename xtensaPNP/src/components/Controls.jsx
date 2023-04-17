@@ -55,8 +55,10 @@ export const ControlPanel=({machineControl})=>{
       </div>
       <span>Feed Rate</span>
       <input type="range" className='w-full'/>
-      <div className='w-full my-2 overflow-scroll inline'>
-        {toolChangeList}
+      <div className='w-full my-2 overflow-scroll'>
+        <div className='min-w-max'>
+          {toolChangeList}
+        </div>
       </div>
     </div>
 
