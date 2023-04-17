@@ -108,6 +108,36 @@ export const ControlPanel=({machineControl})=>{
   </>);
 };
 
+export const SpindelControl=()=>{
+  return(<>
+    <span>turn on</span>
+    <input type="checkbox" />
+    <br />
+    <span>RPM</span>
+    <br />
+    <input type="range" />
+  </>);
+}
+
+export const SolderPaste=()=>{
+  return(<>
+    <button>eject</button>
+  </>);
+}
+
+export const PumpControl=()=>{
+  return(<>
+    <button>pick</button>
+    <br />
+    <button>place</button>
+    <br />
+    
+   <span>speed</span>
+    <input type="range" />
+  </>);
+}
+
+
 
 
 export default function Controls() {
@@ -133,12 +163,36 @@ export default function Controls() {
           console.log("Z_Negative >> ",data);
         },
         toolChangeList:[
-          {},{Control:
-            <div>manga</div>,
+          {
+            label:'spindel',
             activate:()=>{
-              console.log("manga is active")
-            }
-          },{},{},{},{},{}
+              console.log("send some commands to enable spindel");
+            },
+            Control:<SpindelControl/>
+          },
+          {
+            label:'picker',
+            activate:()=>{
+              console.log("send some commands to enable picker");
+            },
+            Control:<PumpControl/>
+          },
+          {
+            label:'solder',
+            activate:()=>{
+              console.log("send some commands to enable SolderPaste");
+            },
+            Control:<SolderPaste/>
+          },
+          {
+
+          },
+          {
+
+          },
+          {
+
+          }
         ]        
       }}/>
     </>
