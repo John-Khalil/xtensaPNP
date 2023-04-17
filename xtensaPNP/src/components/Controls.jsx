@@ -2,7 +2,7 @@ import React from 'react'
 import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { CONTROLPANEL_FEEDRATE, CONTROLPANEL_UNIT, userStorage } from '../utils/utils';
+import { CONTROLPANEL_FEEDRATE, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, userStorage } from '../utils/utils';
 
 
 export const ControlPanel=({machineControl})=>{
@@ -15,7 +15,7 @@ export const ControlPanel=({machineControl})=>{
   const feedRateSliderRef=useRef();
 
   const [toolChangeList,setToolChangeList]=useState([]);
-  const [toolControl,setToolControl]=useState(<>tool control</>);
+  const [toolControl,setToolControl]=useState((((machineControl||{}).toolChangeList||[])[userStorage.get(CONTROLPANEL_SELECTED_TOOL)||userStorage.set(CONTROLPANEL_SELECTED_TOOL,0)].Control)||(<>tool control</>));
 
   useEffect(()=>{
     const toolChangeListBuffer=[];
@@ -27,6 +27,7 @@ export const ControlPanel=({machineControl})=>{
         <button className={`float-left ${tootChangeStyle}`} onClick={()=>{
           ((tool.activate)||(()=>{}))();
           setToolControl(tool.Control||<>undefined</>);
+          userStorage.set(CONTROLPANEL_SELECTED_TOOL,index);
         }}>{tool.label||'tool'}</button>
       );
     });
@@ -37,7 +38,7 @@ export const ControlPanel=({machineControl})=>{
     feedRateRef.current.value=userStorage.get(CONTROLPANEL_FEEDRATE)||userStorage.set(CONTROLPANEL_FEEDRATE,100);
     feedRateSliderRef.current.value=userStorage.get(CONTROLPANEL_FEEDRATE)||userStorage.set(CONTROLPANEL_FEEDRATE,100);
     
-
+    ((((machineControl||{}).toolChangeList||[])[userStorage.get(CONTROLPANEL_SELECTED_TOOL)||userStorage.set(CONTROLPANEL_SELECTED_TOOL,0)].activate)||(()=>{}))();
 
   },[]);
 
@@ -115,7 +116,10 @@ export default function Controls() {
       <ControlPanel machineControl={{
         toolChangeList:[
           {},{Control:
-            <div>manga</div>
+            <div>manga</div>,
+            activate:()=>{
+              console.log("manga is active")
+            }
           },{},{},{},{},{}
         ]        
       }}/>
