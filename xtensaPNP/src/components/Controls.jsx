@@ -71,16 +71,16 @@ export const ControlPanel=({machineControl})=>{
 
 
         <div className='row-start-1 col-start-1 row-span-1 col-span-1'><div className={buttonStyle} onClick={unitUp}>01</div></div>
-        <div className='row-start-1 col-start-3 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>((machineControl||{}).Y_Positive)||(()=>{})({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>02</div></div>
-        <div className='row-start-1 col-start-5 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>((machineControl||{}).Z_Positive)||(()=>{})({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>03</div></div>
+        <div className='row-start-1 col-start-3 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).Y_Positive)||(()=>{}))({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>02</div></div>
+        <div className='row-start-1 col-start-5 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).Z_Positive)||(()=>{}))({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>03</div></div>
 
-        <div className='row-start-3 col-start-1 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>((machineControl||{}).X_Negative)||(()=>{})({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>04</div></div>
+        <div className='row-start-3 col-start-1 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).X_Negative)||(()=>{}))({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>04</div></div>
         <div className='row-start-2 col-start-2 row-span-3 col-span-3'><div className={toolControlStyle}>{toolControl}</div></div>
-        <div className='row-start-3 col-start-5 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>((machineControl||{}).X_Positive)||(()=>{})({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>06</div></div>
+        <div className='row-start-3 col-start-5 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).X_Positive)||(()=>{}))({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>06</div></div>
 
         <div className='row-start-5 col-start-1 row-span-1 col-span-1'><div className={buttonStyle} onClick={unitDown}>07</div></div>
-        <div className='row-start-5 col-start-3 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>((machineControl||{}).Y_Negative)||(()=>{})({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>08</div></div>
-        <div className='row-start-5 col-start-5 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>((machineControl||{}).Z_Negative)||(()=>{})({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>09</div></div>
+        <div className='row-start-5 col-start-3 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).Y_Negative)||(()=>{}))({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>08</div></div>
+        <div className='row-start-5 col-start-5 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).Z_Negative)||(()=>{}))({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>09</div></div>
         
       </div>
       <div className='w-full'>
@@ -114,6 +114,24 @@ export default function Controls() {
   return (
     <>
       <ControlPanel machineControl={{
+        Y_Positive:(data)=>{
+          console.log("Y_Positive >> ",data);
+        },
+        Y_Negative:(data)=>{
+          console.log("Y_Negative >> ",data);
+        },
+        X_Positive:(data)=>{
+          console.log("X_Positive >> ",data);
+        },
+        X_Negative:(data)=>{
+          console.log("X_Negative >> ",data);
+        },
+        Z_Positive:(data)=>{
+          console.log("Z_Positive >> ",data);
+        },
+        Z_Negative:(data)=>{
+          console.log("Z_Negative >> ",data);
+        },
         toolChangeList:[
           {},{Control:
             <div>manga</div>,
