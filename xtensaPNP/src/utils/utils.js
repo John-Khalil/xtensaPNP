@@ -9,6 +9,45 @@ export class AppLinker{
     
 }
 
+const baseAddress='xtensaPNP';
+
+const userLocalStorage=()=>{
+    if(localStorage.getItem(baseAddress)==null)
+        localStorage.setItem(baseAddress,JSON.stringify({
+            selectedMachine:0,
+            machineList:[{}]
+        }));
+    return JSON.parse(localStorage.getItem(baseAddress));
+}
+
+export const userStorage={
+    get:key=>{
+        return(userLocalStorage().machineList[userLocalStorage().selectedMachine][key]);
+    },
+    selectMachine:(selectedMachine)=>{
+        const storedData=userLocalStorage();
+        storedData.selectedMachine=selectedMachine;
+        localStorage.setItem(baseAddress,JSON.stringify(storedData));
+        return JSON.parse(localStorage.getItem(baseAddress)).selectedMachine;
+    },
+    addMachine:(machineID)=>{
+        const storedData=userLocalStorage();
+        storedData.machineList.push({machineID});
+        localStorage.setItem(baseAddress,JSON.stringify(storedData));
+        return JSON.parse(localStorage.getItem(baseAddress)).machineList;
+    },
+    set:(key,value)=>{
+        const storedData=userLocalStorage();
+        storedData.machineList[userLocalStorage().selectedMachine][key]=value;
+        localStorage.setItem(baseAddress,JSON.stringify(storedData));
+        return JSON.parse(localStorage.getItem(baseAddress)).machineList[userLocalStorage().selectedMachine][key];
+    },
+    userLocalStorage 
+}
+
+
+
+
 const appLinker =new AppLinker;
 
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { userStorage } from '../utils/utils';
 
 
 export const ControlPanel=({machineControl})=>{
@@ -27,6 +28,9 @@ export const ControlPanel=({machineControl})=>{
     });
 
     setToolChangeList(toolChangeListBuffer);
+
+    console.log(" >> ",userStorage.set('any value',1234));
+    console.log(" >> ",userStorage.set('any value2','manga'));
 
   },[]);
 
