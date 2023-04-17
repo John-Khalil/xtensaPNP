@@ -1,7 +1,8 @@
 import React from 'react'
+import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { userStorage } from '../utils/utils';
+import { CONTROLPANEL_UNIT, userStorage } from '../utils/utils';
 
 
 export const ControlPanel=({machineControl})=>{
@@ -9,6 +10,7 @@ export const ControlPanel=({machineControl})=>{
   const toolControlStyle='border border-gray-500 h-full w-full';
   const tootChangeStyle='rounded-md bg-red-600 p-1 m-1';
 
+  const unitRef=useRef();
 
   const [toolChangeList,setToolChangeList]=useState([]);
   const [toolControl,setToolControl]=useState(<>tool control</>);
@@ -29,22 +31,41 @@ export const ControlPanel=({machineControl})=>{
 
     setToolChangeList(toolChangeListBuffer);
 
-    console.log(" >> ",userStorage.set('any value',1234));
-    console.log(" >> ",userStorage.set('any value2','manga'));
+    unitRef.current.value=userStorage.get(CONTROLPANEL_UNIT)||userStorage.set(CONTROLPANEL_UNIT,1);
+    
+
 
   },[]);
+
+  const unitUp=()=>{
+    unitRef.current.value*=2;
+    if(unitRef.current.value<0.1)
+      unitRef.current.value=1;
+    userStorage.set(CONTROLPANEL_UNIT,unitRef.current.value);
+  }
+
+  const unitDown=()=>{
+    unitRef.current.value/=2;
+    if(unitRef.current.value<0.1)
+      unitRef.current.value=1;
+    userStorage.set(CONTROLPANEL_UNIT,unitRef.current.value);
+  }
 
 
   return(<>
     <div className='float-right w-[300px]  '>
-      <input type="number" className='w-full bg-gray-800 rounded-lg h-[45px] text-blue-300 text-4xl text-center' />
+      <input type="number" className='w-full bg-gray-800 rounded-lg h-[45px] text-blue-300 text-4xl text-center' ref={unitRef} onChange={()=>{
+        if(unitRef.current.value<0.1)
+          unitRef.current.value=1;
+        userStorage.set(CONTROLPANEL_UNIT,unitRef.current.value);
+      }}/>
       
       <div className='grid grid-cols-5 grid-rows-5 gap-0.5   w-full h-[300px] my-2'>
 
           {/* <div className='row-start-1 col-start-1 row-end-11 col-end-11'><div className=''></div></div> */}
 
 
-        <div className='row-start-1 col-start-1 row-span-1 col-span-1'><div className={buttonStyle}>01</div></div>
+        <div className='row-start-1 col-start-1 row-span-1 col-span-1'><div className={buttonStyle} onClick={unitUp}>01</div></div>
         <div className='row-start-1 col-start-3 row-span-1 col-span-1'><div className={buttonStyle}>02</div></div>
         <div className='row-start-1 col-start-5 row-span-1 col-span-1'><div className={buttonStyle}>03</div></div>
 
@@ -52,7 +73,7 @@ export const ControlPanel=({machineControl})=>{
         <div className='row-start-2 col-start-2 row-span-3 col-span-3'><div className={toolControlStyle}>{toolControl}</div></div>
         <div className='row-start-3 col-start-5 row-span-1 col-span-1'><div className={buttonStyle}>06</div></div>
 
-        <div className='row-start-5 col-start-1 row-span-1 col-span-1'><div className={buttonStyle}>07</div></div>
+        <div className='row-start-5 col-start-1 row-span-1 col-span-1'><div className={buttonStyle} onClick={unitDown}>07</div></div>
         <div className='row-start-5 col-start-3 row-span-1 col-span-1'><div className={buttonStyle}>08</div></div>
         <div className='row-start-5 col-start-5 row-span-1 col-span-1'><div className={buttonStyle}>09</div></div>
         
