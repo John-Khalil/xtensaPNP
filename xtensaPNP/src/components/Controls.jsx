@@ -2,7 +2,7 @@ import React from 'react'
 import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { CONTROLPANEL_UNIT, userStorage } from '../utils/utils';
+import { CONTROLPANEL_FEEDRATE, CONTROLPANEL_UNIT, userStorage } from '../utils/utils';
 
 
 export const ControlPanel=({machineControl})=>{
@@ -11,6 +11,8 @@ export const ControlPanel=({machineControl})=>{
   const tootChangeStyle='rounded-md bg-red-600 p-1 m-1';
 
   const unitRef=useRef();
+  const feedRateRef=useRef();
+  const feedRateSliderRef=useRef();
 
   const [toolChangeList,setToolChangeList]=useState([]);
   const [toolControl,setToolControl]=useState(<>tool control</>);
@@ -32,6 +34,8 @@ export const ControlPanel=({machineControl})=>{
     setToolChangeList(toolChangeListBuffer);
 
     unitRef.current.value=userStorage.get(CONTROLPANEL_UNIT)||userStorage.set(CONTROLPANEL_UNIT,1);
+    feedRateRef.current.value=userStorage.get(CONTROLPANEL_FEEDRATE)||userStorage.set(CONTROLPANEL_FEEDRATE,100);
+    feedRateSliderRef.current.value=userStorage.get(CONTROLPANEL_FEEDRATE)||userStorage.set(CONTROLPANEL_FEEDRATE,100);
     
 
 
@@ -78,8 +82,21 @@ export const ControlPanel=({machineControl})=>{
         <div className='row-start-5 col-start-5 row-span-1 col-span-1'><div className={buttonStyle}>09</div></div>
         
       </div>
-      <span>Feed Rate</span>
-      <input type="range" className='w-full'/>
+      <div className='w-full'>
+        <span className='float-left'>Feed Rate</span>
+        <input type="number"  className='float-right  bg-gray-800 rounded-lg text-blue-300 text-center w-1/3' ref={feedRateRef} onChange={()=>{
+          if(feedRateRef.current.value<1)
+            feedRateRef.current.value=1;
+          userStorage.set(CONTROLPANEL_FEEDRATE,feedRateRef.current.value);
+          feedRateSliderRef.current.max=feedRateRef.current.value;
+          feedRateSliderRef.current.value=feedRateRef.current.value;
+        }}/>
+      </div>
+      <input type="range" className='w-full' ref={feedRateSliderRef} min={1} onChange={()=>{
+        userStorage.set(CONTROLPANEL_FEEDRATE,feedRateSliderRef.current.value);
+        feedRateRef.current.value=feedRateSliderRef.current.value;
+
+      }}/>
       <div className='w-full my-2 overflow-scroll'>
         <div className='min-w-max'>
           {toolChangeList}
