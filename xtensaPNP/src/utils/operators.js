@@ -1,18 +1,32 @@
 import axios from "axios";
 export default class execuatable{
     static send=()=>{};
+    static reportAction=()=>{};
+    static reportStatus=()=>{};
+
+    static THREAD_ACK='THREAD_ACK';
+    static INPUT_VALUE='INPUT_VALUE';
+    static OUTPUT_ACK='OUTPUT_ACK';
+    static MOTIONCONTROLLER_ACK='MOTIONCONTROLLER_ACK';
+
 
     static operatorCallBack={
-        motionController:async(operatorObject)=>{
+        motionController:(statusObject)=>{
+            if(statusObject.ack==execuatable.MOTIONCONTROLLER_ACK){
+                statusObject.ack=execuatable.THREAD_ACK;
+                execuatable.operatorCallBack.thread(statusObject);
+            }
+        },
+        inputDevice:(statusObject)=>{
 
         },
-        inputDevice:async(operatorObject)=>{
-
+        outputDevice:(statusObject)=>{
+            if(statusObject.ack==execuatable.OUTPUT_ACK){
+                statusObject.ack=execuatable.THREAD_ACK;
+                execuatable.operatorCallBack.thread(statusObject);
+            }
         },
-        outputDevice:async(operatorObject)=>{
-
-        },
-        thread:async(operatorObject)=>{
+        thread:(statusObject)=>{
 
         }
     }
@@ -23,25 +37,31 @@ export default class execuatable{
 
     operators={
         motionController:(operatorObject)=>{
+            execuatable.reportAction(operatorObject);
             execuatable.send(operatorObject);
         },
         inputDevice:(operatorObject)=>{
-
+            execuatable.reportAction(operatorObject);
+            
         },
         outputDevice:(operatorObject)=>{
+            execuatable.reportAction(operatorObject);
             execuatable.send(operatorObject);
         },
         thread:(operatorObject)=>{
             // console.log(this)
             execuatable.operatorCallBack.thread=statusObject=>{
-                if(statusObject.ack=='threadLoad'){
+                if(statusObject.ack==execuatable.THREAD_ACK){
                     new execuatable({
                         operator:operatorObject.operator,
                         execuatableList:operatorObject.execuatableList.slice(1)
                     });
                 }
+                else{
+                    execuatable.reportStatus(statusObject);
+                }
             }
-            new execuatable(operatorObject.execuatableList[0]);
+            new execuatable(operatorObject.execuatableList[0]||{});
         }
     }
 
@@ -50,8 +70,9 @@ export default class execuatable{
             console.log('manga')
             this.send=operatorObject;
             return;
-        }    
-        this.operators[operatorObject.operator](operatorObject);
+        }
+        if(operatorObject!=={})    
+            this.operators[operatorObject.operator](operatorObject);
     }
 }
 
