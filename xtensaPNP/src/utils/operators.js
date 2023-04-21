@@ -42,7 +42,14 @@ export default class execuatable{
         },
         inputDevice:(operatorObject)=>{
             execuatable.reportAction(operatorObject);
-            
+            execuatable.operatorCallBack.inputDevice=statusObject=>{
+                if(statusObject.INPUT_VALUE==undefined){
+                    (operatorObject.inputDevice||(()=>{}))(statusObject.INPUT_VALUE);
+                    statusObject.ack=execuatable.THREAD_ACK;
+                    execuatable.operatorCallBack.thread(statusObject);
+                }
+            }
+            execuatable.send(operatorObject);
         },
         outputDevice:(operatorObject)=>{
             execuatable.reportAction(operatorObject);
