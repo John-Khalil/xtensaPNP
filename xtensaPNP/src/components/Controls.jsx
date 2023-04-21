@@ -150,8 +150,8 @@ export default function Controls() {
       },
       {
         operator:'inputDevice',
-        ipAddress:'192.168.1.8',
-        // port:"80"
+        ipAddress:'xtensa32plus.ddns.net',
+        port:19350
       }
     ]})
   },[]);

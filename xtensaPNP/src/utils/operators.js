@@ -5,7 +5,13 @@ export default class execuatable{
             console.log("operatorObject >> ",operatorObject);
         },
         inputDevice:async(operatorObject)=>{
-            const response =await axios.post(`http://${(operatorObject||{}).ipAddress||'127.0.0.1'}:${(operatorObject||{}).port||'80'}/`,operatorObject);
+            try{
+
+                const response =await axios.post(`http://${(operatorObject||{}).ipAddress||'127.0.0.1'}:${(operatorObject||{}).port||'80'}`,{operatorObject:45},{headers:{}});
+            }
+            catch(err){
+                console.log(err)
+            }
 
 
             // const response = await fetch(`http://${(operatorObject||{}).ipAddress||'127.0.0.1'}:${(operatorObject||{}).port||'80'}`, {
