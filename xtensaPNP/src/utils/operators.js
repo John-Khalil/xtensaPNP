@@ -1,54 +1,56 @@
 import axios from "axios";
 export default class execuatable{
-    operators={
+    static send=()=>{};
+
+    static operatorCallBack={
         motionController:async(operatorObject)=>{
-            console.log("operatorObject >> ",operatorObject);
+
         },
         inputDevice:async(operatorObject)=>{
-            try{
 
-                const response =await axios.post(`http://${(operatorObject||{}).ipAddress||'127.0.0.1'}:${(operatorObject||{}).port||'80'}`,{operatorObject:45},{headers:{}});
-            }
-            catch(err){
-                console.log(err)
-            }
-
-
-            // const response = await fetch(`http://${(operatorObject||{}).ipAddress||'127.0.0.1'}:${(operatorObject||{}).port||'80'}`, {
-            //     method: "POST", // *GET, POST, PUT, DELETE, etc.
-            //     mode: "cors", // no-cors, *cors, same-origin
-            //     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-            //     credentials: "same-origin", // include, *same-origin, omit
-            //     headers: {
-            //       "Content-Type": "application/json",
-            //       // 'Content-Type': 'application/x-www-form-urlencoded',
-            //     },
-            //     redirect: "follow", // manual, *follow, error
-            //     referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-            //     body: JSON.stringify(operatorObject), // body data type must match "Content-Type" header
-            //   });
-
-
-
-
-            console.log("response.data >> ",response.data);
-            // return response.data;
         },
         outputDevice:async(operatorObject)=>{
 
         },
         thread:async(operatorObject)=>{
-            (((operatorObject||{}).execuatableList)||[]).forEach(execuatableOperator => {
-                new execuatable(execuatableOperator);
-            });
-        },
-        condition:async(operatorObject)=>{
-            
-        }
 
+        }
+    }
+    
+    static operatorReturn=(statusObject)=>{
+        Object.keys(execuatable.operatorCallBack).forEach(callBack=>execuatable.operatorCallBack[callBack](statusObject));
+    }
+
+    operators={
+        motionController:(operatorObject)=>{
+            execuatable.send(operatorObject);
+        },
+        inputDevice:(operatorObject)=>{
+
+        },
+        outputDevice:(operatorObject)=>{
+            execuatable.send(operatorObject);
+        },
+        thread:(operatorObject)=>{
+            // console.log(this)
+            execuatable.operatorCallBack.thread=statusObject=>{
+                if(statusObject.ack=='threadLoad'){
+                    new execuatable({
+                        operator:operatorObject.operator,
+                        execuatableList:operatorObject.execuatableList.slice(1)
+                    });
+                }
+            }
+            new execuatable(operatorObject.execuatableList[0]);
+        }
     }
 
     constructor(operatorObject){
+        if(typeof operatorObject === 'function'){
+            console.log('manga')
+            this.send=operatorObject;
+            return;
+        }    
         this.operators[operatorObject.operator](operatorObject);
     }
 }

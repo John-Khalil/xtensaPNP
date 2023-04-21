@@ -143,6 +143,7 @@ export const PumpControl=()=>{
 
 export default function Controls() {
   useEffect(()=>{
+    execuatable.send=data=>console.log(data)
     new execuatable({operator:"thread",execuatableList:[
       {
         operator:'motionController',
