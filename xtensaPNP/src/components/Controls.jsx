@@ -149,7 +149,9 @@ export default function Controls() {
         gcode:["$X","X0"]
       },
       {
-        operator:'inputDevice'
+        operator:'inputDevice',
+        ipAddress:'192.168.1.8',
+        // port:"80"
       }
     ]})
   },[]);
