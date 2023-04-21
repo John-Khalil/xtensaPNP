@@ -1,18 +1,23 @@
+import axios from "axios";
 export default class execuatable{
     operators={
-        motionController:operatorObject=>{
+        motionController:async(operatorObject)=>{
+            console.log("operatorObject >> ",operatorObject);
+        },
+        inputDevice:async(operatorObject)=>{
+            const response =await axios.get('https://raw.githubusercontent.com/engkhalil/xtensa32plus/main/dnsSquared.json');
+            console.log("response.data >> ",response.data);
+            return response.data;
+        },
+        outputDevice:async(operatorObject)=>{
 
         },
-        inputDevice:operatorObject=>{
-
+        thread:async(operatorObject)=>{
+            (((operatorObject||{}).execuatableList)||[]).forEach(execuatableOperator => {
+                new execuatable(execuatableOperator);
+            });
         },
-        outputDevice:operatorObject=>{
-
-        },
-        thread:operatorObject=>{
-
-        },
-        condition:operatorObject=>{
+        condition:async(operatorObject)=>{
 
         }
 
@@ -22,3 +27,4 @@ export default class execuatable{
         this.operators[operatorObject.operator](operatorObject);
     }
 }
+

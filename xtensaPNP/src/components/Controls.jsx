@@ -2,6 +2,7 @@ import React from 'react'
 import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import execuatable from '../utils/operators';
 import { CONTROLPANEL_FEEDRATE, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, userStorage } from '../utils/utils';
 
 
@@ -141,6 +142,17 @@ export const PumpControl=()=>{
 
 
 export default function Controls() {
+  useEffect(()=>{
+    new execuatable({operator:"thread",execuatableList:[
+      {
+        operator:'motionController',
+        gcode:["$X","X0"]
+      },
+      {
+        operator:'inputDevice'
+      }
+    ]})
+  },[]);
   return (
     <>
       <ControlPanel machineControl={{
