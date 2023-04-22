@@ -65,7 +65,7 @@ export class execuatable{
         inputDevice:(operatorObject)=>{
             execuatable.reportAction(operatorObject);
             execuatable.operatorCallBack.inputDevice=statusObject=>{
-                if(statusObject.INPUT_VALUE==undefined){
+                if(statusObject.INPUT_VALUE!=undefined){
                     (operatorObject.inputDevice||(()=>{}))(statusObject.INPUT_VALUE);
 
                     // statusObject.ack=execuatable.THREAD_ACK;
@@ -97,7 +97,6 @@ export class execuatable{
 
     constructor(operatorObject){
         if(typeof operatorObject === 'function'){
-            console.log('manga')
             this.send=operatorObject;
             return;
         }
