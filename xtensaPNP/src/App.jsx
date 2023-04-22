@@ -10,11 +10,16 @@ import SmartHub from './components/SmartHub';
 import Controls from './components/Controls';
 import SensorData from './components/SensorData';
 import Logs from './components/Logs';
+import { useEffect } from 'react';
+import { execuatableSetup } from './utils/operators';
 
 
 
 
 function App() {
+	useEffect(()=>{
+		execuatableSetup();
+	},[]);
 	return (
 		<BrowserRouter>
 			<Routes>

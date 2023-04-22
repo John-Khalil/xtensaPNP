@@ -1,4 +1,5 @@
 import axios from "axios";
+import appLinker, { EXECUATABLE_PROCESS, EXECUATABLE_REPORT_ACTION, EXECUATABLE_REPORT_STATUS, EXECUATABLE_RETURN, EXECUATABLE_SEND } from "./utils";
 export default class execuatable{
     static send=()=>{};
     static reportAction=()=>{};
@@ -83,3 +84,18 @@ export default class execuatable{
     }
 }
 
+export const execuatableSetup=()=>{
+    appLinker.addListener(EXECUATABLE_PROCESS,async(data)=>{
+        new execuatable(data);
+    });
+
+    appLinker.addListener(EXECUATABLE_RETURN,async(data)=>{
+        execuatable.operatorReturn(data);
+    });
+    
+    
+    execuatable.send=data=>appLinker.send(EXECUATABLE_SEND,data);
+    execuatable.reportAction=data=>appLinker.send(EXECUATABLE_REPORT_ACTION,data);
+    execuatable.reportStatus=data=>appLinker.send(EXECUATABLE_REPORT_STATUS,data);
+
+}
