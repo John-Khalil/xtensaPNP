@@ -1,6 +1,6 @@
 import WebSocket,{WebSocketServer } from "ws";
 import appLinker from "./utils.js";
-import execuatable from "./utils.js";
+import {execuatable} from "./utils.js";
 
 
 const webSocketServerPort=90;
@@ -13,6 +13,39 @@ const EXECUATABLE_OUTPUT_DEVICE='outputDevice';
 const EXECUATABLE_MOTION_CONTROLLER='motionController';
 
 const USER_RETURN='USER_RETURN';
+
+
+//^ REPLACE WITH WS CLIENT 
+
+appLinker.addListener(EXECUATABLE_INPUT_DEVICE,data=>{
+    setTimeout(() => {
+        appLinker.send(USER_RETURN,{
+            ...data,
+            INPUT_VALUE:556
+        })
+    }, 50);
+
+});
+
+appLinker.addListener(EXECUATABLE_OUTPUT_DEVICE,data=>{
+    setTimeout(() => {
+        appLinker.send(USER_RETURN,{
+            ...data,
+            ack:execuatable.OUTPUT_ACK
+        })
+    }, 50);
+});
+
+appLinker.addListener(EXECUATABLE_MOTION_CONTROLLER,data=>{
+    setTimeout(() => {
+        appLinker.send(USER_RETURN,{
+            ...data,
+            ack:execuatable.MOTIONCONTROLLER_ACK
+        })
+    }, 50);
+});
+
+
 
 
 
