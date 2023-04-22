@@ -19,8 +19,9 @@ export default class execuatable{
     static operatorCallBack={
         motionController:(statusObject)=>{
             if(statusObject.ack==execuatable.MOTIONCONTROLLER_ACK){
-                statusObject.ack=execuatable.THREAD_ACK;
-                execuatable.operatorCallBack.thread(statusObject);
+
+                // statusObject.ack=execuatable.THREAD_ACK;
+                execuatable.operatorCallBack.thread({ack:execuatable.THREAD_ACK});
             }
         },
         inputDevice:(statusObject)=>{
@@ -28,8 +29,9 @@ export default class execuatable{
         },
         outputDevice:(statusObject)=>{
             if(statusObject.ack==execuatable.OUTPUT_ACK){
-                statusObject.ack=execuatable.THREAD_ACK;
-                execuatable.operatorCallBack.thread(statusObject);
+
+                // statusObject.ack=execuatable.THREAD_ACK;
+                execuatable.operatorCallBack.thread({ack:execuatable.THREAD_ACK});
             }
         },
         thread:(statusObject)=>{
@@ -51,8 +53,9 @@ export default class execuatable{
             execuatable.operatorCallBack.inputDevice=statusObject=>{
                 if(statusObject.INPUT_VALUE==undefined){
                     (operatorObject.inputDevice||(()=>{}))(statusObject.INPUT_VALUE);
-                    statusObject.ack=execuatable.THREAD_ACK;
-                    execuatable.operatorCallBack.thread(statusObject);
+
+                    // statusObject.ack=execuatable.THREAD_ACK;
+                    execuatable.operatorCallBack.thread({ack:execuatable.THREAD_ACK});
                 }
             }
             execuatable.send(operatorObject);
@@ -84,7 +87,7 @@ export default class execuatable{
             this.send=operatorObject;
             return;
         }
-        if(operatorObject!=={})    
+        if(Object.keys(operatorObject).length!=0)    
             this.operators[operatorObject.operator](operatorObject);
     }
 }

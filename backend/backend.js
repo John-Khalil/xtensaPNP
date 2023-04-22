@@ -72,7 +72,6 @@ server.on('connection', (socket) => {
 
 
 appLinker.addListener(WEBSOCKET_SERVER_DATA,data=>{
-    console.log(JSON.stringify(data))
     new execuatable(data);
 });
 

@@ -163,15 +163,16 @@ export default function Controls() {
           {
             operator:execuatable.EXECUATABLE_MOTION_CONTROLLER,
           },
-          // {
-          //   operator:execuatable.EXECUATABLE_OUTPUT_DEVICE,
-          // },
-          // {
-          //   operator:execuatable.EXECUATABLE_INPUT_DEVICE,
-          //   inputDevice:(inputDeviceData=>{
-          //     console.log("inputDeviceData >> ",inputDeviceData);
-          //   })
-          // }
+          {
+            operator:execuatable.EXECUATABLE_OUTPUT_DEVICE,
+          },
+          {
+            operator:execuatable.EXECUATABLE_INPUT_DEVICE,
+            customKey:'this is a text',
+            inputDevice:(inputDeviceData=>{
+              console.log("inputDeviceData >> ",inputDeviceData);
+            })
+          }
         ]
       })
     }, 2000);
