@@ -24,12 +24,18 @@ export class execuatable{
     static OUTPUT_ACK='OUTPUT_ACK';
     static MOTIONCONTROLLER_ACK='MOTIONCONTROLLER_ACK';
 
+    static EXECUATABLE_INPUT_DEVICE='inputDevice';
+    static EXECUATABLE_OUTPUT_DEVICE='outputDevice';
+    static EXECUATABLE_MOTION_CONTROLLER='motionController';
+    static EXECUATABLE_THREAD='thread';
+
 
     static operatorCallBack={
         motionController:(statusObject)=>{
             if(statusObject.ack==execuatable.MOTIONCONTROLLER_ACK){
-                statusObject.ack=execuatable.THREAD_ACK;
-                execuatable.operatorCallBack.thread(statusObject);
+
+                // statusObject.ack=execuatable.THREAD_ACK;
+                execuatable.operatorCallBack.thread({ack:execuatable.THREAD_ACK});
             }
         },
         inputDevice:(statusObject)=>{
@@ -37,8 +43,9 @@ export class execuatable{
         },
         outputDevice:(statusObject)=>{
             if(statusObject.ack==execuatable.OUTPUT_ACK){
-                statusObject.ack=execuatable.THREAD_ACK;
-                execuatable.operatorCallBack.thread(statusObject);
+
+                // statusObject.ack=execuatable.THREAD_ACK;
+                execuatable.operatorCallBack.thread({ack:execuatable.THREAD_ACK});
             }
         },
         thread:(statusObject)=>{
@@ -60,8 +67,9 @@ export class execuatable{
             execuatable.operatorCallBack.inputDevice=statusObject=>{
                 if(statusObject.INPUT_VALUE==undefined){
                     (operatorObject.inputDevice||(()=>{}))(statusObject.INPUT_VALUE);
-                    statusObject.ack=execuatable.THREAD_ACK;
-                    execuatable.operatorCallBack.thread(statusObject);
+
+                    // statusObject.ack=execuatable.THREAD_ACK;
+                    execuatable.operatorCallBack.thread({ack:execuatable.THREAD_ACK});
                 }
             }
             execuatable.send(operatorObject);
@@ -93,7 +101,7 @@ export class execuatable{
             this.send=operatorObject;
             return;
         }
-        if(operatorObject!=={})    
+        if(Object.keys(operatorObject).length!=0)    
             this.operators[operatorObject.operator](operatorObject);
     }
 }
