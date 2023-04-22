@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import WebSocket,{WebSocketServer } from "ws";
 import appLinker from "./utils.js";
 import {execuatable} from "./utils.js";
@@ -19,29 +20,23 @@ const USER_RETURN='USER_RETURN';
 
 appLinker.addListener(EXECUATABLE_INPUT_DEVICE,data=>{
     setTimeout(() => {
-        appLinker.send(USER_RETURN,{
-            ...data,
-            INPUT_VALUE:556
-        })
+        data.INPUT_VALUE=556;
+        appLinker.send(USER_RETURN,data)
     }, 50);
 
 });
 
 appLinker.addListener(EXECUATABLE_OUTPUT_DEVICE,data=>{
     setTimeout(() => {
-        appLinker.send(USER_RETURN,{
-            ...data,
-            ack:execuatable.OUTPUT_ACK
-        })
+        data.ack=execuatable.OUTPUT_ACK;
+        appLinker.send(USER_RETURN,data)
     }, 50);
 });
 
 appLinker.addListener(EXECUATABLE_MOTION_CONTROLLER,data=>{
     setTimeout(() => {
-        appLinker.send(USER_RETURN,{
-            ...data,
-            ack:execuatable.MOTIONCONTROLLER_ACK
-        })
+        data.ack=execuatable.MOTIONCONTROLLER_ACK;
+        appLinker.send(USER_RETURN,data)
     }, 50);
 });
 
@@ -77,6 +72,7 @@ server.on('connection', (socket) => {
 
 
 appLinker.addListener(WEBSOCKET_SERVER_DATA,data=>{
+    console.log(JSON.stringify(data))
     new execuatable(data);
 });
 

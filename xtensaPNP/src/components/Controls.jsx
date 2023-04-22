@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import execuatable from '../utils/operators';
-import { CONTROLPANEL_FEEDRATE, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, userStorage } from '../utils/utils';
+import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, EXECUATABLE_PROCESS, userStorage } from '../utils/utils';
 
 
 export const ControlPanel=({machineControl})=>{
@@ -155,6 +155,29 @@ export default function Controls() {
     //     port:19350
     //   }
     // ]})
+
+    setTimeout(() => {
+      appLinker.send(EXECUATABLE_PROCESS,{
+        operator:execuatable.EXECUATABLE_THREAD,
+        execuatableList:[
+          {
+            operator:execuatable.EXECUATABLE_MOTION_CONTROLLER,
+          },
+          // {
+          //   operator:execuatable.EXECUATABLE_OUTPUT_DEVICE,
+          // },
+          // {
+          //   operator:execuatable.EXECUATABLE_INPUT_DEVICE,
+          //   inputDevice:(inputDeviceData=>{
+          //     console.log("inputDeviceData >> ",inputDeviceData);
+          //   })
+          // }
+        ]
+      })
+    }, 2000);
+
+    
+
   },[]);
   return (
     <>

@@ -10,6 +10,11 @@ export default class execuatable{
     static OUTPUT_ACK='OUTPUT_ACK';
     static MOTIONCONTROLLER_ACK='MOTIONCONTROLLER_ACK';
 
+    static EXECUATABLE_INPUT_DEVICE='inputDevice';
+    static EXECUATABLE_OUTPUT_DEVICE='outputDevice';
+    static EXECUATABLE_MOTION_CONTROLLER='motionController';
+    static EXECUATABLE_THREAD='thread';
+
 
     static operatorCallBack={
         motionController:(statusObject)=>{
@@ -90,6 +95,8 @@ export const execuatableSetup=()=>{
     });
 
     appLinker.addListener(EXECUATABLE_RETURN,async(data)=>{
+        
+        console.log(" ------- event.data >> ",data)
         execuatable.operatorReturn(data);
     });
     
@@ -97,5 +104,15 @@ export const execuatableSetup=()=>{
     execuatable.send=data=>appLinker.send(EXECUATABLE_SEND,data);
     execuatable.reportAction=data=>appLinker.send(EXECUATABLE_REPORT_ACTION,data);
     execuatable.reportStatus=data=>appLinker.send(EXECUATABLE_REPORT_STATUS,data);
+
+    //^ only for a demo
+
+    appLinker.addListener(EXECUATABLE_REPORT_ACTION,data=>{
+        console.log(' ---> ',data);
+    });
+
+    appLinker.addListener(EXECUATABLE_REPORT_STATUS,data=>{
+        console.log(' <--- ',data);
+    });
 
 }
