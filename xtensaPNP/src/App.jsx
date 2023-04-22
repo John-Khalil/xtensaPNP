@@ -12,6 +12,7 @@ import SensorData from './components/SensorData';
 import Logs from './components/Logs';
 import { useEffect } from 'react';
 import { execuatableSetup } from './utils/operators';
+import WebSocketSetup from './utils/WebSocketClient';
 
 
 
@@ -19,6 +20,7 @@ import { execuatableSetup } from './utils/operators';
 function App() {
 	useEffect(()=>{
 		execuatableSetup();
+		WebSocketSetup();
 	},[]);
 	return (
 		<BrowserRouter>

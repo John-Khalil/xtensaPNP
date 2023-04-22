@@ -143,18 +143,18 @@ export const PumpControl=()=>{
 
 export default function Controls() {
   useEffect(()=>{
-    execuatable.send=data=>console.log(data)
-    new execuatable({operator:"thread",execuatableList:[
-      {
-        operator:'motionController',
-        gcode:["$X","X0"]
-      },
-      {
-        operator:'inputDevice',
-        ipAddress:'xtensa32plus.ddns.net',
-        port:19350
-      }
-    ]})
+    // execuatable.send=data=>console.log(data)
+    // new execuatable({operator:"thread",execuatableList:[
+    //   {
+    //     operator:'motionController',
+    //     gcode:["$X","X0"]
+    //   },
+    //   {
+    //     operator:'inputDevice',
+    //     ipAddress:'xtensa32plus.ddns.net',
+    //     port:19350
+    //   }
+    // ]})
   },[]);
   return (
     <>
