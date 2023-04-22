@@ -3,10 +3,13 @@ import WebSocket from "ws";
 const webSocketServerPort=90;
 
 const WEBSOCKET_SERVER_DATA='WEBSOCKET_SERVER_DATA';
+const WEBSOCKET_SERVER_SEND='WEBSOCKET_SERVER_SEND';
 
 const EXECUATABLE_INPUT_DEVICE='inputDevice';
 const EXECUATABLE_OUTPUT_DEVICE='outputDevice';
 const EXECUATABLE_MOTION_CONTROLLER='motionController';
+
+const USER_RETURN='USER_RETURN';
 
 
 
@@ -139,6 +142,10 @@ server.on('connection', (socket) => {
     appLinker.send(WEBSOCKET_SERVER_DATA,JSON.parse(message));
   });
 
+  appLinker.addListener(WEBSOCKET_SERVER_SEND,data=>{
+    socket.send(JSON.stringify(data));
+  });
+
   // listen for when the client disconnects
   socket.on('close', () => {
     console.log('Client disconnected');
@@ -149,3 +156,12 @@ server.on('connection', (socket) => {
 appLinker.addListener(WEBSOCKET_SERVER_DATA,data=>{
     new execuatable(data);
 });
+
+appLinker.addListener(USER_RETURN,statusObject=>{
+    appLinker.send(WEBSOCKET_SERVER_SEND,statusObject);
+    execuatable.operatorReturn(statusObject);
+});
+
+execuatable.send=data=>appLinker.send(data.operator,data);
+
+
