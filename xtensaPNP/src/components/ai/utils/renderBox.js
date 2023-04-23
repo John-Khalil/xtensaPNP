@@ -81,8 +81,13 @@ export const renderBoxes = (
         objectCount++;
       }
     })
-    if(objectCount)
-      ((userModel||{}).onDetect||(()=>{}))({dataURL:canvasRef.toDataURL('image/jpeg'),...userModel},objectCount);
+    if(objectCount){
+      let dataURL=canvasRef.toDataURL('image/jpeg');
+      // let nullCounter=0;
+      // dataURL.slice(dataURL.length-2000).split("").forEach(element=>nullCounter+=((element=='A')?1:0));
+      // if(nullCounter<500)
+        ((userModel||{}).onDetect||(()=>{}))({dataURL,...userModel,objectCount});
+    }
   }
 
 

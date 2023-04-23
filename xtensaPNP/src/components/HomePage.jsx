@@ -57,7 +57,7 @@ export default function HomePage() {
                 classThreshold : 0.01,
                 enable:false,
                 onDetect:(res)=>{
-                  console.log("res >> ",res);
+                  // console.log("res >> ",res);
 
                   appLinker.send('ALL-EVENTS',
                     <>
