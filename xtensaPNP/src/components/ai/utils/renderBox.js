@@ -21,7 +21,6 @@ export const renderBoxes = (
   const ctx = canvasRef.getContext("2d");
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clean canvas
 
-  
   ctx.drawImage(userModel.vidSource , 0, 0, canvasRef.width, canvasRef.height );
 
   const colors = new Colors();
@@ -75,10 +74,18 @@ export const renderBoxes = (
     }
   }
 
-  (async()=>{
+  if(scores_data.length!=0){
+    let objectCount=0;
+    scores_data.forEach(element=>{
+      if(element>classThreshold){
+        objectCount++;
+      }
+    })
+    if(objectCount)
+      ((userModel||{}).onDetect||(()=>{}))({dataURL:canvasRef.toDataURL('image/jpeg'),...userModel},objectCount);
+  }
 
-    ((userModel||{}).onDetect||(()=>{}))({dataURL:canvasRef.toDataURL('image/jpeg'),...userModel});
-  })();
+
 };
 
 class Colors {
