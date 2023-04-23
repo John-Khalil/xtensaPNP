@@ -14,6 +14,8 @@ const ObjectDetecion = ({userModel}) => {
   const cameraRef = useRef(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+
+  const feedBackCanvasRef=useRef(null);
   
   const classThreshold = (userModel.classThreshold||0.2);
   const videoSource=(userModel||{}).videoSource||undefined;
@@ -99,9 +101,10 @@ const ObjectDetecion = ({userModel}) => {
       </>);
     }, 10000);
 
-   
 
-   
+  //  setTimeout(() => {
+  //   feedBackCanvasRef.current.getContext('2d').drawImage(cameraRef.current, 0, 0, feedBackCanvasRef.current.width, feedBackCanvasRef.current.height );
+  //  }, 1000);
 
   }, []);
 
@@ -143,6 +146,7 @@ const ObjectDetecion = ({userModel}) => {
               }
             /> */}
             <video
+              className=""
               autoPlay
               muted
               // srcObject ={videoSource}
@@ -173,13 +177,18 @@ const ObjectDetecion = ({userModel}) => {
             <canvas width={(multiModel[0]!=undefined)?multiModel[0].inputShape[1]:0} height={(multiModel[0]!=undefined)?multiModel[0].inputShape[2]:0} ref={canvasRef} />
           </div>
 
-        </div>
+          
 
+
+        </div>
         
+
 
         <div className="float-right w-[150px] mx-2">
             {modelCheckList}
         </div>
+
+        
 
       </div>
     </>

@@ -94,7 +94,7 @@ export const detectVideo = (vidSource, model, classThreshold, canvasRef,userMode
       renderBoxes(canvasRef, classThreshold, boxes_data, scores_data, classes_data, [
         xRatio,
         yRatio,
-      ],userModel); // render boxes
+      ],{...userModel,vidSource}); // render boxes
       tf.dispose(res); // clear memory
       // console.log(`yRatio >> ${yRatio}`);
       // console.log(`xRatio >> ${xRatio}`);

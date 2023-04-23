@@ -21,6 +21,9 @@ export const renderBoxes = (
   const ctx = canvasRef.getContext("2d");
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clean canvas
 
+  
+  ctx.drawImage(userModel.vidSource , 0, 0, canvasRef.width, canvasRef.height );
+
   const colors = new Colors();
 
   // font configs
