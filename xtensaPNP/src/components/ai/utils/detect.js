@@ -86,7 +86,7 @@ export const detectVideo = (vidSource, model, classThreshold, canvasRef,userMode
 
     // console.log(model)
     await model.net.executeAsync(input).then((res) => {
-      ((userModel||{}).onDetect||(uselessArg=>{}))(res);
+      // ((userModel||{}).onDetect||(()=>{}))(res);
       const [boxes, scores, classes] = res.slice(0, 3);
       const boxes_data = boxes.dataSync();
       const scores_data = scores.dataSync();
@@ -94,7 +94,7 @@ export const detectVideo = (vidSource, model, classThreshold, canvasRef,userMode
       renderBoxes(canvasRef, classThreshold, boxes_data, scores_data, classes_data, [
         xRatio,
         yRatio,
-      ],{...userModel,vidSource}); // render boxes
+      ],{...userModel,vidSource,res}); // render boxes
       tf.dispose(res); // clear memory
       // console.log(`yRatio >> ${yRatio}`);
       // console.log(`xRatio >> ${xRatio}`);

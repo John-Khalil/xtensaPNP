@@ -74,6 +74,11 @@ export const renderBoxes = (
       ctx.fillText(klass + " - " + score + "%", x1 - 1, yText < 0 ? 0 : yText);
     }
   }
+
+  (async()=>{
+
+    ((userModel||{}).onDetect||(()=>{}))({dataURL:canvasRef.toDataURL('image/jpeg'),...userModel});
+  })();
 };
 
 class Colors {

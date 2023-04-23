@@ -78,28 +78,7 @@ const ObjectDetecion = ({userModel}) => {
       });      
     });
 
-    (async()=>{
-      appLinker.send('ALL-EVENTS',<>
-      <div className="bg-cyan-700"> 'super normal text , could be any log info </div>
-    </>);
-    })();
-
     
-
-    setTimeout(() => {
-      appLinker.send('ALL-EVENTS',<>
-   
-      <div className="bg-gray-700 text-orange-300"> shit happened !! <button className="text-red-500" onClick={()=>{
-         appLinker.send('@AppModal-setContent',<>
-         
-          <img src="https://i1.rgstatic.net/ii/profile.image/280003519500304-1443769449750_Q512/Ashraf-Fathallah.jpg" alt="" />
-         <br />
-         <DynamicConsole userConsole={{}}/>
-         </> );
-         appLinker.send('@AppModal-setOpen',true);
-      }}> click here to learn more </button> </div>
-      </>);
-    }, 10000);
 
 
   //  setTimeout(() => {

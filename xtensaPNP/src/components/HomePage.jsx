@@ -57,11 +57,22 @@ export default function HomePage() {
                 classThreshold : 0.01,
                 enable:false,
                 onDetect:(res)=>{
-                  const [boxes, scores, classes] = res.slice(0, 3);
-                  const boxes_data = boxes.dataSync();
-                  const scores_data = scores.dataSync();
-                  const classes_data = classes.dataSync();
-                  // console.log([boxes_data,scores_data,classes_data]);
+                  console.log("res >> ",res);
+
+                  appLinker.send('ALL-EVENTS',
+                    <>
+                      <div className="bg-gray-700 text-orange-300"> shit happened !! <button className="text-red-500" onClick={()=>{
+                        appLinker.send('@AppModal-setContent',
+                        <>
+                          
+                          <img src={res.dataURL} alt="" />
+                          
+                        </> 
+                        );
+                        appLinker.send('@AppModal-setOpen',true);
+                      }}> click here to learn more </button> </div>
+                    </>
+                  );
                 },
               },
               {
