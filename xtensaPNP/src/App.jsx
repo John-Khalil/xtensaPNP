@@ -13,6 +13,7 @@ import Logs from './components/Logs';
 import { useEffect } from 'react';
 import { execuatableSetup } from './utils/operators';
 import WebSocketSetup from './utils/WebSocketClient';
+import appLinker, { SERVICE_RUNNER } from './utils/utils';
 
 
 
@@ -21,6 +22,12 @@ function App() {
 	useEffect(()=>{
 		execuatableSetup();
 		WebSocketSetup();
+		appLinker.addListener(SERVICE_RUNNER,serviceRunner=>{
+			if(typeof serviceRunner === 'function')
+				(async()=>{
+					serviceRunner();
+				})();
+		})
 	},[]);
 	return (
 		<BrowserRouter>
