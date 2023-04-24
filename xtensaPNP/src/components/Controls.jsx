@@ -206,9 +206,14 @@ export const SpindelControl=({spindelControl})=>{
   </>);
 }
 
-export const SolderPaste=()=>{
+export const SolderPaste=({SolderControl})=>{
   return(<>
-    <button>eject</button>
+    <div className='p-1'>
+
+      <div className='w-full text-2xl text-center my-1'>SOLDER</div>
+      <div className='w-full text-2xl text-center my-1 bg-green-500 rounded-md'><button onClick={()=>{((SolderControl||{}).eject||(()=>{}))()}}>EJECT</button></div>
+    </div>
+      
   </>);
 }
 
