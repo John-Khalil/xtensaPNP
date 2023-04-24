@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import execuatable from '../utils/operators';
-import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_FEEDRATE_MAX, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, CONTROLPANEL_UNITZ, EXECUATABLE_PROCESS, SPINDEL_RPM, SPINDEL_RPM_MAX, userStorage } from '../utils/utils';
+import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_FEEDRATE_MAX, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, CONTROLPANEL_UNITZ, EXECUATABLE_PROCESS, PUMP_POWER, PUMP_POWER_MAX, SPINDEL_RPM, SPINDEL_RPM_MAX, userStorage } from '../utils/utils';
 
 
 export const ControlPanel=({machineControl})=>{
@@ -164,11 +164,14 @@ export const SpindelControl=({spindelControl})=>{
     rpmSliderRef.current.max=userStorage.get(SPINDEL_RPM_MAX)||userStorage.set(SPINDEL_RPM_MAX,100);
   },[]);
   return(<>
+
+    <div className='w-full text-2xl text-center my-1'>SPINDEL</div>
+
     <div className='grid grid-cols-2 grid-rows-1 gap-1   w-full h-[60px] my-2 p-2'>
       <div className='row-start-1 col-start-1 row-span-1 col-span-1'><div className={`${buttonStyle} bg-green-500`} onClick={()=>{((spindelControl||{}).on||(()=>{}))({rpm:rpmRef.current.value})}}>ON</div></div>
       <div className='row-start-1 col-start-2 row-span-1 col-span-1'><div className={`${buttonStyle} bg-red-500`} onClick={()=>{((spindelControl||{}).off||(()=>{}))()}}>OFF</div></div>
     </div>
-    <br />
+
 
     <div className='p-2'>
 
@@ -181,8 +184,8 @@ export const SpindelControl=({spindelControl})=>{
             rpmRef.current.value=1;
           userStorage.set(SPINDEL_RPM,rpmRef.current.value);
           userStorage.set(SPINDEL_RPM_MAX,rpmRef.current.value);
-          feedRateSliderRef.current.max=rpmRef.current.value;
-          feedRateSliderRef.current.value=rpmRef.current.value;
+          rpmSliderRef.current.max=rpmRef.current.value;
+          rpmSliderRef.current.value=rpmRef.current.value;
 
           ((spindelControl||{}).setRPM||(()=>{}))(rpmRef.current.value);
 
@@ -209,15 +212,56 @@ export const SolderPaste=()=>{
   </>);
 }
 
-export const PumpControl=()=>{
+export const PumpControl=({pumpControl})=>{
+  const rpmRef=useRef();
+  const rpmSliderRef=useRef();
+
+  const buttonStyle='text-center h-full w-full select-none p-2 font-bold text-lg rounded-md';
+  useEffect(()=>{
+    rpmRef.current.value=userStorage.get(PUMP_POWER)||userStorage.set(PUMP_POWER,100);
+    rpmSliderRef.current.value=userStorage.get(PUMP_POWER)||userStorage.set(PUMP_POWER,100);
+    rpmSliderRef.current.max=userStorage.get(PUMP_POWER_MAX)||userStorage.set(PUMP_POWER_MAX,100);
+  },[]);
   return(<>
-    <button>pick</button>
-    <br />
-    <button>place</button>
-    <br />
-    
-   <span>speed</span>
-    <input type="range" />
+
+    <div className='w-full text-2xl text-center my-1'>PUMP</div>
+
+    <div className='grid grid-cols-2 grid-rows-1 gap-1   w-full h-[60px] my-2 p-2'>
+      <div className='row-start-1 col-start-1 row-span-1 col-span-1'><div className={`${buttonStyle} bg-green-500`} onClick={()=>{((pumpControl||{}).on||(()=>{}))({power:rpmRef.current.value})}}>ON</div></div>
+      <div className='row-start-1 col-start-2 row-span-1 col-span-1'><div className={`${buttonStyle} bg-red-500`} onClick={()=>{((pumpControl||{}).off||(()=>{}))()}}>OFF</div></div>
+    </div>
+
+
+    <div className='p-2'>
+
+   
+
+      <div className='w-full'>
+        <span className='float-left'>POWER</span>
+        <input type="number"  className='float-right  bg-gray-800 rounded-lg text-blue-300 text-center w-1/3' ref={rpmRef} onChange={()=>{
+          if(rpmRef.current.value<1)
+            rpmRef.current.value=1;
+          userStorage.set(PUMP_POWER,rpmRef.current.value);
+          userStorage.set(PUMP_POWER_MAX,rpmRef.current.value);
+          rpmSliderRef.current.max=rpmRef.current.value;
+          rpmSliderRef.current.value=rpmRef.current.value;
+
+          ((pumpControl||{}).setPower||(()=>{}))(rpmRef.current.value);
+
+        }}/>
+      </div>
+      <input type="range" className='w-full' ref={rpmSliderRef} min={1} onChange={()=>{
+        userStorage.set(PUMP_POWER,rpmSliderRef.current.value);
+        rpmRef.current.value=rpmSliderRef.current.value;
+        
+        ((pumpControl||{}).setPower||(()=>{}))(rpmRef.current.value);
+
+      }}/>
+
+    </div>
+
+
+
   </>);
 }
 
