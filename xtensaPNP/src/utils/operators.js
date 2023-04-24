@@ -100,7 +100,6 @@ export const execuatableSetup=()=>{
 
     appLinker.addListener(EXECUATABLE_RETURN,async(data)=>{
         
-        console.log(" ------- event.data >> ",data)
         execuatable.operatorReturn(data);
     });
     
