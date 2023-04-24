@@ -10,8 +10,6 @@ export default function FramePreview({objectDetcted}) {
             <span>{`Model : ${((objectDetcted||{}).modelName||'UNDEFINED :-(')}`}</span>
             <br />
             <span>{`Object Count : ${((objectDetcted||{}).objectCount||'UNDEFINED :-(')}`}</span>
-
-            
             {((objectDetcted||{}).onApprove!=undefined)?<>
                 <br />
                 <br />

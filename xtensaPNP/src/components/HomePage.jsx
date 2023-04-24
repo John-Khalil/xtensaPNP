@@ -5,6 +5,7 @@ import appLinker from '../utils/utils'
 import AppModal from "./AppModal";
 import ReactModal from 'react-modal';
 import FramePreview from "./ai/FramePreview";
+import PopUp from "./PopUp";
 
 
 export default function HomePage() {
@@ -59,17 +60,28 @@ export default function HomePage() {
                 enable:false,
                 onDetect:(res)=>{
                   // console.log("res >> ",res);
+                  PopUp({
+                    icon:'https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vvector-notification-icon-png-image_957092.jpg',
+                    label:res.modelName,
+                    onClick:()=>{
+                      appLinker.send('@AppModal-setContent',
+                        <FramePreview objectDetcted={{...res,onApprove:()=>{}}}/>
+                      );
+                      appLinker.send('@AppModal-setOpen',true);
+                    }
+                  });
+                  
 
-                  appLinker.send('ALL-EVENTS',
-                    <>
-                      <div className="bg-gray-700 text-orange-300"> shit happened !! <button className="text-red-500" onClick={()=>{
-                        appLinker.send('@AppModal-setContent',
-                          <FramePreview objectDetcted={{...res,onApprove:()=>{}}}/>
-                        );
-                        appLinker.send('@AppModal-setOpen',true);
-                      }}> click here to learn more </button> </div>
-                    </>
-                  );
+                  // appLinker.send('ALL-EVENTS',
+                  //   <>
+                  //     <div className="bg-gray-700 text-orange-300"> shit happened !! <button className="text-red-500" onClick={()=>{
+                  //       appLinker.send('@AppModal-setContent',
+                  //         <FramePreview objectDetcted={{...res,onApprove:()=>{}}}/>
+                  //       );
+                  //       appLinker.send('@AppModal-setOpen',true);
+                  //     }}> click here to learn more </button> </div>
+                  //   </>
+                  // );
                 },
               },
               {
