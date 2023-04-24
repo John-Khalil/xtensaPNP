@@ -1,7 +1,10 @@
 import React from 'react'
+import Forms from './Forms'
 
 export default function Logs() {
   return (
-    <div>Logs from server and database (mongo db or sql based or cloud based)</div>
+    <>
+      <Forms/>
+    </>
   )
 }
