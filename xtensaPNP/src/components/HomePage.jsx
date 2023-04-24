@@ -4,6 +4,7 @@ import { DynamicConsole } from "./ConsoleDynamic";
 import appLinker from '../utils/utils'
 import AppModal from "./AppModal";
 import ReactModal from 'react-modal';
+import FramePreview from "./ai/FramePreview";
 
 
 export default function HomePage() {
@@ -63,11 +64,7 @@ export default function HomePage() {
                     <>
                       <div className="bg-gray-700 text-orange-300"> shit happened !! <button className="text-red-500" onClick={()=>{
                         appLinker.send('@AppModal-setContent',
-                        <>
-                          
-                          <img src={res.dataURL} alt="" />
-                          
-                        </> 
+                          <FramePreview objectDetcted={{...res,onApprove:()=>{}}}/>
                         );
                         appLinker.send('@AppModal-setOpen',true);
                       }}> click here to learn more </button> </div>
