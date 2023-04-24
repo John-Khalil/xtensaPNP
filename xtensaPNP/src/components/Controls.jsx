@@ -187,7 +187,7 @@ export const SpindelControl=({spindelControl})=>{
           rpmSliderRef.current.max=rpmRef.current.value;
           rpmSliderRef.current.value=rpmRef.current.value;
 
-          ((spindelControl||{}).setRPM||(()=>{}))(rpmRef.current.value);
+          ((spindelControl||{}).setRPM||(()=>{}))({rpm:rpmRef.current.value});
 
         }}/>
       </div>
@@ -195,7 +195,7 @@ export const SpindelControl=({spindelControl})=>{
         userStorage.set(SPINDEL_RPM,rpmSliderRef.current.value);
         rpmRef.current.value=rpmSliderRef.current.value;
         
-        ((spindelControl||{}).setRPM||(()=>{}))(rpmRef.current.value);
+        ((spindelControl||{}).setRPM||(()=>{}))({rpm:rpmRef.current.value});
 
       }}/>
 
@@ -251,7 +251,7 @@ export const PumpControl=({pumpControl})=>{
           rpmSliderRef.current.max=rpmRef.current.value;
           rpmSliderRef.current.value=rpmRef.current.value;
 
-          ((pumpControl||{}).setPower||(()=>{}))(rpmRef.current.value);
+          ((pumpControl||{}).setPower||(()=>{}))({power:rpmRef.current.value});
 
         }}/>
       </div>
@@ -259,7 +259,7 @@ export const PumpControl=({pumpControl})=>{
         userStorage.set(PUMP_POWER,rpmSliderRef.current.value);
         rpmRef.current.value=rpmSliderRef.current.value;
         
-        ((pumpControl||{}).setPower||(()=>{}))(rpmRef.current.value);
+        ((pumpControl||{}).setPower||(()=>{}))({power:rpmRef.current.value});
 
       }}/>
 
@@ -345,21 +345,45 @@ export default function Controls() {
             activate:()=>{
               console.log("send some commands to enable spindel");
             },
-            Control:<SpindelControl/>
+            Control:<SpindelControl spindelControl={{
+              on:(data)=>{
+                console.log(" spindel on >> ",data);
+              },
+              off:()=>{
+                console.log(" spindel off ");
+              },
+              setRPM:(data)=>{
+                console.log(" spindel rpm >> ",data);
+              }
+            }}/>
           },
           {
             label:'picker',
             activate:()=>{
               console.log("send some commands to enable picker");
             },
-            Control:<PumpControl/>
+            Control:<PumpControl pumpControl={{
+              on:(data)=>{
+                console.log(" pump on >> ",data);
+              },
+              off:()=>{
+                console.log(" pump off ");
+              },
+              setPower:(data)=>{
+                console.log(" pump power >> ",data);
+              }
+            }}/>
           },
           {
             label:'solder',
             activate:()=>{
               console.log("send some commands to enable SolderPaste");
             },
-            Control:<SolderPaste/>
+            Control:<SolderPaste SolderControl={{
+              eject:()=>{
+                console.log(" eject solder ");
+              }
+            }}/>
           },
           {
 
