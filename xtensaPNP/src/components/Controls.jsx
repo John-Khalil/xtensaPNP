@@ -165,8 +165,8 @@ export const SpindelControl=({spindelControl})=>{
   },[]);
   return(<>
     <div className='grid grid-cols-2 grid-rows-1 gap-1   w-full h-[60px] my-2 p-2'>
-      <div className='row-start-1 col-start-1 row-span-1 col-span-1'><div className={`${buttonStyle} bg-green-500`} onClick={()=>{}}>ON</div></div>
-      <div className='row-start-1 col-start-2 row-span-1 col-span-1'><div className={`${buttonStyle} bg-red-500`} onClick={()=>{}}>OFF</div></div>
+      <div className='row-start-1 col-start-1 row-span-1 col-span-1'><div className={`${buttonStyle} bg-green-500`} onClick={()=>{((spindelControl||{}).on||(()=>{}))({rpm:rpmRef.current.value})}}>ON</div></div>
+      <div className='row-start-1 col-start-2 row-span-1 col-span-1'><div className={`${buttonStyle} bg-red-500`} onClick={()=>{((spindelControl||{}).off||(()=>{}))()}}>OFF</div></div>
     </div>
     <br />
 
@@ -183,11 +183,16 @@ export const SpindelControl=({spindelControl})=>{
           userStorage.set(SPINDEL_RPM_MAX,rpmRef.current.value);
           feedRateSliderRef.current.max=rpmRef.current.value;
           feedRateSliderRef.current.value=rpmRef.current.value;
+
+          ((spindelControl||{}).setRPM||(()=>{}))(rpmRef.current.value);
+
         }}/>
       </div>
       <input type="range" className='w-full' ref={rpmSliderRef} min={1} onChange={()=>{
         userStorage.set(SPINDEL_RPM,rpmSliderRef.current.value);
         rpmRef.current.value=rpmSliderRef.current.value;
+        
+        ((spindelControl||{}).setRPM||(()=>{}))(rpmRef.current.value);
 
       }}/>
 
