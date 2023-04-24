@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import appLinker from '../utils/utils'
 
 const PopUp=(notification)=>{
-    appLinker.send('ALL-EVENTS',
+    appLinker.send(((notification||{}).loggerIdentifier||'ALL-EVENTS'),
     <>
         <div className='select-none p-1 my-1 bg-zinc-800 hover:bg-zinc-500 w-full h-[30px] text-lg' onClick={()=>{
             ((notification||{}).onClick||(()=>{}))();
