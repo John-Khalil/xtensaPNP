@@ -49,7 +49,9 @@ export class execuatable{
             }
         },
         thread:(statusObject)=>{
-
+            if(statusObject.ack!=execuatable.THREAD_ACK){
+                execuatable.reportStatus(statusObject);
+            }
         }
     }
     
