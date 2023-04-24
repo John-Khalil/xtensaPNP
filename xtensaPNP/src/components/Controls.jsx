@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import execuatable from '../utils/operators';
 import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_FEEDRATE_MAX, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, CONTROLPANEL_UNITZ, EXECUATABLE_PROCESS, PUMP_POWER, PUMP_POWER_MAX, SPINDEL_RPM, SPINDEL_RPM_MAX, userStorage } from '../utils/utils';
+import { DynamicConsole } from './ConsoleDynamic';
 
 
 export const ControlPanel=({machineControl})=>{
@@ -314,6 +315,50 @@ export default function Controls() {
   },[]);
   return (
     <>
+      <div className='grid grid-cols-1 grid-rows-2 gap-1   w-full '>
+        <div className='row-start-2 col-start-1 row-span-1 col-span-1 h-[400px]'>
+
+          <div className='grid grid-cols-2 grid-rows- gap-1   w-full '>
+            <div className='row-start-1 col-start-1 row-span-1 col-span-1'>
+              <DynamicConsole userConsole={{
+                className:'lg:w-[calc(100% -16)] ',
+                consoleInput:true,
+                // clearConsole:true,
+                // themeColor:'#a11caf',
+                height:190,
+                // consoleData:allEventsData,
+                // send:getConsoleInput,
+                hide:false,
+                consoleIdentifier:'G-CODE',
+                // textColor:'#00ff00',
+                // themeColor:'rgb(0,0,0)'
+                
+                
+              }}/>
+            </div>
+            <div className='row-start-1 col-start-2 row-span-1 col-span-1'>
+              <DynamicConsole userConsole={{
+                className:'lg:w-[calc(100% -16)] ',
+                // consoleInput:true,
+                // clearConsole:true,
+                themeColor:'blue',
+                height:261,
+                // consoleData:allEventsData,
+                // send:getConsoleInput,
+                hide:false,
+                consoleIdentifier:'RUNNING-JOB',
+                textColor:'#00ff00',
+                // themeColor:'rgb(0,0,0)'
+                
+                
+              }}/>
+            </div>
+          </div>
+        </div>
+        <div className='row-start-1 col-start-1 row-span-1 col-span-1'>
+          
+
+
       <ControlPanel machineControl={{
         Y_Positive:(data)=>{
           console.log("Y_Positive >> ",data);
@@ -396,6 +441,10 @@ export default function Controls() {
           }
         ]        
       }}/>
+
+</div>
+
+</div>
     </>
   )
 }
