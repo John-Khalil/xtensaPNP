@@ -45,7 +45,7 @@ export class webSocketConnection{
         });
 
         socket.addEventListener('error',()=>{
-            appLinker.send(EXECUATABLE_RETURN,JSON.parse({...payload,returnData:undefined,statusLabel:'NETWORK_ERROR'}));
+            appLinker.send(EXECUATABLE_RETURN,{...payload,returnData:undefined,statusLabel:'NETWORK_ERROR'});
         });
 
 
