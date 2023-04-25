@@ -255,13 +255,16 @@ export class webSocketConnection{
             path:(payload||{}).port||userStorage.get(WEBSOCKET_REMOTE_PATH)||userStorage.set(WEBSOCKET_REMOTE_PATH,'/')
 
         }
+        
 
         if(webSocketConnection.connectionList.includes(JSON.stringify(networkData))){
             appLinker.send(WEBSOCKET_CLIENT_SEND,payload);
             return;
         }
 
-        const socket = new WebSocket(`ws://${networkData.ip}:${networkData.port}${networkData.path}`);
+        const socket = new WebSocket(`ws://${networkData.ip}`,{
+            port:networkData.port
+        });
 
         socket.addEventListener('open',()=>{
             webSocketConnection.connectionList.push(JSON.stringify(networkData));
@@ -287,7 +290,8 @@ export class webSocketConnection{
             })
         });
 
-        socket.addEventListener('error',()=>{
+        socket.addEventListener('error',(err)=>{
+            // console.log(err)
             appLinker.send(EXECUATABLE_RETURN,{...payload,returnData:undefined,statusLabel:'NETWORK_ERROR'});
         });
 

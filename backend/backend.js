@@ -23,7 +23,7 @@ const CONTROLLER_PATH='/'
 
 //^ REPLACE WITH WS CLIENT 
 
-appLinker.addListener(EXECUATABLE_INPUT_DEVICE,data=>{
+appLinker.addListener(EXECUATABLE_MOTION_CONTROLLER,data=>{
   const networkData={
     ip:userStorage.get(MOTIONCONTROLLER_IP)||userStorage.set(MOTIONCONTROLLER_IP,CONTROLLER_IP),
     port:userStorage.get(MOTIONCONTROLLER_PORT)||userStorage.set(MOTIONCONTROLLER_PORT,CONTROLLER_PORT),
@@ -41,7 +41,7 @@ appLinker.addListener(EXECUATABLE_OUTPUT_DEVICE,data=>{
   new webSocketConnection({...data,...networkData});
 });
 
-appLinker.addListener(EXECUATABLE_MOTION_CONTROLLER,data=>{
+appLinker.addListener(EXECUATABLE_INPUT_DEVICE,data=>{
   const networkData={
     ip:userStorage.get(`${(data||{}).ID||''}_IP`)||userStorage.set(`${(data||{}).ID||''}_IP`,CONTROLLER_IP),
     port:userStorage.get(`${(data||{}).ID||''}_PORT`)||userStorage.set(`${(data||{}).ID||''}_PORT`,CONTROLLER_PORT),
