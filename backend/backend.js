@@ -1,8 +1,9 @@
 import chalk from "chalk";
 import WebSocket,{WebSocketServer } from "ws";
-import appLinker, { EXECUATABLE_RETURN } from "./utils.js";
+import appLinker, { EXECUATABLE_RETURN, MOTIONCONTROLLER_IP, MOTIONCONTROLLER_PATH, MOTIONCONTROLLER_PORT, userStorage, webSocketConnection } from "./utils.js";
 import {execuatable} from "./utils.js";
 
+console.clear();
 
 const webSocketServerPort=90;
 
@@ -15,29 +16,38 @@ const EXECUATABLE_MOTION_CONTROLLER='motionController';
 
 const USER_RETURN='EXECUATABLE_RETURN';
 
+const CONTROLLER_IP='192.168.1.8';
+const CONTROLLER_PORT='80';
+const CONTROLLER_PATH='/'
+
 
 //^ REPLACE WITH WS CLIENT 
 
 appLinker.addListener(EXECUATABLE_INPUT_DEVICE,data=>{
-    setTimeout(() => {
-        data.INPUT_VALUE=556;
-        // appLinker.send(USER_RETURN,data)
-    }, 50);
-
+  const networkData={
+    ip:userStorage.get(MOTIONCONTROLLER_IP)||userStorage.set(MOTIONCONTROLLER_IP,CONTROLLER_IP),
+    port:userStorage.get(MOTIONCONTROLLER_PORT)||userStorage.set(MOTIONCONTROLLER_PORT,CONTROLLER_PORT),
+    path:userStorage.get(MOTIONCONTROLLER_PATH)||userStorage.set(MOTIONCONTROLLER_PATH,CONTROLLER_PATH)
+  }
+  new webSocketConnection({...data,...networkData});
 });
 
 appLinker.addListener(EXECUATABLE_OUTPUT_DEVICE,data=>{
-    setTimeout(() => {
-        data.ack=execuatable.OUTPUT_ACK;
-        // appLinker.send(USER_RETURN,data)
-    }, 50);
+  const networkData={
+    ip:userStorage.get(`${(data||{}).ID||''}_IP`)||userStorage.set(`${(data||{}).ID||''}_IP`,CONTROLLER_IP),
+    port:userStorage.get(`${(data||{}).ID||''}_PORT`)||userStorage.set(`${(data||{}).ID||''}_PORT`,CONTROLLER_PORT),
+    path:userStorage.get(`${(data||{}).ID||''}_PATH`)||userStorage.set(`${(data||{}).ID||''}_PATH`,CONTROLLER_PATH)
+  }
+  new webSocketConnection({...data,...networkData});
 });
 
 appLinker.addListener(EXECUATABLE_MOTION_CONTROLLER,data=>{
-    setTimeout(() => {
-        data.ack=execuatable.MOTIONCONTROLLER_ACK;
-        // appLinker.send(USER_RETURN,data)
-    }, 50);
+  const networkData={
+    ip:userStorage.get(`${(data||{}).ID||''}_IP`)||userStorage.set(`${(data||{}).ID||''}_IP`,CONTROLLER_IP),
+    port:userStorage.get(`${(data||{}).ID||''}_PORT`)||userStorage.set(`${(data||{}).ID||''}_PORT`,CONTROLLER_PORT),
+    path:userStorage.get(`${(data||{}).ID||''}_PATH`)||userStorage.set(`${(data||{}).ID||''}_PATH`,CONTROLLER_PATH)
+  }
+  new webSocketConnection({...data,...networkData});
 });
 
 
