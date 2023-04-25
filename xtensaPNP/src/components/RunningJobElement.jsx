@@ -1,5 +1,6 @@
-import React from 'react'
+import React from 'react';
 import { useState } from 'react';
+import ReactJson from 'react-json-view';
 
 export default function RunningJobElement({statusObject}) {
 
@@ -9,10 +10,12 @@ export default function RunningJobElement({statusObject}) {
     const runningJobIDStyle='text-red-400 ml-2 float-left';
     const runningJobStatusLabelStyle='text-amber-200 ml-4 float-left';
 
+    (statusObject||{}).ID=((statusObject||{}).ID||(statusObject||{}).gcode);
+
     return (
         <>
             <div className={runningJobStyle} onClick={()=>{
-                setPreview((preview=='')?<>manga</>:'');
+                setPreview((preview=='')?<div className='bg-neutral-300'><ReactJson name={false} src={statusObject||{}}/></div>:'');
             }}>
                 <div className={runningJobIDStyle}>
                     {(statusObject||{}).ID||'ID'}

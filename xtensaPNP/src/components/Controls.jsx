@@ -277,7 +277,7 @@ export const PumpControl=({pumpControl})=>{
 
 export default function Controls() {
 
-  const [runningJob,showRunningJob]=useState(<RunningJobElement/>);
+  const [runningJob,showRunningJob]=useState(<></>);
 
   const [gcode,showGCODE]=useState('');
 
@@ -286,7 +286,7 @@ export default function Controls() {
   });
 
   appLinker.addListener(EXECUATABLE_REPORT_STATUS,statusObject=>{
-      
+    showRunningJob(<RunningJobElement statusObject={statusObject}/>)
   });
 
   appLinker.addListener(EXECUATABLE_REPORT_STATUS,statusObject=>{
