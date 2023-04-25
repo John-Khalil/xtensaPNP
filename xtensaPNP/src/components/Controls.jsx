@@ -5,6 +5,7 @@ import { useState } from 'react';
 import execuatable from '../utils/operators';
 import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_FEEDRATE_MAX, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, CONTROLPANEL_UNITZ, EXECUATABLE_PROCESS, EXECUATABLE_REPORT_ACTION, EXECUATABLE_REPORT_STATUS, PUMP_POWER, PUMP_POWER_MAX, SPINDEL_RPM, SPINDEL_RPM_MAX, userStorage } from '../utils/utils';
 import { DynamicConsole } from './ConsoleDynamic';
+import RunningJobElement from './RunningJobElement';
 
 
 export const ControlPanel=({machineControl})=>{
@@ -276,7 +277,7 @@ export const PumpControl=({pumpControl})=>{
 
 export default function Controls() {
 
-  const [runningJob,showRunningJob]=useState('');
+  const [runningJob,showRunningJob]=useState(<RunningJobElement/>);
 
   const [gcode,showGCODE]=useState('');
 
@@ -289,13 +290,18 @@ export default function Controls() {
   });
 
   appLinker.addListener(EXECUATABLE_REPORT_STATUS,statusObject=>{
+      console.log(statusObject.ack==execuatable.MOTIONCONTROLLER_ACK)
       if(statusObject.ack==execuatable.MOTIONCONTROLLER_ACK){
-        showGCODE(statusObject.returnData);
+        showGCODE(
+          <>
+            <div className='text-red-400'>{(((statusObject||{}).gcode)||'')}</div>
+            <div className='text-amber-200'>{(((statusObject||{}).returnData)||'')}</div>
+          </>
+        );
       }
   });
 
   const gcodeSend=command=>{
-    showGCODE(command.consoleData);
     appLinker.send(EXECUATABLE_PROCESS,{
       operator:execuatable.EXECUATABLE_MOTION_CONTROLLER,
       gcode:command.consoleData
