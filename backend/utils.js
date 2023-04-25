@@ -1,3 +1,8 @@
+
+import { LocalStorage } from "node-localstorage";
+
+const localStorage = new LocalStorage('./scratch');
+
 export class AppLinker{
     usersList=[];
 
@@ -12,6 +17,107 @@ export class AppLinker{
 const appLinker =new AppLinker;
 
 export default appLinker;
+
+
+const baseAddress='xtensaPNP';
+
+const userLocalStorage=()=>{
+    if(localStorage.getItem(baseAddress)==null)
+        localStorage.setItem(baseAddress,JSON.stringify({
+            selectedMachine:0,
+            machineList:[{}]
+        }));
+    return JSON.parse(localStorage.getItem(baseAddress));
+}
+
+export const userStorage={
+    get:key=>{
+        return(userLocalStorage().machineList[userLocalStorage().selectedMachine][key]);
+    },
+    selectMachine:(selectedMachine)=>{
+        const storedData=userLocalStorage();
+        storedData.selectedMachine=selectedMachine;
+        localStorage.setItem(baseAddress,JSON.stringify(storedData));
+        return JSON.parse(localStorage.getItem(baseAddress)).selectedMachine;
+    },
+    addMachine:(machineID)=>{
+        const storedData=userLocalStorage();
+        storedData.machineList.push({machineID});
+        localStorage.setItem(baseAddress,JSON.stringify(storedData));
+        return JSON.parse(localStorage.getItem(baseAddress)).machineList;
+    },
+    set:(key,value)=>{
+        const storedData=userLocalStorage();
+        storedData.machineList[userLocalStorage().selectedMachine][key]=value;
+        localStorage.setItem(baseAddress,JSON.stringify(storedData));
+        return JSON.parse(localStorage.getItem(baseAddress)).machineList[userLocalStorage().selectedMachine][key];
+    },
+    userLocalStorage 
+}
+
+
+
+
+const SERVICE_RUNNER='SERVICE_RUNNER';
+
+const CONTROLPANEL_UNIT='CONTROLPANEL_UNIT';
+const CONTROLPANEL_UNITZ='CONTROLPANEL_UNITZ';
+const CONTROLPANEL_FEEDRATE='CONTROLPANEL_FEEDRATE';
+const CONTROLPANEL_FEEDRATE_MAX='CONTROLPANEL_FEEDRATE_MAX';
+const CONTROLPANEL_SELECTED_TOOL='CONTROLPANEL_SELECTED_TOOL';
+
+const SPINDEL_RPM='SPINDEL_RPM';
+const SPINDEL_RPM_MAX='SPINDEL_RPM_MAX';
+
+const PUMP_POWER='PUMP_POWER';
+const PUMP_POWER_MAX='PUMP_POWER_MAX';
+
+
+const WEBSOCKET_REMOTE_HOST='WEBSOCKET_REMOTE_HOST';
+const WEBSOCKET_REMOTE_PORT='WEBSOCKET_REMOTE_PORT';
+const WEBSOCKET_REMOTE_PATH='WEBSOCKET_REMOTE_PATH';
+
+const WEBSOCKET_CLIENT_SEND='WEBSOCKET_CLIENT_SEND';
+
+
+const EXECUATABLE_SEND='EXECUATABLE_SEND';
+const EXECUATABLE_REPORT_ACTION='EXECUATABLE_REPORT_ACTION';
+const EXECUATABLE_REPORT_STATUS='EXECUATABLE_REPORT_STATUS';
+const EXECUATABLE_PROCESS='EXECUATABLE_PROCESS';
+const EXECUATABLE_RETURN='EXECUATABLE_RETURN';
+
+
+export {
+    CONTROLPANEL_UNIT,
+    CONTROLPANEL_UNITZ,
+    CONTROLPANEL_FEEDRATE,
+    CONTROLPANEL_FEEDRATE_MAX,
+    CONTROLPANEL_SELECTED_TOOL,
+
+    SPINDEL_RPM,
+    SPINDEL_RPM_MAX,
+
+    PUMP_POWER,
+    PUMP_POWER_MAX,
+
+    EXECUATABLE_SEND,
+    EXECUATABLE_REPORT_ACTION,
+    EXECUATABLE_REPORT_STATUS,
+    EXECUATABLE_PROCESS,
+    EXECUATABLE_RETURN,
+
+    WEBSOCKET_REMOTE_HOST,
+    WEBSOCKET_REMOTE_PORT,
+    WEBSOCKET_REMOTE_PATH,
+
+    WEBSOCKET_CLIENT_SEND,
+
+    SERVICE_RUNNER
+
+}
+
+
+
 
 
 export class execuatable{
@@ -122,5 +228,86 @@ export class execuatable{
 //     execuatable.reportStatus=data=>appLinker.send(EXECUATABLE_REPORT_STATUS,data);
 
 // }
+
+
+export class webSocketConnection{
+    static connectionList=[];
+
+    constructor(payload){
+
+        const networkData={
+            ip:(payload||{}).ip||userStorage.get(WEBSOCKET_REMOTE_HOST)||userStorage.set(WEBSOCKET_REMOTE_HOST,'127.0.0.1'),
+            port:(payload||{}).port||userStorage.get(WEBSOCKET_REMOTE_PORT)||userStorage.set(WEBSOCKET_REMOTE_PORT,'90'),
+            path:(payload||{}).port||userStorage.get(WEBSOCKET_REMOTE_PATH)||userStorage.set(WEBSOCKET_REMOTE_PATH,'/')
+
+        }
+
+        if(webSocketConnection.connectionList.includes(JSON.stringify(networkData))){
+            appLinker.send(WEBSOCKET_CLIENT_SEND,payload);
+            return;
+        }
+
+        const socket = new WebSocket(`ws://${networkData.ip}:${networkData.port}${networkData.path}`);
+
+        socket.addEventListener('open',()=>{
+            webSocketConnection.connectionList.push(JSON.stringify(networkData));
+            appLinker.addListener(WEBSOCKET_CLIENT_SEND,data=>{
+                try{
+                    socket.send(JSON.stringify(data));
+                }
+                catch(e){
+
+                }
+            });
+            appLinker.send(WEBSOCKET_CLIENT_SEND,payload);  //^ send the first message
+        });
+
+        socket.addEventListener('message',(event)=>{
+            appLinker.send(EXECUATABLE_RETURN,JSON.parse(event.data));
+        });
+
+        socket.addEventListener('close',()=>{
+            webSocketConnection.connectionList.forEach((element,index)=>{
+                if(element==JSON.stringify(networkData))
+                    webSocketConnection.connectionList[index]='';
+            })
+        });
+
+        socket.addEventListener('error',()=>{
+            appLinker.send(EXECUATABLE_RETURN,{...payload,returnData:undefined,statusLabel:'NETWORK_ERROR'});
+        });
+
+
+        
+    }
+}
+
+// const WebSocketSetup=()=>{
+//     // const socket = new WebSocket(`ws://${userStorage.get(WEBSOCKET_REMOTE_HOST)||userStorage.set(WEBSOCKET_REMOTE_HOST,'127.0.0.1')}:${userStorage.get(WEBSOCKET_REMOTE_PORT)||userStorage.set(WEBSOCKET_REMOTE_PORT,'90')}`);
+
+//     // socket.addEventListener('open',()=>{
+//     //     appLinker.addListener(EXECUATABLE_SEND,data=>{
+//     //         socket.send(JSON.stringify(data));
+//     //     })
+//     // });
+
+//     // socket.addEventListener('message',(event)=>{
+//     //     appLinker.send(EXECUATABLE_RETURN,JSON.parse(event.data));
+//     // });
+
+//     // socket.addEventListener('close',()=>{
+
+//     // });
+
+//     // socket.addEventListener('error',()=>{
+
+//     // });
+
+//     appLinker.addListener(EXECUATABLE_SEND,data=>{
+//         new webSocketConnection(data);
+//     })
+// }
+
+// export WebSocketSetup;
 
 
