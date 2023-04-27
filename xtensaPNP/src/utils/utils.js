@@ -42,7 +42,12 @@ export const userStorage={
         localStorage.setItem(baseAddress,JSON.stringify(storedData));
         return JSON.parse(localStorage.getItem(baseAddress)).machineList[userLocalStorage().selectedMachine][key];
     },
-    userLocalStorage 
+    storage:(storageData)=>{
+        if(storageData!=undefined)
+            localStorage.setItem(baseAddress,storageData);
+        return localStorage.getItem(baseAddress);
+    },
+    userLocalStorage
 }
 
 
