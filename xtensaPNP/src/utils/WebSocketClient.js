@@ -1,17 +1,21 @@
 // import WebSocket from "ws";
-import appLinker, { EXECUATABLE_RETURN, EXECUATABLE_SEND, userStorage, WEBSOCKET_CLIENT_SEND, WEBSOCKET_REMOTE_HOST, WEBSOCKET_REMOTE_PATH, WEBSOCKET_REMOTE_PORT } from "./utils";
+import appLinker, { EXECUATABLE_RETURN, EXECUATABLE_SEND, getNetworkData, userStorage, WEBSOCKET_CLIENT_SEND, WEBSOCKET_REMOTE_HOST, WEBSOCKET_REMOTE_PATH, WEBSOCKET_REMOTE_PORT } from "./utils";
 
 export class webSocketConnection{
     static connectionList=[];
 
+    static MAIN_IP='192.168.1.8';
+    static MAIN_PORT='80';
+    static MAIN_PATH='/'; 
+
     constructor(payload){
 
-        const networkData={
-            ip:(payload||{}).ip||userStorage.get(WEBSOCKET_REMOTE_HOST)||userStorage.set(WEBSOCKET_REMOTE_HOST,'127.0.0.1'),
-            port:(payload||{}).port||userStorage.get(WEBSOCKET_REMOTE_PORT)||userStorage.set(WEBSOCKET_REMOTE_PORT,'90'),
-            path:(payload||{}).port||userStorage.get(WEBSOCKET_REMOTE_PATH)||userStorage.set(WEBSOCKET_REMOTE_PATH,'/')
+        const networkData=((payload||{}).ID==undefined)?{
+            ip:(payload||{}).ip||userStorage.get(WEBSOCKET_REMOTE_HOST)||userStorage.set(WEBSOCKET_REMOTE_HOST,webSocketConnection.MAIN_IP),
+            port:(payload||{}).port||userStorage.get(WEBSOCKET_REMOTE_PORT)||userStorage.set(WEBSOCKET_REMOTE_PORT,webSocketConnection.MAIN_PORT),
+            path:(payload||{}).port||userStorage.get(WEBSOCKET_REMOTE_PATH)||userStorage.set(WEBSOCKET_REMOTE_PATH,webSocketConnection.MAIN_PATH)
 
-        }
+        }:getNetworkData(payload.ID);
 
         if(webSocketConnection.connectionList.includes(JSON.stringify(networkData))){
             appLinker.send(WEBSOCKET_CLIENT_SEND,payload);

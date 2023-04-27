@@ -22,6 +22,7 @@ const CONTROLLER_PATH='/'
 
 
 //^ REPLACE WITH WS CLIENT 
+//? we couldn't just add a single applinker event, cause of the diffrent connection types ws, telnet , etc..
 
 appLinker.addListener(EXECUATABLE_MOTION_CONTROLLER,data=>{
   const networkData={
