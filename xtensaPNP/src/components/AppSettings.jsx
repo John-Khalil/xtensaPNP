@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useRef } from 'react';
+import ReactJson from 'react-json-view';
 import { userStorage,WEBSOCKET_REMOTE_HOST,WEBSOCKET_REMOTE_PORT,WEBSOCKET_REMOTE_PATH,CAMERA_CONFIG,MOTIONCONTROLLER_IP,MOTIONCONTROLLER_PORT,MOTIONCONTROLLER_PATH} from '../utils/utils';
 
 
@@ -61,6 +62,9 @@ export default function AppSettings() {
         }}/>
 
       </div>
+      <span>ALL-CONFIG</span>
+      <div className='bg-neutral-300'><ReactJson name={false} src={userStorage.storage()}/></div>
+      
     </>
   )
 }

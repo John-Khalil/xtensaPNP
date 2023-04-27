@@ -54,8 +54,8 @@ export const userStorage={
     },
     storage:(storageData)=>{
         if(storageData!=undefined)
-            localStorage.setItem(baseAddress,storageData);
-        return localStorage.getItem(baseAddress);
+            localStorage.setItem(baseAddress,JSON.stringify(storageData));
+        return JSON.parse(localStorage.getItem(baseAddress));
     },
     userLocalStorage
 }
