@@ -25,30 +25,18 @@ const CONTROLLER_PATH='/'
 //? we couldn't just add a single applinker event, cause of the diffrent connection types ws, telnet , etc..
 
 appLinker.addListener(EXECUATABLE_MOTION_CONTROLLER,data=>{
-  const networkData={
-    ip:userStorage.get(MOTIONCONTROLLER_IP)||userStorage.set(MOTIONCONTROLLER_IP,CONTROLLER_IP),
-    port:userStorage.get(MOTIONCONTROLLER_PORT)||userStorage.set(MOTIONCONTROLLER_PORT,CONTROLLER_PORT),
-    path:userStorage.get(MOTIONCONTROLLER_PATH)||userStorage.set(MOTIONCONTROLLER_PATH,CONTROLLER_PATH)
-  }
-  new webSocketConnection({...data,...networkData});
+  //! add telnet connection
+  new webSocketConnection(data);
 });
 
 appLinker.addListener(EXECUATABLE_OUTPUT_DEVICE,data=>{
-  const networkData={
-    ip:userStorage.get(`${(data||{}).ID||''}_IP`)||userStorage.set(`${(data||{}).ID||''}_IP`,CONTROLLER_IP),
-    port:userStorage.get(`${(data||{}).ID||''}_PORT`)||userStorage.set(`${(data||{}).ID||''}_PORT`,CONTROLLER_PORT),
-    path:userStorage.get(`${(data||{}).ID||''}_PATH`)||userStorage.set(`${(data||{}).ID||''}_PATH`,CONTROLLER_PATH)
-  }
-  new webSocketConnection({...data,...networkData});
+  
+  new webSocketConnection(data);
 });
 
 appLinker.addListener(EXECUATABLE_INPUT_DEVICE,data=>{
-  const networkData={
-    ip:userStorage.get(`${(data||{}).ID||''}_IP`)||userStorage.set(`${(data||{}).ID||''}_IP`,CONTROLLER_IP),
-    port:userStorage.get(`${(data||{}).ID||''}_PORT`)||userStorage.set(`${(data||{}).ID||''}_PORT`,CONTROLLER_PORT),
-    path:userStorage.get(`${(data||{}).ID||''}_PATH`)||userStorage.set(`${(data||{}).ID||''}_PATH`,CONTROLLER_PATH)
-  }
-  new webSocketConnection({...data,...networkData});
+  
+  new webSocketConnection(data);
 });
 
 

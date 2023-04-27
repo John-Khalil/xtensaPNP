@@ -73,9 +73,6 @@ const PUMP_POWER='PUMP_POWER';
 const PUMP_POWER_MAX='PUMP_POWER_MAX';
 
 
-const WEBSOCKET_REMOTE_HOST='WEBSOCKET_REMOTE_HOST';
-const WEBSOCKET_REMOTE_PORT='WEBSOCKET_REMOTE_PORT';
-const WEBSOCKET_REMOTE_PATH='WEBSOCKET_REMOTE_PATH';
 
 const WEBSOCKET_CLIENT_SEND='WEBSOCKET_CLIENT_SEND';
 
@@ -89,9 +86,23 @@ const EXECUATABLE_RETURN='EXECUATABLE_RETURN';
 
 
 
+
+
+const WEBSOCKET_REMOTE_HOST='WEBSOCKET_REMOTE_HOST';
+const WEBSOCKET_REMOTE_PORT='WEBSOCKET_REMOTE_PORT';
+const WEBSOCKET_REMOTE_PATH='WEBSOCKET_REMOTE_PATH';
+
+const CAMERA_CONFIG='CAMERA_CONFIG';
+
 const MOTIONCONTROLLER_IP='MOTIONCONTROLLER_IP';
 const MOTIONCONTROLLER_PORT='MOTIONCONTROLLER_PORT';
 const MOTIONCONTROLLER_PATH='MOTIONCONTROLLER_PATH';
+
+const CONTROLLERS_LIST='CONTROLLERS_LIST';
+
+const MAIN_IP='192.168.1.8';
+const MAIN_PORT='80';
+const MAIN_PATH='/'; 
 
 
 export {
@@ -124,10 +135,32 @@ export {
     MOTIONCONTROLLER_PORT,
     MOTIONCONTROLLER_PATH,
 
+    CONTROLLERS_LIST,
+
+    CAMERA_CONFIG,
+
+    MAIN_IP,
+    MAIN_PORT,
+    MAIN_PATH,
+
 
 
     SERVICE_RUNNER
 
+}
+
+
+export const getNetworkData=(deviceID)=>{
+    return userStorage.get(deviceID)||userStorage.set(deviceID,(
+        userStorage.get(CONTROLLERS_LIST)||userStorage.set(CONTROLLERS_LIST,{
+            selectedController:0,
+            CONTROLLERS_LIST:[{
+                ip:userStorage.get(WEBSOCKET_REMOTE_HOST)||userStorage.set(WEBSOCKET_REMOTE_HOST,MAIN_IP),
+                port:userStorage.get(WEBSOCKET_REMOTE_PORT)||userStorage.set(WEBSOCKET_REMOTE_PORT,MAIN_PORT),
+                path:userStorage.get(WEBSOCKET_REMOTE_PATH)||userStorage.set(WEBSOCKET_REMOTE_PATH,MAIN_PATH)
+            }]
+        })
+    ).CONTROLLERS_LIST[userStorage.get(CONTROLLERS_LIST).selectedController]);
 }
 
 
@@ -247,24 +280,22 @@ export class execuatable{
 export class webSocketConnection{
     static connectionList=[];
 
+
     constructor(payload){
 
-        const networkData={
-            ip:(payload||{}).ip||userStorage.get(WEBSOCKET_REMOTE_HOST)||userStorage.set(WEBSOCKET_REMOTE_HOST,'127.0.0.1'),
-            port:(payload||{}).port||userStorage.get(WEBSOCKET_REMOTE_PORT)||userStorage.set(WEBSOCKET_REMOTE_PORT,'90'),
-            path:(payload||{}).port||userStorage.get(WEBSOCKET_REMOTE_PATH)||userStorage.set(WEBSOCKET_REMOTE_PATH,'/')
+        const networkData=((payload||{}).ID==undefined)?{
+            ip:(payload||{}).ip||userStorage.get(WEBSOCKET_REMOTE_HOST)||userStorage.set(WEBSOCKET_REMOTE_HOST,MAIN_IP),
+            port:(payload||{}).port||userStorage.get(WEBSOCKET_REMOTE_PORT)||userStorage.set(WEBSOCKET_REMOTE_PORT,MAIN_PORT),
+            path:(payload||{}).port||userStorage.get(WEBSOCKET_REMOTE_PATH)||userStorage.set(WEBSOCKET_REMOTE_PATH,MAIN_PATH)
 
-        }
-        
+        }:getNetworkData(payload.ID);
 
         if(webSocketConnection.connectionList.includes(JSON.stringify(networkData))){
             appLinker.send(WEBSOCKET_CLIENT_SEND,payload);
             return;
         }
 
-        const socket = new WebSocket(`ws://${networkData.ip}`,{
-            port:networkData.port
-        });
+        const socket = new WebSocket(`ws://${networkData.ip}:${networkData.port}${networkData.path}`);
 
         socket.addEventListener('open',()=>{
             webSocketConnection.connectionList.push(JSON.stringify(networkData));
@@ -290,8 +321,7 @@ export class webSocketConnection{
             })
         });
 
-        socket.addEventListener('error',(err)=>{
-            // console.log(err)
+        socket.addEventListener('error',()=>{
             appLinker.send(EXECUATABLE_RETURN,{...payload,returnData:undefined,statusLabel:'NETWORK_ERROR'});
         });
 
@@ -300,32 +330,36 @@ export class webSocketConnection{
     }
 }
 
-// const WebSocketSetup=()=>{
-//     // const socket = new WebSocket(`ws://${userStorage.get(WEBSOCKET_REMOTE_HOST)||userStorage.set(WEBSOCKET_REMOTE_HOST,'127.0.0.1')}:${userStorage.get(WEBSOCKET_REMOTE_PORT)||userStorage.set(WEBSOCKET_REMOTE_PORT,'90')}`);
+export const WebSocketSetup=()=>{
+    // const socket = new WebSocket(`ws://${userStorage.get(WEBSOCKET_REMOTE_HOST)||userStorage.set(WEBSOCKET_REMOTE_HOST,'127.0.0.1')}:${userStorage.get(WEBSOCKET_REMOTE_PORT)||userStorage.set(WEBSOCKET_REMOTE_PORT,'90')}`);
 
-//     // socket.addEventListener('open',()=>{
-//     //     appLinker.addListener(EXECUATABLE_SEND,data=>{
-//     //         socket.send(JSON.stringify(data));
-//     //     })
-//     // });
+    // socket.addEventListener('open',()=>{
+    //     appLinker.addListener(EXECUATABLE_SEND,data=>{
+    //         socket.send(JSON.stringify(data));
+    //     })
+    // });
 
-//     // socket.addEventListener('message',(event)=>{
-//     //     appLinker.send(EXECUATABLE_RETURN,JSON.parse(event.data));
-//     // });
+    // socket.addEventListener('message',(event)=>{
+    //     appLinker.send(EXECUATABLE_RETURN,JSON.parse(event.data));
+    // });
 
-//     // socket.addEventListener('close',()=>{
+    // socket.addEventListener('close',()=>{
 
-//     // });
+    // });
 
-//     // socket.addEventListener('error',()=>{
+    // socket.addEventListener('error',()=>{
 
-//     // });
+    // });
 
-//     appLinker.addListener(EXECUATABLE_SEND,data=>{
-//         new webSocketConnection(data);
-//     })
-// }
+    appLinker.addListener(EXECUATABLE_SEND,data=>{
+        new webSocketConnection(data);
+    })
 
-// export WebSocketSetup;
+    //^ init settings
 
+    appLinker.send(EXECUATABLE_SEND,{
+        operator:execuatable.EXECUATABLE_OUTPUT_DEVICE,
+        ID:'init'
+    })
+}
 
