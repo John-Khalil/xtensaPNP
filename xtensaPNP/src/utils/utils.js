@@ -89,6 +89,8 @@ const MOTIONCONTROLLER_IP='MOTIONCONTROLLER_IP';
 const MOTIONCONTROLLER_PORT='MOTIONCONTROLLER_PORT';
 const MOTIONCONTROLLER_PATH='MOTIONCONTROLLER_PATH';
 
+const CONTROLLERS_LIST='CONTROLLERS_LIST';
+
 
 export {
     CONTROLPANEL_UNIT,
@@ -120,6 +122,8 @@ export {
     MOTIONCONTROLLER_PORT,
     MOTIONCONTROLLER_PATH,
 
+    CONTROLLERS_LIST,
+
     CAMERA_CONFIG,
 
 
@@ -128,6 +132,19 @@ export {
 
 }
 
+
+export const getNetworkData=(deviceID)=>{
+    return userStorage.get(deviceID)||userStorage.set(deviceID,(
+        userStorage.get(CONTROLLERS_LIST)||userStorage.set(CONTROLLERS_LIST,{
+            selectedController:0,
+            CONTROLLERS_LIST:[{
+                ip:userStorage.get(WEBSOCKET_REMOTE_HOST)||userStorage.set(WEBSOCKET_REMOTE_HOST,'127.0.0.1'),
+                port:userStorage.get(WEBSOCKET_REMOTE_PORT)||userStorage.set(WEBSOCKET_REMOTE_PORT,'90'),
+                path:userStorage.get(WEBSOCKET_REMOTE_PATH)||userStorage.set(WEBSOCKET_REMOTE_PATH,'/')
+            }]
+        })
+    )).userStorage.get(CONTROLLERS_LIST).CONTROLLERS_LIST[userStorage.get(CONTROLLERS_LIST).selectedController];
+}
 
 
 
