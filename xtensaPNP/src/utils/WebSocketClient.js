@@ -79,6 +79,9 @@ const WebSocketSetup=()=>{
     appLinker.addListener(EXECUATABLE_SEND,data=>{
         new webSocketConnection(data);
     })
+
+    //^ init settings
+
     appLinker.send(EXECUATABLE_SEND,{
         operator:execuatable.EXECUATABLE_OUTPUT_DEVICE,
         ID:'init'
