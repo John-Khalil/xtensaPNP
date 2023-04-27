@@ -1,6 +1,6 @@
 // import WebSocket from "ws";
 import execuatable from "./operators";
-import appLinker, { EXECUATABLE_RETURN, EXECUATABLE_SEND, getNetworkData, userStorage, WEBSOCKET_CLIENT_SEND, WEBSOCKET_REMOTE_HOST, WEBSOCKET_REMOTE_PATH, WEBSOCKET_REMOTE_PORT,MAIN_IP,MAIN_PORT,MAIN_PATH } from "./utils";
+import appLinker, { EXECUATABLE_RETURN, EXECUATABLE_SEND, getNetworkData, userStorage, WEBSOCKET_CLIENT_SEND, WEBSOCKET_REMOTE_HOST, WEBSOCKET_REMOTE_PATH, WEBSOCKET_REMOTE_PORT,MAIN_IP,MAIN_PORT,MAIN_PATH, CONTROLLERS_LIST } from "./utils";
 
 export class webSocketConnection{
     static connectionList=[];
@@ -81,11 +81,12 @@ const WebSocketSetup=()=>{
     })
 
     //^ init settings
-
-    appLinker.send(EXECUATABLE_SEND,{
-        operator:execuatable.EXECUATABLE_OUTPUT_DEVICE,
-        ID:'init'
-    })
+    if(userStorage.get(CONTROLLERS_LIST)==undefined){
+        appLinker.send(EXECUATABLE_SEND,{
+            operator:execuatable.EXECUATABLE_OUTPUT_DEVICE,
+            ID:'init'
+        })
+    }
 }
 
 export default WebSocketSetup;
