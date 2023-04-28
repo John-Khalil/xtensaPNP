@@ -5,7 +5,7 @@ import {execuatable} from "./utils.js";
 
 import express  from "express";
 import cors from 'cors';
-import bodyParser from "body-parser";
+import bodyParser, { json } from "body-parser";
 
 console.clear();
 
@@ -86,7 +86,7 @@ appLinker.addListener(EXECUATABLE_RETURN,statusObject=>{
 execuatable.send=data=>appLinker.send(data.operator,data);
 
 
-const appListenerPort =229;
+const appListenerPort=webSocketServerPort+1;
 var app=express();
 
 
@@ -95,6 +95,14 @@ app.use(cors());
 
 
 app.use(express.json());
+
+app.post('/',(req,res)=>{
+  if(((req||{}).body||{}).requestType=='SERVER_CONFIG'){
+    res.send(JSON.stringify(userStorage.storage(((req||{}).body||{}).serverConfig)))
+    return;
+  }
+  res.send(JSON.stringify({}))
+})
 
 app.listen(appListenerPort,()=>{
   console.log("-- http server started--");

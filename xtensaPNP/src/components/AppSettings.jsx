@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import { useRef } from 'react';
 import ReactJson from 'react-json-view';
-import { userStorage,WEBSOCKET_REMOTE_HOST,WEBSOCKET_REMOTE_PORT,WEBSOCKET_REMOTE_PATH,CAMERA_CONFIG,MOTIONCONTROLLER_IP,MOTIONCONTROLLER_PORT,MOTIONCONTROLLER_PATH} from '../utils/utils';
+import { userStorage,WEBSOCKET_REMOTE_HOST,WEBSOCKET_REMOTE_PORT,WEBSOCKET_REMOTE_PATH,CAMERA_CONFIG,MOTIONCONTROLLER_IP,MOTIONCONTROLLER_PORT,MOTIONCONTROLLER_PATH, HTTP_SERVER_ADDRESS,HTTP_SERVER_PORT,HTTP_SERVER_PATH,MAIN_IP,MAIN_HTTP_PORT,MAIN_PORT,MAIN_PATH} from '../utils/utils';
 
 
 export const SettingsFeild=({inputFeild})=>{
@@ -34,6 +35,34 @@ export const SettingsFeild=({inputFeild})=>{
 };
 
 export default function AppSettings() {
+
+  const [serverLocalStorage,setServerLocalStorage]=useState(<></>);
+
+  const loadServerConfig=(serverConfig)=>{
+    axios.post(`http://${
+      userStorage.get(HTTP_SERVER_ADDRESS)||userStorage.set(HTTP_SERVER_ADDRESS,MAIN_IP)
+    }:${
+      userStorage.get(HTTP_SERVER_PORT)||userStorage.set(HTTP_SERVER_PORT,MAIN_HTTP_PORT)
+    }${
+      userStorage.get(HTTP_SERVER_PATH)||userStorage.set(HTTP_SERVER_PATH,MAIN_PATH)
+    }`,{
+      requestType:'SERVER_CONFIG',
+      serverConfig
+    }).then(response=>{
+      setServerLocalStorage(
+        <div className='bg-neutral-300'><ReactJson name={false} src={response.data} theme="monokai" onEdit={(userUpdate)=>{
+          userStorage.storage(userUpdate.updated_src);
+          return true;    //this return would enable the user edit
+        }}/></div>
+      )
+    }).catch(error=>{
+      <div className='text-red'>couldn't load server config</div>
+    })
+  }
+
+  useEffect(()=>{
+    
+  },[]);
   return (
     <>
       <div className='w-[50%]'>
@@ -62,11 +91,16 @@ export default function AppSettings() {
         }}/>
 
       </div>
-      <span>ALL-CONFIG</span>
+      <span>APP-CONFIG</span>
       <div className='bg-neutral-300'><ReactJson name={false} src={userStorage.storage()} theme="monokai" onEdit={(userUpdate)=>{
         userStorage.storage(userUpdate.updated_src);
         return true;    //this return would enable the user edit
       }}/></div>
+
+      <button onClick={()=>{
+        loadServerConfig();
+      }}>SERVER_CONFIG</button>
+      {serverLocalStorage}
       
     </>
   )
