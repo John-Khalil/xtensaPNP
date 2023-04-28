@@ -1,3 +1,4 @@
+import net from 'net';
 import WebSocket from "ws";
 import { LocalStorage } from "node-localstorage";
 
@@ -80,6 +81,7 @@ const PUMP_POWER_MAX='PUMP_POWER_MAX';
 
 
 const WEBSOCKET_CLIENT_SEND='WEBSOCKET_CLIENT_SEND';
+const TELNET_CLIENT_SEND='TELNET_CLIENT_SEND';
 
 
 const EXECUATABLE_SEND='EXECUATABLE_SEND';
@@ -105,9 +107,17 @@ const MOTIONCONTROLLER_PATH='MOTIONCONTROLLER_PATH';
 
 const CONTROLLERS_LIST='CONTROLLERS_LIST';
 
-const MAIN_IP='192.168.1.8';
-const MAIN_PORT='80';
+const MAIN_IP='127.0.0.1';
+const MAIN_PORT='90';
+const MAIN_HTTP_PORT='91';
+const MAIN_TELNET_PORT='23';
 const MAIN_PATH='/'; 
+
+const HTTP_SERVER_ADDRESS='HTTP_SERVER_ADDRESS';
+const HTTP_SERVER_PORT='HTTP_SERVER_PORT';
+const HTTP_SERVER_PATH='HTTP_SERVER_PATH';
+
+const USER_SETTIGNS_LIVE_RELOAD='USER_SETTIGNS_LIVE_RELOAD';
 
 
 export {
@@ -134,6 +144,7 @@ export {
     WEBSOCKET_REMOTE_PATH,
 
     WEBSOCKET_CLIENT_SEND,
+    TELNET_CLIENT_SEND,
 
 
     MOTIONCONTROLLER_IP,
@@ -146,7 +157,13 @@ export {
 
     MAIN_IP,
     MAIN_PORT,
+    MAIN_HTTP_PORT,
     MAIN_PATH,
+
+    HTTP_SERVER_ADDRESS,
+    HTTP_SERVER_PORT,
+    HTTP_SERVER_PATH,
+    USER_SETTIGNS_LIVE_RELOAD,
 
 
 
@@ -368,3 +385,60 @@ export const WebSocketSetup=()=>{
     })
 }
 
+
+
+export class telnetConnection{
+    static connectionList=[];
+
+
+    constructor(payload){
+
+        const networkData={
+            ip:(payload||{}).ip||userStorage.get(MOTIONCONTROLLER_IP)||userStorage.set(MOTIONCONTROLLER_IP,MAIN_IP),
+            port:(payload||{}).port||userStorage.get(MOTIONCONTROLLER_PORT)||userStorage.set(MOTIONCONTROLLER_PORT,MAIN_TELNET_PORT),
+            path:(payload||{}).port||userStorage.get(MOTIONCONTROLLER_PATH)||userStorage.set(MOTIONCONTROLLER_PATH,MAIN_PATH)
+
+        };
+
+        if(telnetConnection.connectionList.includes(JSON.stringify(networkData))){
+            appLinker.send(TELNET_CLIENT_SEND,payload);
+            return;
+        }
+
+        const socket = new net.Socket();
+
+
+        // const socket = new WebSocket(`ws://${networkData.ip}:${networkData.port}${networkData.path}`);
+
+        socket.connect(networkData.port, networkData.ip, ()=>{
+            telnetConnection.connectionList.push(JSON.stringify(networkData));
+            appLinker.addListener(TELNET_CLIENT_SEND,data=>{
+                try{
+                    socket.send(`${data.gcode.split('\r\n')[0]}\r\n`);
+                }
+                catch(e){
+
+                }
+            });
+            appLinker.send(TELNET_CLIENT_SEND,payload);  //^ send the first message
+        });
+
+        socket.on('data',(event)=>{
+            appLinker.send(EXECUATABLE_RETURN,JSON.parse({...payload,ack:execuatable.MOTIONCONTROLLER_ACK,returnData:event.data,statusLabel:`${event.data.includes('error')?'ERROR':'OK'}`}));
+        });
+
+        socket.on('close',()=>{
+            telnetConnection.connectionList.forEach((element,index)=>{
+                if(element==JSON.stringify(networkData))
+                    telnetConnection.connectionList[index]='';
+            })
+        });
+
+        socket.on('error',()=>{
+            appLinker.send(EXECUATABLE_RETURN,{...payload,returnData:undefined,statusLabel:'NETWORK_ERROR'});
+        });
+
+
+        
+    }
+}
