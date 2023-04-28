@@ -423,8 +423,8 @@ export class telnetConnection{
             appLinker.send(TELNET_CLIENT_SEND,payload);  //^ send the first message
         });
 
-        socket.on('data',(event)=>{
-            appLinker.send(EXECUATABLE_RETURN,JSON.parse({...payload,ack:execuatable.MOTIONCONTROLLER_ACK,returnData:event.data,statusLabel:`${event.data.includes('error')?'ERROR':'OK'}`}));
+        socket.on('data',(data)=>{
+            appLinker.send(EXECUATABLE_RETURN,({...payload,ack:execuatable.MOTIONCONTROLLER_ACK,returnData:data.toString(),statusLabel:`${data.toString().includes('error')?'ERROR':'OK'}`}));
         });
 
         socket.on('close',()=>{

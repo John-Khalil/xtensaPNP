@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import WebSocket,{WebSocketServer } from "ws";
-import appLinker, { EXECUATABLE_RETURN, MOTIONCONTROLLER_IP, MOTIONCONTROLLER_PATH, MOTIONCONTROLLER_PORT, userStorage, webSocketConnection } from "./utils.js";
+import appLinker, { EXECUATABLE_RETURN, MOTIONCONTROLLER_IP, MOTIONCONTROLLER_PATH, MOTIONCONTROLLER_PORT, telnetConnection, userStorage, webSocketConnection } from "./utils.js";
 import {execuatable} from "./utils.js";
 
 import express  from "express";
@@ -30,7 +30,8 @@ const CONTROLLER_PATH='/'
 
 appLinker.addListener(EXECUATABLE_MOTION_CONTROLLER,data=>{
   //! add telnet connection
-  new webSocketConnection(data);
+  new telnetConnection(data);
+  // new webSocketConnection(data);
 });
 
 appLinker.addListener(EXECUATABLE_OUTPUT_DEVICE,data=>{
