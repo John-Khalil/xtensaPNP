@@ -37,6 +37,7 @@ export const userStorage={
         return JSON.parse(localStorage.getItem(baseAddress)).machineList;
     },
     set:(key,value)=>{
+        appLinker.send(USER_SETTIGNS_LIVE_RELOAD,{});
         const storedData=userLocalStorage();
         storedData.machineList[userLocalStorage().selectedMachine][key]=value;
         localStorage.setItem(baseAddress,JSON.stringify(storedData));
@@ -105,6 +106,8 @@ const HTTP_SERVER_ADDRESS='HTTP_SERVER_ADDRESS';
 const HTTP_SERVER_PORT='HTTP_SERVER_PORT';
 const HTTP_SERVER_PATH='HTTP_SERVER_PATH';
 
+const USER_SETTIGNS_LIVE_RELOAD='USER_SETTIGNS_LIVE_RELOAD';
+
 
 export {
     CONTROLPANEL_UNIT,
@@ -148,6 +151,7 @@ export {
     HTTP_SERVER_ADDRESS,
     HTTP_SERVER_PORT,
     HTTP_SERVER_PATH,
+    USER_SETTIGNS_LIVE_RELOAD,
 
 
 

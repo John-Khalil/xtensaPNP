@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useRef } from 'react';
 import ReactJson from 'react-json-view';
-import { userStorage,WEBSOCKET_REMOTE_HOST,WEBSOCKET_REMOTE_PORT,WEBSOCKET_REMOTE_PATH,CAMERA_CONFIG,MOTIONCONTROLLER_IP,MOTIONCONTROLLER_PORT,MOTIONCONTROLLER_PATH, HTTP_SERVER_ADDRESS,HTTP_SERVER_PORT,HTTP_SERVER_PATH,MAIN_IP,MAIN_HTTP_PORT,MAIN_PORT,MAIN_PATH} from '../utils/utils';
+import appLinker, { userStorage,WEBSOCKET_REMOTE_HOST,WEBSOCKET_REMOTE_PORT,WEBSOCKET_REMOTE_PATH,CAMERA_CONFIG,MOTIONCONTROLLER_IP,MOTIONCONTROLLER_PORT,MOTIONCONTROLLER_PATH, HTTP_SERVER_ADDRESS,HTTP_SERVER_PORT,HTTP_SERVER_PATH,MAIN_IP,MAIN_HTTP_PORT,MAIN_PORT,MAIN_PATH, USER_SETTIGNS_LIVE_RELOAD} from '../utils/utils';
 
 
 export const SettingsFeild=({inputFeild})=>{
@@ -37,6 +37,7 @@ export const SettingsFeild=({inputFeild})=>{
 export default function AppSettings() {
 
   const [serverLocalStorage,setServerLocalStorage]=useState(<></>);
+  const [userLocalStorage,setUserLocalStorage]=useState(userStorage.storage());
 
   const loadServerConfig=(serverConfig)=>{
     axios.post(`http://${
@@ -61,7 +62,9 @@ export default function AppSettings() {
   }
 
   useEffect(()=>{
-    
+    appLinker.addListener(USER_SETTIGNS_LIVE_RELOAD,()=>{
+      setUserLocalStorage(userStorage.storage());
+    });
   },[]);
   return (
     <>
@@ -91,8 +94,10 @@ export default function AppSettings() {
         }}/>
 
       </div>
-      <span>APP-CONFIG</span>
-      <div className='bg-neutral-300'><ReactJson name={false} src={userStorage.storage()} theme="monokai" onEdit={(userUpdate)=>{
+      <button onClick={()=>{
+        setUserLocalStorage(userStorage.storage());
+      }}>APP-CONFIG</button>
+      <div className='bg-neutral-300'><ReactJson name={false} src={userLocalStorage} theme="monokai" onEdit={(userUpdate)=>{
         userStorage.storage(userUpdate.updated_src);
         return true;    //this return would enable the user edit
       }}/></div>
