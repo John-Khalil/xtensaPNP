@@ -15,7 +15,7 @@ export default function RunningJobElement({statusObject}) {
     return (
         <>
             <div className={runningJobStyle} onClick={()=>{
-                setPreview((preview=='')?<div className='bg-neutral-300'><ReactJson name={false} src={statusObject||{}}/></div>:'');
+                setPreview((preview=='')?<div className='bg-neutral-300'><ReactJson name={false} src={statusObject||{}} theme="monokai"/></div>:'');
             }}>
                 <div className={runningJobIDStyle}>
                     {(statusObject||{}).ID||'ID'}

@@ -63,7 +63,10 @@ export default function AppSettings() {
 
       </div>
       <span>ALL-CONFIG</span>
-      <div className='bg-neutral-300'><ReactJson name={false} src={userStorage.storage()}/></div>
+      <div className='bg-neutral-300'><ReactJson name={false} src={userStorage.storage()} theme="monokai" onEdit={(userUpdate)=>{
+        userStorage.storage(userUpdate.updated_src);
+        return true;    //this return would enable the user edit
+      }}/></div>
       
     </>
   )
