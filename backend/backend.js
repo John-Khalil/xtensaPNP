@@ -3,6 +3,10 @@ import WebSocket,{WebSocketServer } from "ws";
 import appLinker, { EXECUATABLE_RETURN, MOTIONCONTROLLER_IP, MOTIONCONTROLLER_PATH, MOTIONCONTROLLER_PORT, userStorage, webSocketConnection } from "./utils.js";
 import {execuatable} from "./utils.js";
 
+import express  from "express";
+import cors from 'cors';
+import bodyParser from "body-parser";
+
 console.clear();
 
 const webSocketServerPort=90;
@@ -82,3 +86,16 @@ appLinker.addListener(EXECUATABLE_RETURN,statusObject=>{
 execuatable.send=data=>appLinker.send(data.operator,data);
 
 
+const appListenerPort =229;
+var app=express();
+
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+
+
+app.use(express.json());
+
+app.listen(appListenerPort,()=>{
+  console.log("-- http server started--");
+});
