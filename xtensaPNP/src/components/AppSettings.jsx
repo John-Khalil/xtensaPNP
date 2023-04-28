@@ -51,7 +51,7 @@ export default function AppSettings() {
     }).then(response=>{
       setServerLocalStorage(
         <div className='bg-neutral-300'><ReactJson name={false} src={response.data} theme="monokai" onEdit={(userUpdate)=>{
-          userStorage.storage(userUpdate.updated_src);
+          loadServerConfig(userUpdate.updated_src);
           return true;    //this return would enable the user edit
         }}/></div>
       )
