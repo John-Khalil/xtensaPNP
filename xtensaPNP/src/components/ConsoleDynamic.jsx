@@ -1,5 +1,5 @@
 import React,{ useState,useEffect,useRef } from "react"
-import appLinker from "../utils/utils";
+import appLinker, { userStorage } from "../utils/utils";
 
 // const userCommands=[];
 // let userCommandsIndex=0;
@@ -84,6 +84,13 @@ export const DynamicConsole=({userConsole})=>{
 
 	},[consoleDataObjects]);
 
+	useEffect(()=>{
+		if(consoleInput){
+			consoleEnableNL.current.checked=(userStorage.get(`consoleEnableNL-@${consoleIdentifier}`)==undefined)?userStorage.set(`consoleEnableNL-@${consoleIdentifier}`,true):userStorage.get(`consoleEnableNL-@${consoleIdentifier}`);
+			consoleEnableCR.current.checked=(userStorage.get(`consoleEnableCR-@${consoleIdentifier}`)==undefined)?userStorage.set(`consoleEnableCR-@${consoleIdentifier}`,true):userStorage.get(`consoleEnableCR-@${consoleIdentifier}`);
+		}
+	},[]);
+
 	return(
 		<>
 			<div className={`p-1 m-1 overflow-scroll min-w-1000 rounded-lg  ${userConsole.className||'float-left lg:w-[45%] w-[calc(100% -16)] '}`} style={{
@@ -136,11 +143,16 @@ export const DynamicConsole=({userConsole})=>{
 
 						<div className="float-right p-1 block">
 							<div className="block">
-								<input type="checkbox" ref={consoleEnableNL} className="inline-block float-right m-1 mt-1.5 mr-1 p-1"/>
+								<input type="checkbox" ref={consoleEnableNL} className="inline-block float-right m-1 mt-1.5 mr-1 p-1" onChange={()=>{
+									console.log(consoleEnableNL.current.checked)
+									userStorage.set(`consoleEnableNL-@${consoleIdentifier}`,consoleEnableNL.current.checked);
+								}}/>
 								<span className="inline-block float-right mr-1 text-white">CR</span>
 							</div>
 							<div className="block">
-								<input type="checkbox" ref={consoleEnableCR} className="inline-block float-right m-1 mt-1.5 mr-1 p-1"/>
+								<input type="checkbox" ref={consoleEnableCR} className="inline-block float-right m-1 mt-1.5 mr-1 p-1" onChange={()=>{
+									userStorage.set(`consoleEnableCR-@${consoleIdentifier}`,consoleEnableCR.current.checked);
+								}}/>
 								<span className="inline-block float-right mr-1 text-white">NL</span>
 							</div>
 							
