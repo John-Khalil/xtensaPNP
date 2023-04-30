@@ -1,6 +1,7 @@
 import net from 'net';
 import WebSocket from "ws";
 import { LocalStorage } from "node-localstorage";
+import chalk from 'chalk';
 
 const localStorage = new LocalStorage('./scratch');
 
@@ -414,13 +415,13 @@ export class telnetConnection{
             telnetConnection.connectionList.push(JSON.stringify(networkData));
             appLinker.addListener(TELNET_CLIENT_SEND,data=>{
                 try{
-                    socket.send(`${data.gcode.split('\r\n')[0]}\r\n`);
+                    socket.write(`${data.gcode.toString().split('\r\n')[0]}\r\n`);
                 }
                 catch(e){
 
                 }
             });
-            appLinker.send(TELNET_CLIENT_SEND,payload);  //^ send the first message
+            // appLinker.send(TELNET_CLIENT_SEND,payload);  //^ send the first message
         });
 
         socket.on('data',(data)=>{
