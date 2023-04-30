@@ -391,9 +391,10 @@ export const WebSocketSetup=()=>{
 export class telnetConnection{
     static connectionList=[];
 
+    static payloadreturn;
 
     constructor(payload){
-
+        telnetConnection.payloadreturn=payload;
         const networkData={
             ip:(payload||{}).ip||userStorage.get(MOTIONCONTROLLER_IP)||userStorage.set(MOTIONCONTROLLER_IP,MAIN_IP),
             port:(payload||{}).port||userStorage.get(MOTIONCONTROLLER_PORT)||userStorage.set(MOTIONCONTROLLER_PORT,MAIN_TELNET_PORT),
@@ -425,7 +426,8 @@ export class telnetConnection{
         });
 
         socket.on('data',(data)=>{
-            appLinker.send(EXECUATABLE_RETURN,({...payload,ack:execuatable.MOTIONCONTROLLER_ACK,returnData:data.toString(),statusLabel:`${data.toString().includes('error')?'ERROR':'OK'}`}));
+            data=data.toString().split('\r\n')[0];
+            appLinker.send(EXECUATABLE_RETURN,({...telnetConnection.payloadreturn,ack:execuatable.MOTIONCONTROLLER_ACK,returnData:data.toString(),statusLabel:`${data.toString().includes('error')?'ERROR':'OK'}`}));
         });
 
         socket.on('close',()=>{
