@@ -33,6 +33,21 @@ export default function HomePage() {
       allEventsLog(data)
     });
 
+    //
+    const onDetect=(res)=>{
+      // console.log("res >> ",res);
+      PopUp({
+        icon:'https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vvector-notification-icon-png-image_957092.jpg',
+        label:'res.modelName',
+        onClick:()=>{
+          appLinker.send('@AppModal-setContent',
+            //<FramePreview objectDetcted={{...res}}/>
+          );
+          appLinker.send('@AppModal-setOpen',true);
+        }
+      });
+    }
+    onDetect()
 
 
   },[]);
@@ -44,7 +59,7 @@ export default function HomePage() {
       <AppModal identifier={''}/>
 
 
-      <div className="border border-fuchsia-700 rounded-lg m-1 p-1 h-[950px]">
+      <div className="m-1 p-1 h-[550px]">
 
 
 
@@ -166,12 +181,12 @@ export default function HomePage() {
           className:'lg:w-[calc(100% -16)] ',
           // consoleInput:true,
           // clearConsole:true,
-          themeColor:'#a11caf',
+          themeColor:'#6B7280', //bg-gray-500
           height:280,
           consoleData:allEventsData,
           // send:getConsoleInput,
           hide:false,
-          consoleIdentifier:'ALL-EVENTS',
+          consoleIdentifier:'EVENTS',
           textColor:'#00ff00',
           // themeColor:'rgb(0,0,0)'
           

@@ -358,6 +358,7 @@ export default function Controls() {
                 consoleInput:true,
                 // clearConsole:true,
                 // themeColor:'#a11caf',
+                themeColor:'darkslategray',
                 height:190,
                 consoleData:gcode,
                 send:gcodeSend,
@@ -374,12 +375,12 @@ export default function Controls() {
                 className:'lg:w-[calc(100% -16)] ',
                 // consoleInput:true,
                 // clearConsole:true,
-                themeColor:'blue',
+                themeColor:'dimgray',
                 height:261,
                 consoleData:runningJob,
                 // send:getConsoleInput,
                 hide:false,
-                consoleIdentifier:'RUNNING-JOB',
+                consoleIdentifier:'RUNNING JOB',
                 textColor:'#00ff00',
                 // themeColor:'rgb(0,0,0)'
                 

@@ -93,13 +93,13 @@ export const DynamicConsole=({userConsole})=>{
 
 	return(
 		<>
-			<div className={`p-1 m-1 overflow-scroll min-w-1000 rounded-lg  ${userConsole.className||'float-left lg:w-[45%] w-[calc(100% -16)] '}`} style={{
-				border:`1px solid ${userConsole.themeColor||defaultThemeColor}`,
+			<div className={`overflow-scroll min-w-1000 bg-gray-700 rounded-lg ${userConsole.className||'float-left lg:w-[45%] w-[calc(100% -16)] '}`} style={{
+				// border:`1px solid ${userConsole.themeColor||defaultThemeColor}`,
 				color:userConsole.textColor||defaultTextColor,
 				display:`${userConsole.hide?'none':''}`
 			}}>
 
-				<div className={`w-[calc(100% -24)] p-1 m-1 overflow-scroll rounded-lg bg-black`} style={{
+				<div className={`w-[calc(100% -24)] pl-4 p-2 overflow-scroll bg-black shadow-md`} style={{
 					border:`1px solid ${userConsole.themeColor||defaultThemeColor}`,
 					color:'white',
 					background:userConsole.themeColor||defaultThemeColor
@@ -121,13 +121,13 @@ export const DynamicConsole=({userConsole})=>{
 
 				{(consoleInput)?(
 				
-					<div className={`w-[calc(100% -24)] p-1 m-1 overflow-scroll rounded-lg bg-black`} style={{
-						border:`1px solid ${userConsole.themeColor||defaultThemeColor}`,
+					<div className={`w-[calc(100% -24)] p-1 overflow-scroll rounded-lg`} style={{
+						//border:`1px solid ${userConsole.themeColor||defaultThemeColor}`,
 						color:userConsole.textColor||defaultTextColor
 					}}>
 
-						<input type="text" ref={mainConsoleInput} className="p-1 m-1 rounded-lg bg-white mt-3 font-semibold" style={{
-							border:`1px solid ${userConsole.themeColor||defaultThemeColor}`,
+						<input type="text" ref={mainConsoleInput} className="p-1 m-1 rounded-lg bg-white mt-3 font-semibold shadow-xl" style={{
+							//border:`1px solid ${userConsole.themeColor||defaultThemeColor}`,
 							color:userConsole.textColor||defaultTextColor,
 							width:'calc(100% - 123px)'
 						}} placeholder=" > Enter Command" onKeyDown={hitEnter}/>
@@ -158,10 +158,10 @@ export const DynamicConsole=({userConsole})=>{
 							
 						</div>
 
-						<button className={`m-1 p-1 pl-2 pr-2 inline rounded-lg float-right mt-3`} style={{
-							border:`1px solid ${userConsole.themeColor||defaultThemeColor}`,
+						<button className={`m-1 p-1 pl-2 pr-2 inline rounded-lg float-right mt-3 bg-green-600 hover:bg-green-700 active:bg-green-800 shadow-xl`} style={{
+							//border:`1px solid ${userConsole.themeColor||defaultThemeColor}`,
 							color:"white",
-							background:userConsole.themeColor||defaultThemeColor
+							//background:userConsole.themeColor||defaultThemeColor
 						}} onClick={()=>{
 							consoleSend();
 						}}>Send</button>
@@ -178,7 +178,7 @@ export const DynamicConsole=({userConsole})=>{
 export default function ConsoleDynamic() {
 
 	const [consoleLog,consoleLogger]=useState(<>
-		<div className="bg-fuchsia-400"> test</div>
+		<div className="bg-blue-800"> test</div>
 	</>);
 	let testCounter=0;
 	const getConsoleInput=(consoleInput)=>{

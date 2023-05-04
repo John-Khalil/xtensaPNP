@@ -4,9 +4,9 @@ import {Link,Outlet} from 'react-router-dom'
 import '../App.css';
 
 export default function Layout() {
-	const navBarStyleElements='felx p-1 text-center inline-block bg-fuchsia-700 rounded-md hover:bg-fuchsia-950 w-18 font-bold';
-	const navBarStyle='m-1 p-1 text-left border border-fuchsia-700 rounded-md';
-	const layoutBodyStyle='m-1 p-1 text center  border-sky-800';
+	const navBarStyleElements='felx p-1 text-center inline-block text-blue-400 hover:text-blue-50 w-18 font-bold text-md';
+	const navBarStyle='ml-2 m-1 p-2 text-left shadow-xl';
+	const layoutBodyStyle='m-1 p-1 text center border-sky-800';
 	const navBarHeight=67;
 	const [windowHeight,setWindowHeight]=useState((window.innerHeight-navBarHeight))
 	useEffect(()=>{
