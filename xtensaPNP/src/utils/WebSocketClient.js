@@ -32,7 +32,9 @@ export class webSocketConnection{
 
                 }
             });
-            appLinker.send(WEBSOCKET_CLIENT_SEND,payload);  //^ send the first message
+            setTimeout(() => {
+                appLinker.send(WEBSOCKET_CLIENT_SEND,payload);  //^ send the first message
+            }, 50);
         });
 
         socket.addEventListener('message',(event)=>{
@@ -87,6 +89,10 @@ const WebSocketSetup=()=>{
             ID:'init'
         })
     }
+    appLinker.send(EXECUATABLE_SEND,{
+        operator:execuatable.EXECUATABLE_INPUT_DEVICE,
+        ID:'test0'
+    })
 }
 
 export default WebSocketSetup;

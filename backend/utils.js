@@ -330,10 +330,13 @@ export class webSocketConnection{
 
                 }
             });
-            appLinker.send(WEBSOCKET_CLIENT_SEND,payload);  //^ send the first message
+            setTimeout(() => {
+                appLinker.send(WEBSOCKET_CLIENT_SEND,payload);  //^ send the first message
+            }, 50);
         });
 
         socket.addEventListener('message',(event)=>{
+            console.log(event.data)
             appLinker.send(EXECUATABLE_RETURN,JSON.parse(event.data));
         });
 
