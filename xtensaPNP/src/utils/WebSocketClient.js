@@ -91,7 +91,7 @@ const WebSocketSetup=()=>{
         })
     }
     appLinker.send(EXECUATABLE_SEND,{
-        operator:execuatable.EXECUATABLE_INPUT_DEVICE,
+        operator:execuatable.EXECUATABLE_OUTPUT_DEVICE,
         ID:'test0'
     })
 }
