@@ -7,7 +7,7 @@ export default function AppModal({identifier}) {
     const exitElement=<><button className="float-right inline underline font-bold mr-3" onClick={()=>{setOpen(false);}}>CLOSE</button><br /></>;
     const [openModal,setOpen]=useState(false);
     const [contentModal,setContent]=useState([exitElement]);
-    const [backgroundColor,setBackgroundColor]=useState('rgba(30, 30, 30, 0.9)');
+    const [backgroundColor,setBackgroundColor]=useState('rgba(30, 30, 30, 1)');
 
     appLinker.addListener(`${identifier}@AppModal-setOpen`,eventData=>setOpen(eventData));
     appLinker.addListener(`${identifier}@AppModal-setContent`,eventData=>setContent([exitElement,eventData]));

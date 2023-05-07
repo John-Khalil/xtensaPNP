@@ -34,20 +34,6 @@ export default function HomePage() {
     });
 
     //
-    const onDetect=(res)=>{
-      // console.log("res >> ",res);
-      PopUp({
-        icon:'https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vvector-notification-icon-png-image_957092.jpg',
-        label:'res.modelName',
-        onClick:()=>{
-          appLinker.send('@AppModal-setContent',
-            //<FramePreview objectDetcted={{...res}}/>
-          );
-          appLinker.send('@AppModal-setOpen',true);
-        }
-      });
-    }
-    onDetect()
 
 
   },[]);
@@ -59,7 +45,7 @@ export default function HomePage() {
       <AppModal identifier={''}/>
 
 
-      <div className="m-1 p-1 h-[550px]">
+      <div className="m-1 p-1 grid grid-cols-1 lg:md-cols-2 place-items-center lg:place-items-start gap-6">
 
 
 
@@ -181,7 +167,7 @@ export default function HomePage() {
           className:'lg:w-[calc(100% -16)] ',
           // consoleInput:true,
           // clearConsole:true,
-          themeColor:'#6B7280', //bg-gray-500
+          themeColor:'#1c283b', //6B7280 //1c283b
           height:280,
           consoleData:allEventsData,
           // send:getConsoleInput,

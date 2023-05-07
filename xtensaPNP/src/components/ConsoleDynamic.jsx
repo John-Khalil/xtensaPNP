@@ -93,7 +93,8 @@ export const DynamicConsole=({userConsole})=>{
 
 	return(
 		<>
-			<div className={`overflow-scroll min-w-1000 bg-gray-700 rounded-lg ${userConsole.className||'float-left lg:w-[45%] w-[calc(100% -16)] '}`} style={{
+			<div className={`overflow-scroll min-w-1000 rounded-lg ${userConsole.className||'float-left lg:w-[45%] w-[calc(100% -16)] '}`} style={{
+				backgroundColor: "#1c283b",
 				// border:`1px solid ${userConsole.themeColor||defaultThemeColor}`,
 				color:userConsole.textColor||defaultTextColor,
 				display:`${userConsole.hide?'none':''}`
@@ -126,9 +127,9 @@ export const DynamicConsole=({userConsole})=>{
 						color:userConsole.textColor||defaultTextColor
 					}}>
 
-						<input type="text" ref={mainConsoleInput} className="p-1 m-1 rounded-lg bg-white mt-3 font-semibold shadow-xl" style={{
+						<input type="text" ref={mainConsoleInput} className="p-1 m-1 rounded-lg bg-white mt-3 font-semibold shadow-xl font-gray" style={{
 							//border:`1px solid ${userConsole.themeColor||defaultThemeColor}`,
-							color:userConsole.textColor||defaultTextColor,
+							color:"black",
 							width:'calc(100% - 123px)'
 						}} placeholder=" > Enter Command" onKeyDown={hitEnter}/>
 

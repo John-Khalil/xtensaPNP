@@ -8,7 +8,7 @@ export default function Forms({formAttribute}) {
 
   return (
   <>
-    <div className='grid grid-cols-1 grid-rows-2 gap-1   w-full '>
+    <div className='grid grid-cols-1 grid-rows-2 gap-1 w-full '>
       <div className='row-start-1 col-start-1 row-span-1 col-span-1'>
         <div className='text-center '>
           <img className='w-[50%] ml-[25%]' src="" alt="" />

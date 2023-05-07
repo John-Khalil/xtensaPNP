@@ -376,7 +376,7 @@ export default function Controls() {
                 // consoleInput:true,
                 // clearConsole:true,
                 themeColor:'dimgray',
-                height:261,
+                height:254,
                 consoleData:runningJob,
                 // send:getConsoleInput,
                 hide:false,

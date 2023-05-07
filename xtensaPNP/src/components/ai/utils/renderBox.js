@@ -49,11 +49,11 @@ export const renderBoxes = (
       const height = y2 - y1;
 
       // draw box.
-      ctx.fillStyle = Colors.hexToRgba(color, 0.2);
+      ctx.fillStyle = Colors.hexToRgba(color, 0);
       ctx.fillRect(x1, y1, width, height);
       // draw border box.
       ctx.strokeStyle = color;
-      ctx.lineWidth = Math.max(Math.min(ctx.canvas.width, ctx.canvas.height) / 200, 2.5);
+      ctx.lineWidth = Math.max(Math.min(ctx.canvas.width, ctx.canvas.height) / 400, 2);
       ctx.strokeRect(x1, y1, width, height);
 
       // Draw the label background.
