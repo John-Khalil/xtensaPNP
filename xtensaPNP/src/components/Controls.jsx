@@ -2,7 +2,7 @@ import React from 'react'
 import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import execuatable from '../utils/operators';
+import execuatable, { pipeline } from '../utils/operators';
 import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_FEEDRATE_MAX, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, CONTROLPANEL_UNITZ, EXECUATABLE_PROCESS, EXECUATABLE_REPORT_ACTION, EXECUATABLE_REPORT_STATUS, PUMP_POWER, PUMP_POWER_MAX, SPINDEL_RPM, SPINDEL_RPM_MAX, userStorage } from '../utils/utils';
 import { DynamicConsole } from './ConsoleDynamic';
 import RunningJobElement from './RunningJobElement';
@@ -396,6 +396,7 @@ export default function Controls() {
       <ControlPanel machineControl={{
         Y_Positive:(data)=>{
           console.log("Y_Positive >> ",data);
+          new pipeline().outputPort1(3,1).outputPort1(2,1).run();
         },
         Y_Negative:(data)=>{
           console.log("Y_Negative >> ",data);

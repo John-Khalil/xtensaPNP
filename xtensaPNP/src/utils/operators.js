@@ -158,19 +158,19 @@ export class pipeline {
     static EXECUTABLE_OBJECT=   "executableObject"
 
     threadLoader={
-        [this.OPERATOR]:execuatable.EXECUATABLE_THREAD,
-        [this.EXECUTABLE_LIST]:[]
+        [pipeline.OPERATOR]:execuatable.EXECUATABLE_THREAD,
+        [pipeline.EXECUTABLE_LIST]:[]
     }
 
     
     run=()=>{
-        appLinker.send(EXECUATABLE_PROCESS,this.threadLoader);
+        appLinker.send(EXECUATABLE_PROCESS,JSON.parse(JSON.stringify(this.threadLoader)));
         this.threadLoader[pipeline.EXECUTABLE_LIST]=[];
         return this;
     }
 
     runAsync=()=>{
-        execuatable.send(this.threadLoader);
+        execuatable.send(JSON.parse(JSON.stringify(this.threadLoader)));
         this.threadLoader[pipeline.EXECUTABLE_LIST]=[];
         return this;
     }
