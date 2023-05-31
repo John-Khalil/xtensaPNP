@@ -396,7 +396,7 @@ export default function Controls() {
       <ControlPanel machineControl={{
         Y_Positive:(data)=>{
           console.log("Y_Positive >> ",data);
-          new pipeline().outputPort1(3,1).outputPort1(2,1).run();
+          new pipeline().gcode("X100").outputPort1(2,1).outputPort1(1,1).servoControl(1,parseInt(Math.random()*179)).outputPort1(2,0).run();
         },
         Y_Negative:(data)=>{
           console.log("Y_Negative >> ",data);
