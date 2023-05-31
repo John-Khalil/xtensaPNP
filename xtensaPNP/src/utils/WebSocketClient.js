@@ -94,11 +94,18 @@ const WebSocketSetup=()=>{
     //     operator:execuatable.EXECUATABLE_OUTPUT_DEVICE,
     //     ID:'test0'
     // })
+    // appLinker.send(EXECUATABLE_SEND,{
+    //     operator:execuatable.EXECUATABLE_OUTPUT_DEVICE,
+    //     ID:'servoControl',
+    //     ch:1,
+    //     value:parseInt(Math.random()*179)
+    // })
+
     appLinker.send(EXECUATABLE_SEND,{
         operator:execuatable.EXECUATABLE_OUTPUT_DEVICE,
-        ID:'servoControl',
-        ch:1,
-        value:parseInt(Math.random()*179)
+        ID:'digitalOutput',
+        ch:258,
+        value:0
     })
 }
 

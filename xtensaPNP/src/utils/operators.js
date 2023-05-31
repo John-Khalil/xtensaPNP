@@ -119,3 +119,115 @@ export const execuatableSetup=()=>{
     });
 
 }
+
+
+export class pipeline {
+    //^ keys
+
+    static STATUS_LABEL=        "statusLabel";
+    static INPUT_VALUE=         "INPUT_VALUE";
+    static RETURN_DATA=         "returnData";
+    static OPERATOR=            "operator";
+    static ID=                  "ID";
+    static ACK=                 "ack";
+    static CHANNEL=             "ch";
+    static VALUE=               "value";
+    static THREAD_ACK=          "THREAD_ACK";
+    static INPUT_VALUE=         "INPUT_VALUE";
+    static OUTPUT_ACK=          "OUTPUT_ACK";
+    static MOTIONCONTROLLER_ACK="MOTIONCONTROLLER_ACK";
+    static EXECUTABLE_LIST=     "execuatableList";
+    static G_CODE=              "gcode";
+
+    static INPUT_DEVICE=        "inputDevice"
+    static OUTPUT_DEVICE=       "outputDevice"
+    static MOTION_CONTROLLER=   "motionController"
+    static THREAD=              "thread"
+    static PIN_MODE=            "pinMode"
+    static INPUT_REGISTER_0=    "inputRegister0"
+    static INPUT_REGISTER_1=    "inputRegister1"
+    static OUTPUT_REGISTER_0=   "outputRegister0"
+    static OUTPUT_REGISTER_1=   "outputRegister1"
+    static PWM=                 "pwm"
+    static ANALOG_INPUT=        "analogInput"
+    static DIGITAL_INPUT=       "digitalInput"
+    static DIGITAL_OUTPUT=      "digitalOutput"
+    static SERVO_CONTROL=       "servoControl"
+    static CLOCK_OUTPUT=        "clockOutput"
+    static EXTENDED_OUTPUT=     "extendedOutput"
+    static EXECUTABLE_OBJECT=   "executableObject"
+
+    threadLoader={
+        [this.OPERATOR]:execuatable.EXECUATABLE_THREAD,
+        [this.EXECUTABLE_LIST]:[]
+    }
+
+    
+    run=()=>{
+        appLinker.send(EXECUATABLE_PROCESS,this.threadLoader);
+        this.threadLoader[pipeline.EXECUTABLE_LIST]=[];
+        return this;
+    }
+
+    runAsync=()=>{
+        execuatable.send(this.threadLoader);
+        this.threadLoader[pipeline.EXECUTABLE_LIST]=[];
+        return this;
+    }
+
+    analogRead=(channel,onData)=>{
+        this.threadLoader[pipeline.EXECUTABLE_LIST].push({
+            [pipeline.OPERATOR]:execuatable.EXECUATABLE_INPUT_DEVICE,
+            [pipeline.ID]:pipeline.ANALOG_INPUT,
+            [pipeline.CHANNEL]:channel,
+            [pipeline.INPUT_DEVICE]:onData
+        })
+        return this;
+    }
+
+    servoControl=(channel,value)=>{
+        this.threadLoader[pipeline.EXECUTABLE_LIST].push({
+            [pipeline.OPERATOR]:execuatable.EXECUATABLE_OUTPUT_DEVICE,
+            [pipeline.ID]:pipeline.SERVO_CONTROL,
+            [pipeline.CHANNEL]:channel,
+            [pipeline.VALUE]:value
+        })
+        return this;
+    }
+
+    outputPort0=(channel,value)=>{
+        this.threadLoader[pipeline.EXECUTABLE_LIST].push({
+            [pipeline.OPERATOR]:execuatable.EXECUATABLE_OUTPUT_DEVICE,
+            [pipeline.ID]:pipeline.DIGITAL_OUTPUT,
+            [pipeline.CHANNEL]:(value==undefined)?(0x280):(channel|0x80),
+            [pipeline.VALUE]:(value==undefined)?(channel):(value)
+        })
+        return this;
+    }
+
+    outputPort1=(channel,value)=>{
+        this.threadLoader[pipeline.EXECUTABLE_LIST].push({
+            [pipeline.OPERATOR]:execuatable.EXECUATABLE_OUTPUT_DEVICE,
+            [pipeline.ID]:pipeline.DIGITAL_OUTPUT,
+            [pipeline.CHANNEL]:(value==undefined)?(0x300):(channel|0x100),
+            [pipeline.VALUE]:(value==undefined)?(channel):(value)
+        })
+        return this;
+    }
+
+    gcode=(command)=>{
+        this.threadLoader[pipeline.EXECUTABLE_LIST].push({
+            [pipeline.OPERATOR]:execuatable.EXECUATABLE_MOTION_CONTROLLER,
+            [pipeline.G_CODE]:command
+        })
+        return this;
+    }
+
+
+    constructor(){
+        return this;
+    }
+
+
+
+}
