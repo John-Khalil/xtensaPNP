@@ -400,9 +400,11 @@ export default function Controls() {
         },
         Y_Negative:(data)=>{
           console.log("Y_Negative >> ",data);
+          new pipeline().gcode("$x").gcode("$x").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").run();
         },
         X_Positive:(data)=>{
           console.log("X_Positive >> ",data);
+          new pipeline().clock(2,500,2).run();
         },
         X_Negative:(data)=>{
           console.log("X_Negative >> ",data);

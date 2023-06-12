@@ -132,6 +132,7 @@ export class pipeline {
     static ACK=                 "ack";
     static CHANNEL=             "ch";
     static VALUE=               "value";
+    static CLOCK_EDGE=          "clockEdge"
     static THREAD_ACK=          "THREAD_ACK";
     static INPUT_VALUE=         "INPUT_VALUE";
     static OUTPUT_ACK=          "OUTPUT_ACK";
@@ -191,6 +192,17 @@ export class pipeline {
             [pipeline.ID]:pipeline.SERVO_CONTROL,
             [pipeline.CHANNEL]:channel,
             [pipeline.VALUE]:value
+        })
+        return this;
+    }
+
+    clock=(channel,delay,clkEdge)=>{
+        this.threadLoader[pipeline.EXECUTABLE_LIST].push({
+            [pipeline.OPERATOR]:execuatable.EXECUATABLE_OUTPUT_DEVICE,
+            [pipeline.ID]:pipeline.CLOCK_OUTPUT,
+            [pipeline.CHANNEL]:channel,
+            [pipeline.CLOCK_EDGE]:clkEdge,
+            [pipeline.VALUE]:delay
         })
         return this;
     }
