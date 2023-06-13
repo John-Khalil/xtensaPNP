@@ -273,6 +273,58 @@ export const PumpControl=({pumpControl})=>{
 }
 
 
+const pickup=({x=330,y=300,zPickup=0,zPutDown=32,zClamp=28,delayTime=30000,feedRate=2500})=>{
+  new pipeline()
+    .gcode(`G1 X0 F${feedRate}`)
+    .gcode(`G1 Y0 F${feedRate}`)
+    .gcode(`G1 Z${zClamp} F${feedRate}`)
+    .gcode(`G1 Y${y} F${feedRate}`)
+    .gcode(`G1 X${x} F${feedRate}`)
+    .run();
+  
+  setTimeout(()=>{
+    new pipeline()
+      .outputPort1(1,0)
+      .clock(0,4000,1)
+      .outputPort1(0,1)
+      .outputPort1(0,1)
+      .outputPort1(0,1)
+      .outputPort1(0,1)
+      .outputPort1(0,1)
+      .outputPort1(0,0)
+      .gcode(`G1 Z${zPickup} F${feedRate}`)
+      .gcode(`G1 X0 F${feedRate}`)
+      .gcode(`G1 Y0 F${feedRate}`)
+      .run();
+  },delayTime);
+  
+  return;
+}
+
+const putDown=({x=330,y=300,zPickup=0,zPutDown=32,zClamp=28,delayTime=30000,feedRate=2500})=>{
+  new pipeline()
+    .gcode(`G1 X0 F${feedRate}`)
+    .gcode(`G1 Y0 F${feedRate}`)
+    .gcode(`G1 Z${zPickup} F${feedRate}`)
+    .gcode(`G1 Y${y} F${feedRate}`)
+    .gcode(`G1 X${x} F${feedRate}`)
+    .gcode(`G1 Z${zPutDown} F${feedRate}`)
+    .run();
+  
+  setTimeout(()=>{
+    new pipeline()
+      .outputPort1(0,0)
+      .clock(1,4000,1)
+      .outputPort1(1,0)
+      .gcode(`G1 Z${zClamp} F${feedRate}`)
+      .gcode(`G1 X0 F${feedRate}`)
+      .gcode(`G1 Y0 F${feedRate}`)
+      .run();
+  },delayTime);
+  
+  return;
+}
+
 
 
 export default function Controls() {
@@ -396,15 +448,12 @@ export default function Controls() {
       <ControlPanel machineControl={{
         Y_Positive:(data)=>{
           console.log("Y_Positive >> ",data);
-          new pipeline().gcode("X100").outputPort1(2,1).outputPort1(1,1).servoControl(1,parseInt(Math.random()*179)).outputPort1(2,0).run();
         },
         Y_Negative:(data)=>{
           console.log("Y_Negative >> ",data);
-          new pipeline().gcode("$x").gcode("$x").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").gcode("y50").gcode("y100").run();
         },
         X_Positive:(data)=>{
           console.log("X_Positive >> ",data);
-          new pipeline().clock(2,500,2).run();
         },
         X_Negative:(data)=>{
           console.log("X_Negative >> ",data);
@@ -426,6 +475,7 @@ export default function Controls() {
             label:'spindel',
             activate:()=>{
               console.log("send some commands to enable spindel");
+              putDown({});
             },
             Control:<SpindelControl spindelControl={{
               on:(data)=>{
@@ -443,6 +493,7 @@ export default function Controls() {
             label:'picker',
             activate:()=>{
               console.log("send some commands to enable picker");
+              pickup({});
             },
             Control:<PumpControl pumpControl={{
               on:(data)=>{

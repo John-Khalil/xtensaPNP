@@ -101,12 +101,12 @@ const WebSocketSetup=()=>{
     //     value:parseInt(Math.random()*179)
     // })
 
-    appLinker.send(EXECUATABLE_SEND,{
-        operator:execuatable.EXECUATABLE_OUTPUT_DEVICE,
-        ID:'digitalOutput',
-        ch:258,
-        value:0
-    })
+    // appLinker.send(EXECUATABLE_SEND,{
+    //     operator:execuatable.EXECUATABLE_OUTPUT_DEVICE,
+    //     ID:'digitalOutput',
+    //     ch:258,
+    //     value:0
+    // })
 }
 
 export default WebSocketSetup;
