@@ -273,7 +273,7 @@ export const PumpControl=({pumpControl})=>{
 }
 
 
-const pickup=({x=330,y=300,zPickup=0,zPutDown=32,zClamp=28,delayTime=30000,feedRate=2500})=>{
+const pickup=({x=335,y=300,zPickup=0,zPutDown=33,zClamp=28,delayTime=30000,feedRate=2500})=>{
   new pipeline()
     .gcode(`G1 X0 F${feedRate}`)
     .gcode(`G1 Y0 F${feedRate}`)
@@ -285,12 +285,7 @@ const pickup=({x=330,y=300,zPickup=0,zPutDown=32,zClamp=28,delayTime=30000,feedR
   setTimeout(()=>{
     new pipeline()
       .outputPort1(1,0)
-      .clock(0,4000,1)
-      .outputPort1(0,1)
-      .outputPort1(0,1)
-      .outputPort1(0,1)
-      .outputPort1(0,1)
-      .outputPort1(0,1)
+      .clock(0,4500,1)
       .outputPort1(0,0)
       .gcode(`G1 Z${zPickup} F${feedRate}`)
       .gcode(`G1 X0 F${feedRate}`)
@@ -301,7 +296,7 @@ const pickup=({x=330,y=300,zPickup=0,zPutDown=32,zClamp=28,delayTime=30000,feedR
   return;
 }
 
-const putDown=({x=330,y=300,zPickup=0,zPutDown=32,zClamp=28,delayTime=30000,feedRate=2500})=>{
+const putDown=({x=335,y=300,zPickup=0,zPutDown=33,zClamp=28,delayTime=30000,feedRate=2500})=>{
   new pipeline()
     .gcode(`G1 X0 F${feedRate}`)
     .gcode(`G1 Y0 F${feedRate}`)
