@@ -19,15 +19,15 @@ export const AddComponent=({component})=>{
             <div className='grid grid-cols-3 grid-rows-1 gap-1   w-[50%] h-[300px] my-2'>
               <div className='row-start-1 col-start-1 row-span-1 col-span-1'>
                 <span>X-Coordinate</span>
-                <input className={formInputString} type="text" ref={pcb_x}/>
+                <input className={formInputString} type="number" ref={pcb_x}/>
               </div>
               <div className='row-start-1 col-start-2 row-span-1 col-span-1'>
                 <span>Y-Coordinate</span>
-                <input className={formInputString} type="text" ref={pcb_y}/>
+                <input className={formInputString} type="number" ref={pcb_y}/>
               </div>
               <div className='row-start-1 col-start-3 row-span-1 col-span-1'>
                 <span>Z-Coordinate</span>
-                <input className={formInputString} type="text" ref={pcb_z}/>
+                <input className={formInputString} type="number" ref={pcb_z}/>
               </div>
             </div>
         </>
