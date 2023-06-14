@@ -58,7 +58,7 @@ export const AddComponent=({component})=>{
               </div>
               <div className='row-start-1 col-start-4 row-span-1 col-span-1'>
                 <span>Label</span>
-                <input className={formInputString} type="number" ref={partLabel}/>
+                <input className={formInputString} type="text" ref={partLabel}/>
               </div>
               <div className='row-start-1 col-start-5 row-span-1 col-span-1'>
                 <span><pre> </pre></span>
@@ -92,13 +92,15 @@ export default function ManualJobSetup() {
     partsListBufer.forEach((element,index) => {
       renderBuffer.push(<>
         <div className='bg-gray-900 rounded-md w-full text-left p-4 my-1'>
-          <span>{element.label||'label'}</span>
+          <span>{element.partLabel||'label'}</span>
           <div className='float-right'>
             <div className='grid grid-cols-3 grid-rows-1 gap-1  w-fit '>
 
               <div className='row-start-1 col-start-1 row-span-1  col-span-1'>
                 <button className='bg-gray-500 text-right h-full  select-none px-2 font-bold text-lg rounded-md' onClick={()=>{
                   let switchBuffer=partsListBufer[index+1];
+                  if(switchBuffer==undefined)
+                    return;
                   partsListBufer[index+1]=partsListBufer[index];
                   partsListBufer[index]=switchBuffer;
 
@@ -109,6 +111,8 @@ export default function ManualJobSetup() {
               <div className='row-start-1 col-start-2 row-span-1 col-span-1'>
                 <button className='bg-gray-500 text-right h-full  select-none px-2 font-bold text-lg rounded-md' onClick={()=>{
                   let switchBuffer=partsListBufer[index-1];
+                  if(switchBuffer==undefined)
+                    return;
                   partsListBufer[index-1]=partsListBufer[index];
                   partsListBufer[index]=switchBuffer;
 
@@ -150,7 +154,7 @@ export default function ManualJobSetup() {
     <>
       <AddComponent component={{
         submit:(part)=>{
-          appLinker.send(PARTS_LIST,[...partsListBufer,{...part,index:partsListBufer.length}])
+          appLinker.send(PARTS_LIST,[...partsListBufer,part])
         }
       }}/>
       {partsList}
