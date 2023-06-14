@@ -88,7 +88,52 @@ export default function ManualJobSetup() {
   const [partsList,setPartsList]=useState([]);
 
   const updatePartsList=()=>{
+    let renderBuffer=[];
+    partsListBufer.forEach((element,index) => {
+      renderBuffer.push(<>
+        <div className='bg-gray-900 rounded-md w-full text-left p-4 my-1'>
+          <span>{element.label||'label'}</span>
+          <div className='float-right'>
+            <div className='grid grid-cols-3 grid-rows-1 gap-1  w-fit '>
 
+              <div className='row-start-1 col-start-1 row-span-1  col-span-1'>
+                <button className='bg-gray-500 text-right h-full  select-none px-2 font-bold text-lg rounded-md' onClick={()=>{
+                  let switchBuffer=partsListBufer[index+1];
+                  partsListBufer[index+1]=partsListBufer[index];
+                  partsListBufer[index]=switchBuffer;
+
+                  appLinker.send(PARTS_LIST,partsListBufer);
+                }}>-</button>
+              </div>
+
+              <div className='row-start-1 col-start-2 row-span-1 col-span-1'>
+                <button className='bg-gray-500 text-right h-full  select-none px-2 font-bold text-lg rounded-md' onClick={()=>{
+                  let switchBuffer=partsListBufer[index-1];
+                  partsListBufer[index-1]=partsListBufer[index];
+                  partsListBufer[index]=switchBuffer;
+
+                  appLinker.send(PARTS_LIST,partsListBufer);
+                }}>+</button>
+              </div>
+
+              <div className='row-start-1 col-start-3 row-span-1 col-span-1'>
+                <button className='bg-red-700 text-right h-full  select-none px-1 font-bold text-lg rounded-md' onClick={()=>{
+                  partsListBufer.splice(index, 1);
+
+                  appLinker.send(PARTS_LIST,partsListBufer);
+                }}>delete</button>
+              </div>
+
+            </div>
+          </div>
+          <br />
+          <div className='text-xs text-gray-500 text-left'>
+            {JSON.stringify(element)}
+          </div>
+        </div>
+      </>)
+    });
+    setPartsList(renderBuffer);
   }
 
   appLinker.addListener(PARTS_LIST,(data)=>{
