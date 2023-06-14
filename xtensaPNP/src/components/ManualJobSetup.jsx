@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRef } from 'react';
+import { pipeline } from '../utils/operators';
 import appLinker, { PARTS_LIST, userStorage } from '../utils/utils';
 
 export const AddComponent=({component})=>{
@@ -64,15 +65,15 @@ export const AddComponent=({component})=>{
                 <span><pre> </pre></span>
                 <button className='bg-green-600 text-xl text-center w-full rounded-lg' onClick={()=>{
                   ((component||{}).submit||(()=>{}))({
-                    pcb_x:pcb_x.current.value,
-                    pcb_y:pcb_y.current.value,
-                    pcb_z:pcb_z.current.value,
+                    pcb_x:pcb_x.current.value||20,
+                    pcb_y:pcb_y.current.value||20,
+                    pcb_z:pcb_z.current.value||2,
                     partLabel:partLabel.current.value,
-                    partWidth:partWidth.current.value,
-                    partHeight:partHeight.current.value,
-                    partLength:partLength.current.value,
-                    partOrientation:partOrientation.current.value,
-                    partTray:partTray.current.value,
+                    partWidth:partWidth.current.value||1,
+                    partHeight:partHeight.current.value||1,
+                    partLength:partLength.current.value||2,
+                    partOrientation:partOrientation.current.value||0,
+                    partTray:partTray.current.value||0,
                   });
                 }}>Add</button>
               </div>
@@ -81,6 +82,33 @@ export const AddComponent=({component})=>{
             
         </>
     )
+}
+
+export const jobSetup=()=>{
+  const x0=9;
+  const y0=19;
+
+  const pcb_x0=39;
+  const pcb_y0=39;
+
+  const feedRate=3000;
+  const pumpSpeed=500;
+  const jobSetupPipeline=new pipeline().gcode(`$H`).gcode(`S${pumpSpeed}`);
+  (userStorage.get(PARTS_LIST)||userStorage.set(PARTS_LIST,[])).forEach(element => {
+    jobSetupPipeline
+    .gcode(`G1 X${x0+(partTray/((partTray<14)?7:2))+(element.partWidth/2)} Y${y0+(partTray%((partTray<14)?7:2))+(element.partLength/2)} F${feedRate}`)
+    .gcode(`G1 Z${33-1-element.partHeight} F${feedRate}`)
+    .gcode(`M3`)
+    .gcode(`G1 Z0 F${feedRate}`)
+    .gcode(`G1 X${pcb_x0+pcb_x} Y${pcb_y0+pcb_y} F${feedRate}`)
+    .gcode(`G1 C${partOrientation} F${feedRate}`)
+    .gcode(`G1 Z${33-element.pcb_z} F${feedRate}`)
+    .gcode(`M5`)
+    .gcode(`G1 Z0 F${feedRate}`)
+    .gcode(`G1 C0 F${feedRate}`)
+
+  });
+  return jobSetupPipeline.gcode(`$H`);
 }
 
 export default function ManualJobSetup() {

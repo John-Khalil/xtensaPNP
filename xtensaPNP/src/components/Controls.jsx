@@ -309,7 +309,7 @@ const putDown=({x=335,y=300,zPickup=0,zPutDown=33,zClamp=28,delayTime=30000,feed
   setTimeout(()=>{
     new pipeline()
       .outputPort1(0,0)
-      .clock(1,4000,1)
+      .clock(1,3800,1)
       .outputPort1(1,0)
       .gcode(`G1 Z${zClamp} F${feedRate}`)
       .gcode(`G1 X0 F${feedRate}`)
