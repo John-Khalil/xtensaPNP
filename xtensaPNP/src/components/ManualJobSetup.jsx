@@ -1,5 +1,8 @@
 import React from 'react'
+import { useEffect } from 'react';
+import { useState } from 'react';
 import { useRef } from 'react';
+import appLinker, { PARTS_LIST, userStorage } from '../utils/utils';
 
 export const AddComponent=({component})=>{
   const formInputString='w-full bg-gray-700 rounded-lg text-blue-300 text-xl text-center float-right';
@@ -7,7 +10,6 @@ export const AddComponent=({component})=>{
     const pcb_y=useRef();
     const pcb_z=useRef();
     const partLabel=useRef();
-
     const partWidth=useRef();
     const partHeight=useRef();
     const partLength=useRef();
@@ -60,7 +62,19 @@ export const AddComponent=({component})=>{
               </div>
               <div className='row-start-1 col-start-5 row-span-1 col-span-1'>
                 <span><pre> </pre></span>
-                <button className='bg-green-600 text-xl text-center w-full rounded-lg'>Add</button>
+                <button className='bg-green-600 text-xl text-center w-full rounded-lg' onClick={()=>{
+                  ((component||{}).submit||(()=>{}))({
+                    pcb_x:pcb_x.current.value,
+                    pcb_y:pcb_y.current.value,
+                    pcb_z:pcb_z.current.value,
+                    partLabel:partLabel.current.value,
+                    partWidth:partWidth.current.value,
+                    partHeight:partHeight.current.value,
+                    partLength:partLength.current.value,
+                    partOrientation:partOrientation.current.value,
+                    partTray:partTray.current.value,
+                  });
+                }}>Add</button>
               </div>
             </div>
 
@@ -70,9 +84,32 @@ export const AddComponent=({component})=>{
 }
 
 export default function ManualJobSetup() {
-  return (
-    <AddComponent component={{
+  let partsListBufer=userStorage.get(PARTS_LIST)||userStorage.set(PARTS_LIST,[]);
+  const [partsList,setPartsList]=useState([]);
 
-    }}/>
+  const updatePartsList=()=>{
+
+  }
+
+  appLinker.addListener(PARTS_LIST,(data)=>{
+    userStorage.set(PARTS_LIST,data);
+    partsListBufer=userStorage.get(PARTS_LIST);
+    updatePartsList();
+  })
+
+  useEffect(()=>{
+    appLinker.send(PARTS_LIST,partsListBufer);
+  },[]);
+
+  return (
+    <>
+      <AddComponent component={{
+        submit:(part)=>{
+          appLinker.send(PARTS_LIST,[...partsListBufer,{...part,index:partsListBufer.length}])
+        }
+      }}/>
+      {partsList}
+    </>
+
   )
 }
