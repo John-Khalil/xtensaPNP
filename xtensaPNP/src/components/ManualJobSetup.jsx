@@ -85,8 +85,8 @@ export const AddComponent=({component})=>{
 }
 
 export const jobSetup=()=>{
-  const x0=9;
-  const y0=19;
+  const x0=7;
+  const y0=17;
 
   const pcb_x0=39;
   const pcb_y0=39;
@@ -96,7 +96,7 @@ export const jobSetup=()=>{
   const jobSetupPipeline=new pipeline().gcode(`$H`).gcode(`S${pumpSpeed}`);
   (userStorage.get(PARTS_LIST)||userStorage.set(PARTS_LIST,[])).forEach(element => {
     jobSetupPipeline
-    .gcode(`G1 X${x0+(15*Math.floor(element.partTray/((element.partTray<14)?7:2)))+(element.partWidth/2)} Y${y0+(15*(element.partTray%((element.partTray<14)?7:2)))+(element.partLength/2)} F${feedRate}`)
+    .gcode(`G1 X${x0+(15*Math.floor((element.partTray-((element.partTray<14)?0:10))/((element.partTray<14)?7:2)))+(element.partWidth/2)} Y${y0+(15*(element.partTray%((element.partTray<14)?7:2)))-(element.partLength/2)} F${feedRate}`)
     .gcode(`G1 Z${33-1-element.partHeight} F${feedRate}`)
     .gcode(`M3`)
     .gcode(`G1 Z0 F${feedRate}`)
