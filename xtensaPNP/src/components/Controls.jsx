@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import execuatable, { pipeline } from '../utils/operators';
 import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_FEEDRATE_MAX, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, CONTROLPANEL_UNITZ, EXECUATABLE_PROCESS, EXECUATABLE_REPORT_ACTION, EXECUATABLE_REPORT_STATUS, PUMP_POWER, PUMP_POWER_MAX, SPINDEL_RPM, SPINDEL_RPM_MAX, userStorage } from '../utils/utils';
+import AppModal from './AppModal';
 import { DynamicConsole } from './ConsoleDynamic';
 import RunningJobElement from './RunningJobElement';
 
@@ -395,6 +396,9 @@ export default function Controls() {
   },[]);
   return (
     <>
+
+      <AppModal identifier={'jobSetup'}/>
+
       <div className='grid grid-cols-1 grid-rows-2 gap-1   w-full '>
         <div className='row-start-2 col-start-1 row-span-1 col-span-1 h-[400px]'>
 
@@ -437,93 +441,124 @@ export default function Controls() {
           </div>
         </div>
         <div className='row-start-1 col-start-1 row-span-1 col-span-1'>
+        
+          <div className='grid grid-cols-2 grid-rows-1 gap-1   w-full '>
+            <div className='row-start-1 col-start-1 row-span-1 col-span-1' >
+              test
+            </div>
+            <div className='row-start-1 col-start-2 row-span-1 col-span-1' >
+              <ControlPanel machineControl={{
+                Y_Positive:(data)=>{
+                  console.log("Y_Positive >> ",data);
+                },
+                Y_Negative:(data)=>{
+                  console.log("Y_Negative >> ",data);
+                },
+                X_Positive:(data)=>{
+                  console.log("X_Positive >> ",data);
+                },
+                X_Negative:(data)=>{
+                  console.log("X_Negative >> ",data);
+                },
+                Z_Positive:(data)=>{
+                  console.log("Z_Positive >> ",data);
+                },
+                Z_Negative:(data)=>{
+                  console.log("Z_Negative >> ",data);
+                },
+                unlock:()=>{
+                  console.log("unlock");
+                },
+                stop:()=>{
+                  console.log("stop");
+                },
+                toolChangeList:[
+                  {
+                    label:'spindel',
+                    activate:()=>{
+                      console.log("send some commands to enable spindel");
+                      putDown({});
+                    },
+                    Control:<SpindelControl spindelControl={{
+                      on:(data)=>{
+                        console.log(" spindel on >> ",data);
+                      },
+                      off:()=>{
+                        console.log(" spindel off ");
+                      },
+                      setRPM:(data)=>{
+                        console.log(" spindel rpm >> ",data);
+                      }
+                    }}/>
+                  },
+                  {
+                    label:'picker',
+                    activate:()=>{
+                      console.log("send some commands to enable picker");
+                      pickup({});
+                    },
+                    Control:<PumpControl pumpControl={{
+                      on:(data)=>{
+                        console.log(" pump on >> ",data);
+                      },
+                      off:()=>{
+                        console.log(" pump off ");
+                      },
+                      setPower:(data)=>{
+                        console.log(" pump power >> ",data);
+                      }
+                    }}/>
+                  },
+                  {
+                    label:'solder',
+                    activate:()=>{
+                      console.log("send some commands to enable SolderPaste");
+                    },
+                    Control:<SolderPaste SolderControl={{
+                      eject:()=>{
+                        console.log(" eject solder ");
+                      }
+                    }}/>
+                  },
+                  {
+
+                  },
+                  {
+
+                  },
+                  {
+
+                  }
+                ]        
+              }}/>
+              <div className='float-left h-full'>
+
+                <div className='grid grid-cols-1 grid-rows-2 gap-1   w-full h-inherit'>
+                  <div className='row-start-1 col-start-1 row-span-1 col-span-1 '>
+                    
+                  </div>
+                  <div className='row-start-2 col-start-1 row-span-1 col-span-1'>
+                    <span className='text-2xl font-extrabold'>Job Setup</span>
+                    <br />
+                    <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>Setup</button>
+                    <button className='bg-green-500 px-4 rounded-lg text-2xl font-extrabold m-1'>Run</button>
+                    <br />
+                    <span className='text-2xl font-extrabold'>Extras</span>
+                    <br />
+                    <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>ESP3D APP</button>
+                    <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>Export</button>
+                    <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>Load</button>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+
+
+
           
-
-
-      <ControlPanel machineControl={{
-        Y_Positive:(data)=>{
-          console.log("Y_Positive >> ",data);
-        },
-        Y_Negative:(data)=>{
-          console.log("Y_Negative >> ",data);
-        },
-        X_Positive:(data)=>{
-          console.log("X_Positive >> ",data);
-        },
-        X_Negative:(data)=>{
-          console.log("X_Negative >> ",data);
-        },
-        Z_Positive:(data)=>{
-          console.log("Z_Positive >> ",data);
-        },
-        Z_Negative:(data)=>{
-          console.log("Z_Negative >> ",data);
-        },
-        unlock:()=>{
-          console.log("unlock");
-        },
-        stop:()=>{
-          console.log("stop");
-        },
-        toolChangeList:[
-          {
-            label:'spindel',
-            activate:()=>{
-              console.log("send some commands to enable spindel");
-              putDown({});
-            },
-            Control:<SpindelControl spindelControl={{
-              on:(data)=>{
-                console.log(" spindel on >> ",data);
-              },
-              off:()=>{
-                console.log(" spindel off ");
-              },
-              setRPM:(data)=>{
-                console.log(" spindel rpm >> ",data);
-              }
-            }}/>
-          },
-          {
-            label:'picker',
-            activate:()=>{
-              console.log("send some commands to enable picker");
-              pickup({});
-            },
-            Control:<PumpControl pumpControl={{
-              on:(data)=>{
-                console.log(" pump on >> ",data);
-              },
-              off:()=>{
-                console.log(" pump off ");
-              },
-              setPower:(data)=>{
-                console.log(" pump power >> ",data);
-              }
-            }}/>
-          },
-          {
-            label:'solder',
-            activate:()=>{
-              console.log("send some commands to enable SolderPaste");
-            },
-            Control:<SolderPaste SolderControl={{
-              eject:()=>{
-                console.log(" eject solder ");
-              }
-            }}/>
-          },
-          {
-
-          },
-          {
-
-          },
-          {
-
-          }
-        ]        
-      }}/>
 
 </div>
 
