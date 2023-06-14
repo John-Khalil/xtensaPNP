@@ -6,6 +6,7 @@ import execuatable, { pipeline } from '../utils/operators';
 import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_FEEDRATE_MAX, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, CONTROLPANEL_UNITZ, EXECUATABLE_PROCESS, EXECUATABLE_REPORT_ACTION, EXECUATABLE_REPORT_STATUS, PUMP_POWER, PUMP_POWER_MAX, SPINDEL_RPM, SPINDEL_RPM_MAX, userStorage } from '../utils/utils';
 import AppModal from './AppModal';
 import { DynamicConsole } from './ConsoleDynamic';
+import ManualJobSetup, { jobSetup } from './ManualJobSetup';
 import RunningJobElement from './RunningJobElement';
 
 
@@ -274,52 +275,52 @@ export const PumpControl=({pumpControl})=>{
 }
 
 
-const pickup=({x=335,y=300,zPickup=0,zPutDown=33,zClamp=28,delayTime=30000,feedRate=2500})=>{
-  new pipeline()
-    .gcode(`G1 X0 F${feedRate}`)
-    .gcode(`G1 Y0 F${feedRate}`)
-    .gcode(`G1 Z${zClamp} F${feedRate}`)
-    .gcode(`G1 Y${y} F${feedRate}`)
-    .gcode(`G1 X${x} F${feedRate}`)
-    .run();
+// export const pickup=({x=335,y=300,zPickup=0,zPutDown=33,zClamp=28,delayTime=30000,feedRate=2500})=>{
+//   new pipeline()
+//     .gcode(`G1 X0 F${feedRate}`)
+//     .gcode(`G1 Y0 F${feedRate}`)
+//     .gcode(`G1 Z${zClamp} F${feedRate}`)
+//     .gcode(`G1 Y${y} F${feedRate}`)
+//     .gcode(`G1 X${x} F${feedRate}`)
+//     .run();
   
-  setTimeout(()=>{
-    new pipeline()
-      .outputPort1(1,0)
-      .clock(0,4500,1)
-      .outputPort1(0,0)
-      .gcode(`G1 Z${zPickup} F${feedRate}`)
-      .gcode(`G1 X0 F${feedRate}`)
-      .gcode(`G1 Y0 F${feedRate}`)
-      .run();
-  },delayTime);
+//   setTimeout(()=>{
+//     new pipeline()
+//       .outputPort1(1,0)
+//       .clock(0,4500,1)
+//       .outputPort1(0,0)
+//       .gcode(`G1 Z${zPickup} F${feedRate}`)
+//       .gcode(`G1 X0 F${feedRate}`)
+//       .gcode(`G1 Y0 F${feedRate}`)
+//       .run();
+//   },delayTime);
   
-  return;
-}
+//   return;
+// }
 
-const putDown=({x=335,y=300,zPickup=0,zPutDown=33,zClamp=28,delayTime=30000,feedRate=2500})=>{
-  new pipeline()
-    .gcode(`G1 X0 F${feedRate}`)
-    .gcode(`G1 Y0 F${feedRate}`)
-    .gcode(`G1 Z${zPickup} F${feedRate}`)
-    .gcode(`G1 Y${y} F${feedRate}`)
-    .gcode(`G1 X${x} F${feedRate}`)
-    .gcode(`G1 Z${zPutDown} F${feedRate}`)
-    .run();
+// export const putDown=({x=335,y=300,zPickup=0,zPutDown=33,zClamp=28,delayTime=30000,feedRate=2500})=>{
+//   new pipeline()
+//     .gcode(`G1 X0 F${feedRate}`)
+//     .gcode(`G1 Y0 F${feedRate}`)
+//     .gcode(`G1 Z${zPickup} F${feedRate}`)
+//     .gcode(`G1 Y${y} F${feedRate}`)
+//     .gcode(`G1 X${x} F${feedRate}`)
+//     .gcode(`G1 Z${zPutDown} F${feedRate}`)
+//     .run();
   
-  setTimeout(()=>{
-    new pipeline()
-      .outputPort1(0,0)
-      .clock(1,3800,1)
-      .outputPort1(1,0)
-      .gcode(`G1 Z${zClamp} F${feedRate}`)
-      .gcode(`G1 X0 F${feedRate}`)
-      .gcode(`G1 Y0 F${feedRate}`)
-      .run();
-  },delayTime);
+//   setTimeout(()=>{
+//     new pipeline()
+//       .outputPort1(0,0)
+//       .clock(1,3800,1)
+//       .outputPort1(1,0)
+//       .gcode(`G1 Z${zClamp} F${feedRate}`)
+//       .gcode(`G1 X0 F${feedRate}`)
+//       .gcode(`G1 Y0 F${feedRate}`)
+//       .run();
+//   },delayTime);
   
-  return;
-}
+//   return;
+// }
 
 
 
@@ -477,7 +478,7 @@ export default function Controls() {
                     label:'spindel',
                     activate:()=>{
                       console.log("send some commands to enable spindel");
-                      putDown({});
+                      // putDown({});
                     },
                     Control:<SpindelControl spindelControl={{
                       on:(data)=>{
@@ -495,7 +496,7 @@ export default function Controls() {
                     label:'picker',
                     activate:()=>{
                       console.log("send some commands to enable picker");
-                      pickup({});
+                      // pickup({});
                     },
                     Control:<PumpControl pumpControl={{
                       on:(data)=>{
@@ -540,8 +541,16 @@ export default function Controls() {
                   <div className='row-start-2 col-start-1 row-span-1 col-span-1'>
                     <span className='text-2xl font-extrabold'>Job Setup</span>
                     <br />
-                    <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>Setup</button>
-                    <button className='bg-green-500 px-4 rounded-lg text-2xl font-extrabold m-1'>Run</button>
+                    <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                      appLinker.send('jobSetup@AppModal-setContent',<>
+                        <ManualJobSetup/>
+
+                      </>);
+                      appLinker.send('jobSetup@AppModal-setOpen',true);
+                    }}>Setup</button>
+                    <button className='bg-green-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                      jobSetup().run();
+                    }}>Run</button>
                     <br />
                     <span className='text-2xl font-extrabold'>Extras</span>
                     <br />
