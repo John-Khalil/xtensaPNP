@@ -322,6 +322,71 @@ export const PumpControl=({pumpControl})=>{
 //   return;
 // }
 
+export const toolChanger={
+  putDownCounter:-1,
+  pickupCounter:-1,
+
+
+  pickup:({x=335,y=299,zPickup=0,zPutDown=33,zClamp=28,delayTime=30000,feedRate=2500})=>{
+    toolChanger.pickupCounter++;
+    if(toolChanger.pickupCounter==0)
+      return;
+    new pipeline()
+      .gcode(`G1 X0 F${feedRate}`)
+      .gcode(`G1 Y0 F${feedRate}`)
+      .gcode(`G1 Z${zClamp} F${feedRate}`)
+      .gcode(`G1 Y${y} F${feedRate}`)
+      .gcode(`G1 X${x} F${feedRate}`)
+      .run();
+    
+    setTimeout(()=>{
+      new pipeline()
+        .outputPort1(1,0)
+        .clock(0,4500,1)
+        .outputPort1(0,0)
+        .gcode(`G1 Z${zPickup} F${feedRate}`)
+        .gcode(`G1 X0 F${feedRate}`)
+        .gcode(`G1 Y0 F${feedRate}`)
+        .run();
+    },delayTime);
+    
+    return;
+  },
+
+  putDown:({x=335,y=299,zPickup=0,zPutDown=33,zClamp=28,delayTime=30000,feedRate=2500})=>{
+    toolChanger.putDownCounter++;
+    if(toolChanger.putDownCounter==0)
+      return;
+    new pipeline()
+      .gcode(`G1 X0 F${feedRate}`)
+      .gcode(`G1 Y0 F${feedRate}`)
+      .gcode(`G1 Z${zPickup} F${feedRate}`)
+      .gcode(`G1 Y${y} F${feedRate}`)
+      .gcode(`G1 X${x} F${feedRate}`)
+      .gcode(`G1 Z${zPutDown} F${feedRate}`)
+      .run();
+    
+    setTimeout(()=>{
+      new pipeline()
+        .outputPort1(0,0)
+        .clock(1,3800,1)
+        .outputPort1(1,0)
+        .gcode(`G1 Z${zClamp} F${feedRate}`)
+        .gcode(`G1 X0 F${feedRate}`)
+        .gcode(`G1 Y0 F${feedRate}`)
+        .run();
+    },delayTime);
+    
+    return;
+  }
+
+
+
+
+}
+
+
+
 
 
 export default function Controls() {
@@ -329,6 +394,10 @@ export default function Controls() {
   const [runningJob,showRunningJob]=useState(<></>);
 
   const [gcode,showGCODE]=useState('');
+
+  appLinker.addListener('manga',(data)=>{
+    toolChanger.testAutoRun(data)
+  })
 
   appLinker.addListener(EXECUATABLE_REPORT_ACTION,data=>{
       
@@ -391,7 +460,6 @@ export default function Controls() {
     //     ]
     //   })
     // }, 2000);
-
     
 
   },[]);
@@ -478,7 +546,9 @@ export default function Controls() {
                     label:'spindel',
                     activate:()=>{
                       console.log("send some commands to enable spindel");
-                      // putDown({});
+                      toolChanger.putDown({});
+
+
                     },
                     Control:<SpindelControl spindelControl={{
                       on:(data)=>{
@@ -496,7 +566,7 @@ export default function Controls() {
                     label:'picker',
                     activate:()=>{
                       console.log("send some commands to enable picker");
-                      // pickup({});
+                      toolChanger.pickup({});
                     },
                     Control:<PumpControl pumpControl={{
                       on:(data)=>{
