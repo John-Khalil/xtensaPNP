@@ -85,8 +85,8 @@ export const AddComponent=({component})=>{
 }
 
 export const jobSetup=()=>{
-  const x0=7;
-  const y0=17;
+  const x0=12;
+  const y0=18;
 
   const pcb_x0=39;
   const pcb_y0=39;
