@@ -327,11 +327,15 @@ export const toolChanger={
   pickupCounter:-1,
 
 
-  pickup:({x=335,y=299,zPickup=0,zPutDown=33,zClamp=28,delayTime=30000,feedRate=2500})=>{
+  pickup:({x=335,y=298,zPickup=0,zPutDown=33,zClamp=28,delayTime=30000,feedRate=2500})=>{
     toolChanger.pickupCounter++;
     if(toolChanger.pickupCounter==0)
       return;
     new pipeline()
+      // .outputPort1(15,1)
+      // .gcode(`$X`)
+      // .gcode(`$X`)
+      // .gcode(`$H`)
       .gcode(`G1 X0 F${feedRate}`)
       .gcode(`G1 Y0 F${feedRate}`)
       .gcode(`G1 Z${zClamp} F${feedRate}`)
@@ -353,11 +357,15 @@ export const toolChanger={
     return;
   },
 
-  putDown:({x=335,y=299,zPickup=0,zPutDown=33,zClamp=28,delayTime=30000,feedRate=2500})=>{
+  putDown:({x=335,y=298,zPickup=0,zPutDown=33,zClamp=28,delayTime=30000,feedRate=2500})=>{
     toolChanger.putDownCounter++;
     if(toolChanger.putDownCounter==0)
       return;
     new pipeline()
+      // .outputPort1(15,1)
+      // .gcode(`$X`)
+      // .gcode(`$X`)
+      // .gcode(`$H`)
       .gcode(`G1 X0 F${feedRate}`)
       .gcode(`G1 Y0 F${feedRate}`)
       .gcode(`G1 Z${zPickup} F${feedRate}`)
@@ -369,7 +377,7 @@ export const toolChanger={
     setTimeout(()=>{
       new pipeline()
         .outputPort1(0,0)
-        .clock(1,3800,1)
+        .clock(1,4300,1)
         .outputPort1(1,0)
         .gcode(`G1 Z${zClamp} F${feedRate}`)
         .gcode(`G1 X0 F${feedRate}`)
