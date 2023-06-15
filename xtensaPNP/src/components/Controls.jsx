@@ -557,8 +557,6 @@ export default function Controls() {
                     <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
                       appLinker.send('jobSetup@AppModal-setContent',<>
                         <iframe src={`http://${userStorage.get(ESP3D_ADDRESS)||userStorage.set(ESP3D_ADDRESS,MAIN_IP)}`} className='w-full h-[90%]'></iframe>
-                        {/* <iframe src={`https://help.openai.com/en/articles/7925741-chatgpt-shared-links-faq`}></iframe> */}
-
                       </>);
                       appLinker.send('jobSetup@AppModal-setOpen',true);
                     }}>ESP3D APP</button>
