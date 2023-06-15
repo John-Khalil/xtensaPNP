@@ -109,6 +109,7 @@ const HTTP_SERVER_PATH='HTTP_SERVER_PATH';
 const USER_SETTIGNS_LIVE_RELOAD='USER_SETTIGNS_LIVE_RELOAD';
 
 const PARTS_LIST='partsList';
+const ESP3D_ADDRESS='esp3dAddress';
 
 
 export {
@@ -156,6 +157,7 @@ export {
     USER_SETTIGNS_LIVE_RELOAD,
 
     PARTS_LIST,
+    ESP3D_ADDRESS,
 
 
 

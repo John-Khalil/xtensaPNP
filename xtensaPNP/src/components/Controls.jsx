@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import execuatable, { pipeline } from '../utils/operators';
-import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_FEEDRATE_MAX, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, CONTROLPANEL_UNITZ, EXECUATABLE_PROCESS, EXECUATABLE_REPORT_ACTION, EXECUATABLE_REPORT_STATUS, PUMP_POWER, PUMP_POWER_MAX, SPINDEL_RPM, SPINDEL_RPM_MAX, userStorage } from '../utils/utils';
+import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_FEEDRATE_MAX, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, CONTROLPANEL_UNITZ, ESP3D_ADDRESS, EXECUATABLE_PROCESS, EXECUATABLE_REPORT_ACTION, EXECUATABLE_REPORT_STATUS, MAIN_IP, PUMP_POWER, PUMP_POWER_MAX, SPINDEL_RPM, SPINDEL_RPM_MAX, userStorage } from '../utils/utils';
 import AppModal from './AppModal';
 import { DynamicConsole } from './ConsoleDynamic';
 import ManualJobSetup, { jobSetup } from './ManualJobSetup';
@@ -535,10 +535,10 @@ export default function Controls() {
               <div className='float-left h-full'>
 
                 <div className='grid grid-cols-1 grid-rows-2 gap-1   w-full h-inherit'>
-                  <div className='row-start-1 col-start-1 row-span-1 col-span-1 '>
+                  <div className='row-start-2 col-start-1 row-span-1 col-span-1 '>
                     
                   </div>
-                  <div className='row-start-2 col-start-1 row-span-1 col-span-1'>
+                  <div className='row-start-1 col-start-1 row-span-1 col-span-1'>
                     <span className='text-2xl font-extrabold'>Job Setup</span>
                     <br />
                     <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
@@ -554,7 +554,14 @@ export default function Controls() {
                     <br />
                     <span className='text-2xl font-extrabold'>Extras</span>
                     <br />
-                    <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>ESP3D APP</button>
+                    <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                      appLinker.send('jobSetup@AppModal-setContent',<>
+                        <iframe src={`http://${userStorage.get(ESP3D_ADDRESS)||userStorage.set(ESP3D_ADDRESS,MAIN_IP)}`} className='w-full h-[90%]'></iframe>
+                        {/* <iframe src={`https://help.openai.com/en/articles/7925741-chatgpt-shared-links-faq`}></iframe> */}
+
+                      </>);
+                      appLinker.send('jobSetup@AppModal-setOpen',true);
+                    }}>ESP3D APP</button>
                     <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>Export</button>
                     <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>Load</button>
                   </div>
