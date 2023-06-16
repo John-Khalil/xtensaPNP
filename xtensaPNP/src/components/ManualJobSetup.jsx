@@ -92,7 +92,7 @@ export const jobSetup=()=>{
   const pcb_y0=39;
 
   const feedRate=3000;
-  const pumpSpeed=500;
+  const pumpSpeed=1000;
   const jobSetupPipeline=new pipeline().gcode(`$H`).gcode(`S${pumpSpeed}`);
   (userStorage.get(PARTS_LIST)||userStorage.set(PARTS_LIST,[])).forEach(element => {
     jobSetupPipeline
