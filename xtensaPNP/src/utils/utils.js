@@ -168,6 +168,8 @@ export {
 }
 
 
+
+
 export const getNetworkData=(deviceID)=>{
     return userStorage.get(deviceID)||userStorage.set(deviceID,(
         userStorage.get(CONTROLLERS_LIST)||userStorage.set(CONTROLLERS_LIST,{
@@ -181,6 +183,18 @@ export const getNetworkData=(deviceID)=>{
     ).CONTROLLERS_LIST[userStorage.get(CONTROLLERS_LIST).selectedController]);
 }
 
+
+export class runOnce{
+    runFlag=1;
+    run=(oneTimeRun)=>{
+        if(this.runFlag==1)
+            oneTimeRun();
+        this.runFlag=0;
+    }
+    constructor(){
+        
+    }
+}
 
 
 const appLinker =new AppLinker;

@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import execuatable, { pipeline } from '../utils/operators';
-import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_FEEDRATE_MAX, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, CONTROLPANEL_UNITZ, ESP3D_ADDRESS, EXECUATABLE_PROCESS, EXECUATABLE_REPORT_ACTION, EXECUATABLE_REPORT_STATUS, LIVE_CAMERA_FEED, MAIN_IP, PUMP_POWER, PUMP_POWER_MAX, SPINDEL_RPM, SPINDEL_RPM_MAX, userStorage } from '../utils/utils';
+import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_FEEDRATE_MAX, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, CONTROLPANEL_UNITZ, ESP3D_ADDRESS, EXECUATABLE_PROCESS, EXECUATABLE_REPORT_ACTION, EXECUATABLE_REPORT_STATUS, LIVE_CAMERA_FEED, MAIN_IP, PUMP_POWER, PUMP_POWER_MAX, runOnce, SPINDEL_RPM, SPINDEL_RPM_MAX, userStorage } from '../utils/utils';
 import AppModal from './AppModal';
 import { DynamicConsole } from './ConsoleDynamic';
 import ManualJobSetup, { jobSetup } from './ManualJobSetup';
@@ -331,6 +331,9 @@ export const toolChanger={
     toolChanger.pickupCounter++;
     if(toolChanger.pickupCounter==0)
       return;
+
+    const clampON=new runOnce();
+    
     new pipeline()
       // .outputPort1(15,1)
       // .gcode(`$X`)
@@ -341,10 +344,35 @@ export const toolChanger={
       .gcode(`G1 Z${zClamp} F${feedRate}`)
       .gcode(`G1 Y${y} F${feedRate}`)
       .gcode(`G1 X${x} F${feedRate}`)
+      // .gcode(`?`).gcode(`?`).gcode(`?`).gcode(`?`).gcode(`?`).gcode(`?`).gcode(`?`).gcode(`?`).gcode(`?`).gcode(`?`).gcode(`?`).gcode(`?`).gcode(`?`)
       .run();
-    
+
+      // appLinker.addListener(EXECUATABLE_REPORT_STATUS,statusObject=>{
+      //   if(statusObject.ack==execuatable.MOTIONCONTROLLER_ACK){
+      //     // const x_coordinate=parseInt(((statusObject||{}).returnData).split(':')[1].split(',')[0])==parseInt(x);
+      //     // const y_coordinate=parseInt(((statusObject||{}).returnData).split(':')[1].split(',')[1])==parseInt(y);
+      //     // const z_coordinate=parseInt(((statusObject||{}).returnData).split(':')[1].split(',')[2])==parseInt(zClamp);
+      //     if((parseInt(((statusObject||{}).returnData).split(':')[1].split(',')[0])==parseInt(x))&&(parseInt(((statusObject||{}).returnData).split(':')[1].split(',')[1])==parseInt(y))&&(parseInt(((statusObject||{}).returnData).split(':')[1].split(',')[2])==parseInt(zClamp))){
+      //       clampON.run(()=>{
+      //         new pipeline()
+      //           .outputPort1(1,0)
+      //           .clock(0,4500,1)
+      //           .outputPort1(0,0)
+      //           .gcode(`G1 Z${zPickup} F${feedRate}`)
+      //           .gcode(`G1 X0 F${feedRate}`)
+      //           .gcode(`G1 Y0 F${feedRate}`)
+      //           .run();
+      //       })
+      //     }
+
+          
+          
+      //   }
+      // });
+      
     setTimeout(()=>{
       new pipeline()
+        .gcode(`G1 Z${zPutDown} F${feedRate}`)
         .outputPort1(1,0)
         .clock(0,4500,1)
         .outputPort1(0,0)
@@ -377,7 +405,7 @@ export const toolChanger={
     setTimeout(()=>{
       new pipeline()
         .outputPort1(0,0)
-        .clock(1,4300,1)
+        .clock(1,3800,1)
         .outputPort1(1,0)
         .gcode(`G1 Z${zClamp} F${feedRate}`)
         .gcode(`G1 X0 F${feedRate}`)
@@ -476,7 +504,19 @@ export default function Controls() {
     // .catch((error) => {
     //   console.error(error);
     // });
+    setTimeout(() => {
+      new pipeline().gcode('?').run();
 
+      // setInterval(() => {
+      //   new pipeline().gcode('?').run();
+      // }, 5000);
+      
+      setTimeout(() => {
+        new pipeline().outputPort1(15,0).run();
+      }, 500);
+
+
+    }, 500);
   },[]);
   return (
     <>
