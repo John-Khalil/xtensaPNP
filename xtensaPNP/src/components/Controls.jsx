@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import execuatable, { pipeline } from '../utils/operators';
-import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_FEEDRATE_MAX, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, CONTROLPANEL_UNITZ, ESP3D_ADDRESS, EXECUATABLE_PROCESS, EXECUATABLE_REPORT_ACTION, EXECUATABLE_REPORT_STATUS, MAIN_IP, PUMP_POWER, PUMP_POWER_MAX, SPINDEL_RPM, SPINDEL_RPM_MAX, userStorage } from '../utils/utils';
+import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_FEEDRATE_MAX, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, CONTROLPANEL_UNITZ, ESP3D_ADDRESS, EXECUATABLE_PROCESS, EXECUATABLE_REPORT_ACTION, EXECUATABLE_REPORT_STATUS, LIVE_CAMERA_FEED, MAIN_IP, PUMP_POWER, PUMP_POWER_MAX, SPINDEL_RPM, SPINDEL_RPM_MAX, userStorage } from '../utils/utils';
 import AppModal from './AppModal';
 import { DynamicConsole } from './ConsoleDynamic';
 import ManualJobSetup, { jobSetup } from './ManualJobSetup';
@@ -96,17 +96,17 @@ export const ControlPanel=({machineControl})=>{
           {/* <div className='row-start-1 col-start-1 row-end-11 col-end-11'><div className=''></div></div> */}
 
 
-        <div className='row-start-1 col-start-1 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).unlock)||(()=>{}))()}>01</div></div>
-        <div className='row-start-1 col-start-2 row-span-1 col-span-3'><div className={buttonStyle} onClick={()=>(((machineControl||{}).Y_Positive)||(()=>{}))({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>02</div></div>
-        <div className='row-start-1 col-start-5 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).Z_Positive)||(()=>{}))({unit:unitZRef.current.value,feedRate:feedRateRef.current.value})}>03</div></div>
+        <div className='row-start-1 col-start-1 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).unlock)||(()=>{}))()}>$X</div></div>
+        <div className='row-start-1 col-start-2 row-span-1 col-span-3'><div className={buttonStyle} onClick={()=>(((machineControl||{}).Y_Positive)||(()=>{}))({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>Y+</div></div>
+        <div className='row-start-1 col-start-5 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).Z_Positive)||(()=>{}))({unit:unitZRef.current.value,feedRate:feedRateRef.current.value})}>Z+</div></div>
 
-        <div className='row-start-2 col-start-1 row-span-3 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).X_Negative)||(()=>{}))({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>04</div></div>
+        <div className='row-start-2 col-start-1 row-span-3 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).X_Negative)||(()=>{}))({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}><div className='mt-16'>X-</div></div></div>
         <div className='row-start-2 col-start-2 row-span-3 col-span-3'><div className={toolControlStyle}>{toolControl}</div></div>
-        <div className='row-start-2 col-start-5 row-span-3 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).X_Positive)||(()=>{}))({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>06</div></div>
+        <div className='row-start-2 col-start-5 row-span-3 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).X_Positive)||(()=>{}))({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}><div className='mt-16'>X+</div></div></div>
 
-        <div className='row-start-5 col-start-1 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).stop)||(()=>{}))()}>07</div></div>
-        <div className='row-start-5 col-start-2 row-span-1 col-span-3'><div className={buttonStyle} onClick={()=>(((machineControl||{}).Y_Negative)||(()=>{}))({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>08</div></div>
-        <div className='row-start-5 col-start-5 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).Z_Negative)||(()=>{}))({unit:unitZRef.current.value,feedRate:feedRateRef.current.value})}>09</div></div>
+        <div className='row-start-5 col-start-1 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).stop)||(()=>{}))()}>$H</div></div>
+        <div className='row-start-5 col-start-2 row-span-1 col-span-3'><div className={buttonStyle} onClick={()=>(((machineControl||{}).Y_Negative)||(()=>{}))({unit:unitRef.current.value,feedRate:feedRateRef.current.value})}>Y-</div></div>
+        <div className='row-start-5 col-start-5 row-span-1 col-span-1'><div className={buttonStyle} onClick={()=>(((machineControl||{}).Z_Negative)||(()=>{}))({unit:unitZRef.current.value,feedRate:feedRateRef.current.value})}>Z-</div></div>
         
       </div>
       <div className='w-full'>
@@ -403,9 +403,9 @@ export default function Controls() {
 
   const [gcode,showGCODE]=useState('');
 
-  appLinker.addListener('manga',(data)=>{
-    toolChanger.testAutoRun(data)
-  })
+  const [videoSource,setVideoSource]=useState(undefined);
+
+
 
   appLinker.addListener(EXECUATABLE_REPORT_ACTION,data=>{
       
@@ -468,7 +468,14 @@ export default function Controls() {
     //     ]
     //   })
     // }, 2000);
-    
+    // navigator.mediaDevices.getUserMedia({ video: true })
+    // .then((stream) => {
+    //   setVideoSource(stream);
+    //   // videoRef.current.srcObject = stream;
+    // })
+    // .catch((error) => {
+    //   console.error(error);
+    // });
 
   },[]);
   return (
@@ -521,7 +528,13 @@ export default function Controls() {
         
           <div className='grid grid-cols-2 grid-rows-1 gap-1   w-full '>
             <div className='row-start-1 col-start-1 row-span-1 col-span-1' >
-              test
+              {/* <video 
+  
+                autoPlay
+                muted
+                src ={videoSource}
+              ></video> */}
+              <img src={userStorage.get(LIVE_CAMERA_FEED)||userStorage.set(LIVE_CAMERA_FEED,'http://192.168.1.6:8080/videofeed')} alt="" className='rounded-lg' />
             </div>
             <div className='row-start-1 col-start-2 row-span-1 col-span-1' >
               <ControlPanel machineControl={{
@@ -599,15 +612,7 @@ export default function Controls() {
                       }
                     }}/>
                   },
-                  {
 
-                  },
-                  {
-
-                  },
-                  {
-
-                  }
                 ]        
               }}/>
               <div className='float-left h-full'>

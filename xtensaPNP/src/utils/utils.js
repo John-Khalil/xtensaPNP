@@ -110,6 +110,7 @@ const USER_SETTIGNS_LIVE_RELOAD='USER_SETTIGNS_LIVE_RELOAD';
 
 const PARTS_LIST='partsList';
 const ESP3D_ADDRESS='esp3dAddress';
+const LIVE_CAMERA_FEED='LIVE_CAMERA_FEED';
 
 
 export {
@@ -158,6 +159,7 @@ export {
 
     PARTS_LIST,
     ESP3D_ADDRESS,
+    LIVE_CAMERA_FEED,
 
 
 
