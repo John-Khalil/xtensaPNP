@@ -15,7 +15,7 @@ import camera from '../../public/camera.jpg'
 export const ControlPanel=({machineControl})=>{
   const buttonStyle='bg-teal-900 text-center h-full w-full select-none p-4 font-bold text-lg rounded-md';
   const toolControlStyle='border border-gray-500 h-full w-full';
-  const tootChangeStyle='rounded-md bg-red-600 p-1 m-1';
+  const tootChangeStyle='rounded-md bg-blue-600 p-1 m-1 px-10 font-bold ';
 
   const unitRef=useRef();
   const unitZRef=useRef();
@@ -623,7 +623,7 @@ export default function Controls() {
                 },
                 toolChangeList:[
                   {
-                    label:'spindel',
+                    label:'SPINDEL',
                     activate:()=>{
                       // console.log("send some commands to enable spindel");
                       new pipeline().outputPort1(2,1).run();
@@ -647,7 +647,7 @@ export default function Controls() {
                     }}/>
                   },
                   {
-                    label:'picker',
+                    label:'PICKER',
                     activate:()=>{
                       // console.log("send some commands to enable picker");
                       new pipeline().outputPort1(2,0).run();
