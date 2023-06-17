@@ -724,12 +724,12 @@ export default function Controls() {
                 <span className='text-2xl font-extrabold'>Spindel</span>
                 <br />
                 <button className='bg-red-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
-                  toolChanger.putDown({x:335,y:50,delayTime:20000});
+                  toolChanger.putDown({x:335,y:47,delayTime:20000});
                 }}>Detach</button>
                 <button className='bg-green-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
                   new pipeline().outputPort1(2,1).run();
                   setTimeout(() => {
-                    toolChanger.pickup({x:335,y:50,delayTime:20000});
+                    toolChanger.pickup({x:335,y:47,delayTime:20000});
                   }, 500);
                 }}>Attach</button>
 
