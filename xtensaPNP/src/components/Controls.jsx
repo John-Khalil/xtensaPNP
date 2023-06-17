@@ -9,6 +9,8 @@ import { DynamicConsole } from './ConsoleDynamic';
 import ManualJobSetup, { jobSetup } from './ManualJobSetup';
 import RunningJobElement from './RunningJobElement';
 
+import camera from '../../public/camera.jpg'
+
 
 export const ControlPanel=({machineControl})=>{
   const buttonStyle='bg-teal-900 text-center h-full w-full select-none p-4 font-bold text-lg rounded-md';
@@ -433,6 +435,8 @@ export default function Controls() {
 
   const [videoSource,setVideoSource]=useState(undefined);
 
+  const camPlaceholderRef=useRef();
+
 
 
   appLinker.addListener(EXECUATABLE_REPORT_ACTION,data=>{
@@ -573,42 +577,49 @@ export default function Controls() {
                 autoPlay
                 muted
                 src ={videoSource}
-              ></video> */}
-              <img src={userStorage.get(LIVE_CAMERA_FEED)||userStorage.set(LIVE_CAMERA_FEED,'http://192.168.1.6:8080/videofeed')} alt="" className='rounded-lg' />
+              // ></video> */}
+              <img src={userStorage.get(LIVE_CAMERA_FEED)||userStorage.set(LIVE_CAMERA_FEED,'http://192.168.1.6:8080/videofeed')} alt="" className='rounded-lg m-1' onLoad={()=>{
+                camPlaceholderRef.current.style.display='none';
+              }}/>
+
+              <img src={camera} alt="Camera Feed" className='rounded-lg m-1 ' ref={camPlaceholderRef}/>
+
+              {/* <div className='rounded-lg bg-sky-500'>
+              </div> */}
             </div>
-            <div className='row-start-1 col-start-2 row-span-1 col-span-1' >
+            <div className='row-start-1 col-start-2 row-span-1 col-span-1 ml-2' >
               <ControlPanel machineControl={{
                 Y_Positive:(data)=>{
                   // console.log("Y_Positive >> ",data);
-                  new pipeline().gcode(`G91 G21 Y${data.unit} F${data.feedRate}`).run();
+                  new pipeline().gcode(`G91 G21 Y${data.unit} F${data.feedRate}`).gcode('G90').run();
                 },
                 Y_Negative:(data)=>{
                   // console.log("Y_Negative >> ",data);
-                  new pipeline().gcode(`G91 G21 Y-${data.unit} F${data.feedRate}`).run();
+                  new pipeline().gcode(`G91 G21 Y-${data.unit} F${data.feedRate}`).gcode('G90').run();
                 },
                 X_Positive:(data)=>{
                   // console.log("X_Positive >> ",data);
-                  new pipeline().gcode(`G91 G21 X${data.unit} F${data.feedRate}`).run();
+                  new pipeline().gcode(`G91 G21 X${data.unit} F${data.feedRate}`).gcode('G90').run();
                 },
                 X_Negative:(data)=>{
                   // console.log("X_Negative >> ",data);
-                  new pipeline().gcode(`G91 G21 X-${data.unit} F${data.feedRate}`).run();
+                  new pipeline().gcode(`G91 G21 X-${data.unit} F${data.feedRate}`).gcode('G90').run();
                 },
                 Z_Positive:(data)=>{
                   // console.log("Z_Positive >> ",data);
-                  new pipeline().gcode(`G91 G21 Z${data.unit} F${data.feedRate}`).run();
+                  new pipeline().gcode(`G91 G21 Z${data.unit} F${data.feedRate}`).gcode('G90').run();
                 },
                 Z_Negative:(data)=>{
                   // console.log("Z_Negative >> ",data);
-                  new pipeline().gcode(`G91 G21 Z-${data.unit} F${data.feedRate}`).run();
+                  new pipeline().gcode(`G91 G21 Z-${data.unit} F${data.feedRate}`).gcode('G90').run();
                 },
                 unlock:()=>{
                   // console.log("unlock");
-                  new pipeline().gcode('$X').run();
+                  new pipeline().gcode('$X').gcode('G90').run();
                 },
                 stop:()=>{
                   // console.log("stop");
-                  new pipeline().gcode('$H').run();
+                  new pipeline().gcode('$H').gcode('G90').run();
                 },
                 toolChangeList:[
                   {
@@ -701,6 +712,26 @@ export default function Controls() {
                     }}>ESP3D APP</button>
                     <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>Export</button>
                     <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>Load</button>
+                    <br />
+                    <span className='text-2xl font-extrabold'>Part Picker</span>
+                    <br />
+                    <button className='bg-red-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                      toolChanger.putDown({x:335,y:297});
+                    }}>Detach</button>
+                    <button className='bg-green-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                      toolChanger.pickup({x:335,y:297});
+                    }}>Attach</button>
+                    
+                    <br />
+                    <span className='text-2xl font-extrabold'>Spindel</span>
+                    <br />
+                    <button className='bg-red-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                      toolChanger.putDown({x:335,y:51});
+                    }}>Detach</button>
+                    <button className='bg-green-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                      toolChanger.pickup({x:335,y:51});
+                    }}>Attach</button>
+                    
                   </div>
                 </div>
                 
