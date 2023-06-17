@@ -739,14 +739,14 @@ export default function Controls() {
                 <button className='bg-red-500 px-9 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
                   new pipeline()
                   .outputPort1(0,0)
-                  .clock(1,3800,1)
+                  .clock(1,2000,1)
                   .outputPort1(1,0)
                   .run();
                 }}>OFF</button>
                 <button className='bg-green-500 px-9 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
                   new pipeline()
                   .outputPort1(1,0)
-                  .clock(0,4500,1)
+                  .clock(0,2000,1)
                   .outputPort1(0,0)
                   .run();
                 }}>ON</button>
