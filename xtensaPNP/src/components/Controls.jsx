@@ -579,79 +579,95 @@ export default function Controls() {
             <div className='row-start-1 col-start-2 row-span-1 col-span-1' >
               <ControlPanel machineControl={{
                 Y_Positive:(data)=>{
-                  console.log("Y_Positive >> ",data);
+                  // console.log("Y_Positive >> ",data);
+                  new pipeline().gcode(`G91 G21 Y${data.unit} F${data.feedRate}`).run();
                 },
                 Y_Negative:(data)=>{
-                  console.log("Y_Negative >> ",data);
+                  // console.log("Y_Negative >> ",data);
+                  new pipeline().gcode(`G91 G21 Y-${data.unit} F${data.feedRate}`).run();
                 },
                 X_Positive:(data)=>{
-                  console.log("X_Positive >> ",data);
+                  // console.log("X_Positive >> ",data);
+                  new pipeline().gcode(`G91 G21 X${data.unit} F${data.feedRate}`).run();
                 },
                 X_Negative:(data)=>{
-                  console.log("X_Negative >> ",data);
+                  // console.log("X_Negative >> ",data);
+                  new pipeline().gcode(`G91 G21 X-${data.unit} F${data.feedRate}`).run();
                 },
                 Z_Positive:(data)=>{
-                  console.log("Z_Positive >> ",data);
+                  // console.log("Z_Positive >> ",data);
+                  new pipeline().gcode(`G91 G21 Z${data.unit} F${data.feedRate}`).run();
                 },
                 Z_Negative:(data)=>{
-                  console.log("Z_Negative >> ",data);
+                  // console.log("Z_Negative >> ",data);
+                  new pipeline().gcode(`G91 G21 Z-${data.unit} F${data.feedRate}`).run();
                 },
                 unlock:()=>{
-                  console.log("unlock");
+                  // console.log("unlock");
+                  new pipeline().gcode('$X').run();
                 },
                 stop:()=>{
-                  console.log("stop");
+                  // console.log("stop");
+                  new pipeline().gcode('$H').run();
                 },
                 toolChangeList:[
                   {
                     label:'spindel',
                     activate:()=>{
-                      console.log("send some commands to enable spindel");
-                      toolChanger.putDown({});
+                      // console.log("send some commands to enable spindel");
+                      new pipeline().outputPort1(2,1).run();
+                      // toolChanger.putDown({});
 
 
                     },
                     Control:<SpindelControl spindelControl={{
                       on:(data)=>{
-                        console.log(" spindel on >> ",data);
+                        // console.log(" spindel on >> ",data);
+                        new pipeline().gcode(`S${data.rpm}`).gcode('M3').run();
                       },
                       off:()=>{
-                        console.log(" spindel off ");
+                        // console.log(" spindel off ");
+                        new pipeline().gcode('M5').run();
                       },
                       setRPM:(data)=>{
-                        console.log(" spindel rpm >> ",data);
+                        // console.log(" spindel rpm >> ",data);
+                        new pipeline().gcode(`S${data.rpm}`).run();
                       }
                     }}/>
                   },
                   {
                     label:'picker',
                     activate:()=>{
-                      console.log("send some commands to enable picker");
-                      toolChanger.pickup({});
+                      // console.log("send some commands to enable picker");
+                      new pipeline().outputPort1(2,0).run();
+                      // toolChanger.pickup({});
                     },
                     Control:<PumpControl pumpControl={{
                       on:(data)=>{
-                        console.log(" pump on >> ",data);
+                        // console.log(" pump on >> ",data);
+                        new pipeline().gcode(`S${data.power}`).gcode('M3').run();
                       },
                       off:()=>{
-                        console.log(" pump off ");
+                        // console.log(" pump off ");
+                        new pipeline().gcode('M5').run();
                       },
                       setPower:(data)=>{
-                        console.log(" pump power >> ",data);
+                        // console.log(" pump power >> ",data);
+                        new pipeline().gcode(`S${data.power}`).run();
                       }
                     }}/>
                   },
-                  {
-                    label:'solder',
-                    activate:()=>{
-                      console.log("send some commands to enable SolderPaste");
-                    },
-                    Control:<SolderPaste SolderControl={{
-                      eject:()=>{
-                        console.log(" eject solder ");
-                      }
-                    }}/>
-                  },
+                  // {
+                  //   label:'solder',
+                  //   activate:()=>{
+                  //     console.log("send some commands to enable SolderPaste");
+                  //   },
+                  //   Control:<SolderPaste SolderControl={{
+                  //     eject:()=>{
+                  //       console.log(" eject solder ");
+                  //     }
+                  //   }}/>
+                  // },
 
                 ]        
               }}/>
