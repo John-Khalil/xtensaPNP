@@ -684,57 +684,73 @@ export default function Controls() {
               }}/>
               <div className='float-left h-full'>
 
-                <div className='grid grid-cols-1 grid-rows-2 gap-1   w-full h-inherit'>
-                  <div className='row-start-2 col-start-1 row-span-1 col-span-1 '>
-                    
-                  </div>
-                  <div className='row-start-1 col-start-1 row-span-1 col-span-1'>
-                    <span className='text-2xl font-extrabold'>Job Setup</span>
-                    <br />
-                    <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
-                      appLinker.send('jobSetup@AppModal-setContent',<>
-                        <ManualJobSetup/>
+                <span className='text-2xl font-extrabold'>Job Setup</span>
+                <br />
+                <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                  appLinker.send('jobSetup@AppModal-setContent',<>
+                    <ManualJobSetup/>
 
-                      </>);
-                      appLinker.send('jobSetup@AppModal-setOpen',true);
-                    }}>Setup</button>
-                    <button className='bg-green-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
-                      jobSetup().run();
-                    }}>Run</button>
-                    <br />
-                    <span className='text-2xl font-extrabold'>Extras</span>
-                    <br />
-                    <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
-                      appLinker.send('jobSetup@AppModal-setContent',<>
-                        <iframe src={`http://${userStorage.get(ESP3D_ADDRESS)||userStorage.set(ESP3D_ADDRESS,MAIN_IP)}`} className='w-full h-[90%]'></iframe>
-                      </>);
-                      appLinker.send('jobSetup@AppModal-setOpen',true);
-                    }}>ESP3D APP</button>
-                    <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>Export</button>
-                    <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>Load</button>
-                    <br />
-                    <span className='text-2xl font-extrabold'>Part Picker</span>
-                    <br />
-                    <button className='bg-red-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
-                      toolChanger.putDown({x:335,y:297});
-                    }}>Detach</button>
-                    <button className='bg-green-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
-                      toolChanger.pickup({x:335,y:297});
-                    }}>Attach</button>
-                    
-                    <br />
-                    <span className='text-2xl font-extrabold'>Spindel</span>
-                    <br />
-                    <button className='bg-red-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
-                      toolChanger.putDown({x:335,y:51});
-                    }}>Detach</button>
-                    <button className='bg-green-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
-                      toolChanger.pickup({x:335,y:51});
-                    }}>Attach</button>
-                    
-                  </div>
-                </div>
+                  </>);
+                  appLinker.send('jobSetup@AppModal-setOpen',true);
+                }}>Setup</button>
+                <button className='bg-green-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                  jobSetup().run();
+                }}>Run</button>
+                <br />
+                <span className='text-2xl font-extrabold'>Extras</span>
+                <br />
+                <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                  appLinker.send('jobSetup@AppModal-setContent',<>
+                    <iframe src={`http://${userStorage.get(ESP3D_ADDRESS)||userStorage.set(ESP3D_ADDRESS,MAIN_IP)}`} className='w-full h-[90%]'></iframe>
+                  </>);
+                  appLinker.send('jobSetup@AppModal-setOpen',true);
+                }}>ESP3D APP</button>
+                <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>Export</button>
+                <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>Load</button>
+                <br />
+                <span className='text-2xl font-extrabold'>Part Picker</span>
+                <br />
+                <button className='bg-red-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                  toolChanger.putDown({x:335,y:297});
+                }}>Detach</button>
+                <button className='bg-green-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                  new pipeline().outputPort1(2,1).run();
+                  setTimeout(() => {
+                    toolChanger.pickup({x:335,y:297});
+                  }, 500);
+                }}>Attach</button>
                 
+                <br />
+                <span className='text-2xl font-extrabold'>Spindel</span>
+                <br />
+                <button className='bg-red-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                  toolChanger.putDown({x:335,y:50,delayTime:20000});
+                }}>Detach</button>
+                <button className='bg-green-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                  new pipeline().outputPort1(2,1).run();
+                  setTimeout(() => {
+                    toolChanger.pickup({x:335,y:50,delayTime:20000});
+                  }, 500);
+                }}>Attach</button>
+
+                <br />
+                <span className='text-2xl font-extrabold'>C-Clamp</span>
+                <br />
+                <button className='bg-red-500 px-9 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                  new pipeline()
+                  .outputPort1(0,0)
+                  .clock(1,3800,1)
+                  .outputPort1(1,0)
+                  .run();
+                }}>OFF</button>
+                <button className='bg-green-500 px-9 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
+                  new pipeline()
+                  .outputPort1(1,0)
+                  .clock(0,4500,1)
+                  .outputPort1(0,0)
+                  .run();
+                }}>ON</button>
+
               </div>
             </div>
           </div>
