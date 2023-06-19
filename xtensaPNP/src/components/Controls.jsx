@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import execuatable, { pipeline } from '../utils/operators';
-import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_FEEDRATE_MAX, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, CONTROLPANEL_UNITZ, ESP3D_ADDRESS, EXECUATABLE_PROCESS, EXECUATABLE_REPORT_ACTION, EXECUATABLE_REPORT_STATUS, LIVE_CAMERA_FEED, MAIN_IP, PUMP_POWER, PUMP_POWER_MAX, runOnce, SPINDEL_RPM, SPINDEL_RPM_MAX, userStorage } from '../utils/utils';
+import appLinker, { CONTROLPANEL_FEEDRATE, CONTROLPANEL_FEEDRATE_MAX, CONTROLPANEL_SELECTED_TOOL, CONTROLPANEL_UNIT, CONTROLPANEL_UNITZ, ESP3D_ADDRESS, EXECUATABLE_PROCESS, EXECUATABLE_REPORT_ACTION, EXECUATABLE_REPORT_STATUS, LIVE_CAMERA_FEED, MAIN_IP, PART_PICKER_END_EFFECTOR, PUMP_POWER, PUMP_POWER_MAX, runOnce, SPINDEL_END_EFFECTOR, SPINDEL_RPM, SPINDEL_RPM_MAX, userStorage } from '../utils/utils';
 import AppModal from './AppModal';
 import { DynamicConsole } from './ConsoleDynamic';
 import ManualJobSetup, { jobSetup } from './ManualJobSetup';
@@ -437,6 +437,8 @@ export default function Controls() {
 
   const camPlaceholderRef=useRef();
 
+  const camStream=useRef();
+
 
 
   appLinker.addListener(EXECUATABLE_REPORT_ACTION,data=>{
@@ -521,6 +523,8 @@ export default function Controls() {
 
 
     }, 500);
+
+
   },[]);
   return (
     <>
@@ -578,8 +582,11 @@ export default function Controls() {
                 muted
                 src ={videoSource}
               // ></video> */}
-              <img src={userStorage.get(LIVE_CAMERA_FEED)||userStorage.set(LIVE_CAMERA_FEED,'http://192.168.1.6:8080/videofeed')} alt="" className='rounded-lg m-1' onLoad={()=>{
+              <img src={userStorage.get(LIVE_CAMERA_FEED)||userStorage.set(LIVE_CAMERA_FEED,'http://192.168.1.6:8080/videofeed')} alt="" className='rounded-lg m-1' ref={camStream} onLoad={()=>{
+                //h-[587px] w-[783 px]
                 camPlaceholderRef.current.style.display='none';
+                camStream.current.style.height=587;
+                camStream.current.style.width=783;
               }}/>
 
               <img src={camera} alt="Camera Feed" className='rounded-lg m-1 ' ref={camPlaceholderRef}/>
@@ -711,12 +718,14 @@ export default function Controls() {
                 <span className='text-2xl font-extrabold'>Part Picker</span>
                 <br />
                 <button className='bg-red-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
-                  toolChanger.putDown({x:335,y:297});
+                  // toolChanger.putDown({x:335,y:297});
+                  toolChanger.putDown(userStorage.get(PART_PICKER_END_EFFECTOR)||userStorage.set(PART_PICKER_END_EFFECTOR,{x:335,y:297,zPickup:0,zPutDown:33,zClamp:28,delayTime:30000,feedRate:2500}));
                 }}>Detach</button>
                 <button className='bg-green-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
                   new pipeline().outputPort1(2,1).run();
                   setTimeout(() => {
-                    toolChanger.pickup({x:335,y:297});
+                    // toolChanger.pickup({x:335,y:297});
+                    toolChanger.pickup(userStorage.get(PART_PICKER_END_EFFECTOR)||userStorage.set(PART_PICKER_END_EFFECTOR,{x:335,y:297,zPickup:0,zPutDown:33,zClamp:28,delayTime:30000,feedRate:2500}));
                   }, 500);
                 }}>Attach</button>
                 
@@ -724,12 +733,14 @@ export default function Controls() {
                 <span className='text-2xl font-extrabold'>Spindel</span>
                 <br />
                 <button className='bg-red-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
-                  toolChanger.putDown({x:335,y:47,delayTime:20000});
+                  // toolChanger.putDown({x:335,y:47,delayTime:20000});
+                  toolChanger.putDown(userStorage.get(SPINDEL_END_EFFECTOR)||userStorage.set(SPINDEL_END_EFFECTOR,{x:335,y:47,zPickup:0,zPutDown:33,zClamp:28,delayTime:20000,feedRate:2500}));
                 }}>Detach</button>
                 <button className='bg-green-500 px-4 rounded-lg text-2xl font-extrabold m-1' onClick={()=>{
                   new pipeline().outputPort1(2,1).run();
                   setTimeout(() => {
-                    toolChanger.pickup({x:335,y:47,delayTime:20000});
+                    // toolChanger.pickup({x:335,y:47,delayTime:20000});
+                    toolChanger.pickup(userStorage.get(SPINDEL_END_EFFECTOR)||userStorage.set(SPINDEL_END_EFFECTOR,{x:335,y:47,zPickup:0,zPutDown:33,zClamp:28,delayTime:20000,feedRate:2500}));
                   }, 500);
                 }}>Attach</button>
 

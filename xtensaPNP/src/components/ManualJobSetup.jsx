@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRef } from 'react';
 import { pipeline } from '../utils/operators';
-import appLinker, { PARTS_LIST, userStorage } from '../utils/utils';
+import appLinker, { MANUAL_JOB_SETUP, PARTS_LIST, userStorage } from '../utils/utils';
 
 export const AddComponent=({component})=>{
   const formInputString='w-full bg-gray-700 rounded-lg text-blue-300 text-xl text-center float-right';
@@ -85,11 +85,16 @@ export const AddComponent=({component})=>{
 }
 
 export const jobSetup=()=>{
-  const x0=12;
-  const y0=18;
-
-  const pcb_x0=39;
-  const pcb_y0=39;
+  const {x0,y0,pcb_x0,pcb_y0}=(userStorage.get(MANUAL_JOB_SETUP)||userStorage.set(MANUAL_JOB_SETUP,{
+    x0:12,
+    y0:18,
+    pcb_x0:39,
+    pcb_y0:39
+  }));
+  // const x0=12;
+  // const y0=18;
+  // const pcb_x0=39;
+  // const pcb_y0=39;
 
   const feedRate=3000;
   const pumpSpeed=1000;
