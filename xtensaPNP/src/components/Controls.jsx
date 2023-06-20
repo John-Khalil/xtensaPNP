@@ -712,7 +712,7 @@ export default function Controls() {
                   </>);
                   appLinker.send('jobSetup@AppModal-setOpen',true);
                 }}>ESP3D APP</button>
-                <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>Export</button>
+                <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-2'>Export</button>
                 <button className='bg-blue-600 px-4 rounded-lg text-2xl font-extrabold m-1'>Load</button>
                 <br />
                 <span className='text-2xl font-extrabold'>Part Picker</span>

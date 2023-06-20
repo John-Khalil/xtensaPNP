@@ -5,7 +5,7 @@ import {execuatable} from "./utils.js";
 
 import express  from "express";
 import cors from 'cors';
-import bodyParser, { json } from "body-parser";
+import bodyParser from "body-parser";
 
 console.clear();
 

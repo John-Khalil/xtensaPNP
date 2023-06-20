@@ -68,7 +68,7 @@ export default function AppSettings() {
   },[]);
   return (
     <>
-      <div className='w-[50%]'>
+      {/* <div className='w-[50%]'>
         
         <SettingsFeild inputFeild={{
           label:WEBSOCKET_REMOTE_HOST
@@ -93,7 +93,7 @@ export default function AppSettings() {
           label:MOTIONCONTROLLER_PATH
         }}/>
 
-      </div>
+      </div> */}
       <button onClick={()=>{
         setUserLocalStorage(userStorage.storage());
       }}>APP-CONFIG</button>

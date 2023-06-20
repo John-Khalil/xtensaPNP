@@ -54,7 +54,7 @@ export default class execuatable{
             execuatable.reportAction(operatorObject);
             execuatable.operatorCallBack.inputDevice=statusObject=>{
                 if(statusObject.INPUT_VALUE!=undefined){
-                    (operatorObject.inputDevice||(()=>{}))(statusObject.INPUT_VALUE);
+                    (operatorObject.inputDevice||(()=>{console.log("this sould not log")}))(statusObject.INPUT_VALUE);
 
                     // statusObject.ack=execuatable.THREAD_ACK;
                     execuatable.operatorCallBack.thread({ack:execuatable.THREAD_ACK});

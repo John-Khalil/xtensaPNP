@@ -14,6 +14,7 @@ import { useEffect } from 'react';
 import { execuatableSetup } from './utils/operators';
 import WebSocketSetup from './utils/WebSocketClient';
 import appLinker, { SERVICE_RUNNER } from './utils/utils';
+import { Modules } from './components/Modules';
 
 
 
@@ -38,9 +39,10 @@ function App() {
 					<Route path='smart-hub' element={<SmartHub/>}/>
 					<Route path="console-dynamic" element={<ConsoleDynamic />} />
 					<Route path="app-settings" element={<AppSettings />} />
-					<Route path="app-controls" element={<Controls/>} />
+					<Route path="app-home" element={<Controls/>} />
 					<Route path="app-sensor-data" element={<SensorData/>} />
 					<Route path="app-logs" element={<Logs/>} />
+					<Route path="app-modules" element={<Modules/>} />
 					<Route path="*" element={<NotFound />} />
 				</Route>
 			</Routes>
