@@ -55,8 +55,8 @@ export default function HomePage() {
             className:'',
             models:[
               {
-                modelName:'broken_traces',
-                labels:['missing_hole', 'mouse_bite','open_circuit', 'short', 'spur', 'spurious_copper'],
+                modelName:'QA',
+                labels:['Dry_joint', 'Incorrect_installation', 'Short_circuit'],
                 classThreshold : 0.01,
                 enable:false,
                 onDetect:(res)=>{
@@ -85,74 +85,74 @@ export default function HomePage() {
                   // );
                 },
               },
-              {
-                modelName:'components',
-                labels:['capacitor', 'inductor', 'resistor'],
-                classThreshold : 0.01,
-                enable:false
-              },
-              {
-                modelName:'ppe',
-                labels:['Gloves', 'Safety_Boot','glass', 'head', 'helmet', 'person','vest'],
-                classThreshold : 0.01,
-                enable:false,
-                onDetect:(res)=>{
-                  // console.log("res >> ",res);
-                  PopUp({
-                    icon:'https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vvector-notification-icon-png-image_957092.jpg',
-                    label:res.modelName,
-                    onClick:()=>{
-                      appLinker.send('@AppModal-setContent',
-                        <FramePreview objectDetcted={{...res}}/>
-                      );
-                      appLinker.send('@AppModal-setOpen',true);
-                    }
-                  });
+              // {
+              //   modelName:'components',
+              //   labels:['capacitor', 'inductor', 'resistor'],
+              //   classThreshold : 0.01,
+              //   enable:false
+              // },
+              // {
+              //   modelName:'ppe',
+              //   labels:['Gloves', 'Safety_Boot','glass', 'head', 'helmet', 'person','vest'],
+              //   classThreshold : 0.01,
+              //   enable:false,
+              //   onDetect:(res)=>{
+              //     // console.log("res >> ",res);
+              //     PopUp({
+              //       icon:'https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vvector-notification-icon-png-image_957092.jpg',
+              //       label:res.modelName,
+              //       onClick:()=>{
+              //         appLinker.send('@AppModal-setContent',
+              //           <FramePreview objectDetcted={{...res}}/>
+              //         );
+              //         appLinker.send('@AppModal-setOpen',true);
+              //       }
+              //     });
                   
 
-                  // appLinker.send('ALL-EVENTS',
-                  //   <>
-                  //     <div className="bg-gray-700 text-orange-300"> shit happened !! <button className="text-red-500" onClick={()=>{
-                  //       appLinker.send('@AppModal-setContent',
-                  //         <FramePreview objectDetcted={{...res,onApprove:()=>{}}}/>
-                  //       );
-                  //       appLinker.send('@AppModal-setOpen',true);
-                  //     }}> click here to learn more </button> </div>
-                  //   </>
-                  // );
-                },
-              },
-              {
-                modelName:'fire',
-                labels:['fire', 'other','smoke'],
-                classThreshold : 0.01,
-                enable:false,
-                onDetect:(res)=>{
-                  // console.log("res >> ",res);
-                  PopUp({
-                    icon:'https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vvector-notification-icon-png-image_957092.jpg',
-                    label:res.modelName,
-                    onClick:()=>{
-                      appLinker.send('@AppModal-setContent',
-                        <FramePreview objectDetcted={{...res}}/>
-                      );
-                      appLinker.send('@AppModal-setOpen',true);
-                    }
-                  });
+              //     // appLinker.send('ALL-EVENTS',
+              //     //   <>
+              //     //     <div className="bg-gray-700 text-orange-300"> shit happened !! <button className="text-red-500" onClick={()=>{
+              //     //       appLinker.send('@AppModal-setContent',
+              //     //         <FramePreview objectDetcted={{...res,onApprove:()=>{}}}/>
+              //     //       );
+              //     //       appLinker.send('@AppModal-setOpen',true);
+              //     //     }}> click here to learn more </button> </div>
+              //     //   </>
+              //     // );
+              //   },
+              // },
+              // {
+              //   modelName:'fire',
+              //   labels:['fire', 'other','smoke'],
+              //   classThreshold : 0.01,
+              //   enable:false,
+              //   onDetect:(res)=>{
+              //     // console.log("res >> ",res);
+              //     PopUp({
+              //       icon:'https://png.pngtree.com/png-vector/20190419/ourmid/pngtree-vvector-notification-icon-png-image_957092.jpg',
+              //       label:res.modelName,
+              //       onClick:()=>{
+              //         appLinker.send('@AppModal-setContent',
+              //           <FramePreview objectDetcted={{...res}}/>
+              //         );
+              //         appLinker.send('@AppModal-setOpen',true);
+              //       }
+              //     });
                   
 
-                  // appLinker.send('ALL-EVENTS',
-                  //   <>
-                  //     <div className="bg-gray-700 text-orange-300"> shit happened !! <button className="text-red-500" onClick={()=>{
-                  //       appLinker.send('@AppModal-setContent',
-                  //         <FramePreview objectDetcted={{...res,onApprove:()=>{}}}/>
-                  //       );
-                  //       appLinker.send('@AppModal-setOpen',true);
-                  //     }}> click here to learn more </button> </div>
-                  //   </>
-                  // );
-                },
-              }
+              //     // appLinker.send('ALL-EVENTS',
+              //     //   <>
+              //     //     <div className="bg-gray-700 text-orange-300"> shit happened !! <button className="text-red-500" onClick={()=>{
+              //     //       appLinker.send('@AppModal-setContent',
+              //     //         <FramePreview objectDetcted={{...res,onApprove:()=>{}}}/>
+              //     //       );
+              //     //       appLinker.send('@AppModal-setOpen',true);
+              //     //     }}> click here to learn more </button> </div>
+              //     //   </>
+              //     // );
+              //   },
+              // }
             ]
           }}/>
 
