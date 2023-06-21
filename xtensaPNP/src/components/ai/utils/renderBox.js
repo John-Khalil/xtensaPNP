@@ -36,7 +36,7 @@ export const renderBoxes = (
   for (let i = 0; i < scores_data.length; ++i) {
     // filter based on class threshold
     if (scores_data[i] > classThreshold) {
-      const klass = ((userModel||{}).labels||[])[classes_data[i]];
+      const klass = ((userModel||{}).labels||[])[classes_data[i]]||'missing component';
       const color = colors.get(classes_data[i]);
       const score = (scores_data[i] * 100).toFixed(1);
 

@@ -56,7 +56,7 @@ export default function HomePage() {
             models:[
               {
                 modelName:'QA',
-                labels:['Dry_joint', 'Incorrect_installation', 'Short_circuit'],
+                labels:['missing dip', 'missing capacitor', 'missing component', 'missing component', 'short circuit', 'missing ic', 'solder defect'],
                 classThreshold : 0.01,
                 enable:false,
                 onDetect:(res)=>{
